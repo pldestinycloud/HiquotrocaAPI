@@ -1,0 +1,19 @@
+﻿@page "/creditos"
+
+<div style="background-color:#FC8404;height:35.308vh;width:100vw;padding:20px">
+    <div style="width:-webkit-fill-available;height:36px;display:flex">
+    <MudIconButton Icon="@SVG.Avatar" Size="Size.Large"></MudIconButton>
+    <MudSpacer></MudSpacer>
+        <MudIconButton Icon="@SVG.Filtro"></MudIconButton>
+    </div>
+    <div style="display:flex;align-items:center">
+        <MudText Style="font-weight:700;font-size:36">@Carteira </MudText>
+        <MudIcon Icon="@SVG.Vector"/>
+    </div>
+</div>
+
+
+@code {
+    public double Carteira { get; set; } = 300.0;
+
+}

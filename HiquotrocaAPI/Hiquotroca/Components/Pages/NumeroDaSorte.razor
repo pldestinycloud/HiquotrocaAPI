@@ -1,0 +1,387 @@
+﻿@page "/numero-sorte/{nome}"
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+
+@code {
+    [Parameter] public string? Nome { get; set; }
+
+    // numbers 001..999
+    List<string> Numeros = Enumerable.Range(1, 999).Select(n => n.ToString("D3")).ToList();
+
+    ElementReference PickerRef;
+    int SelectedIndex = 0;
+    string SelectedNumber => Numeros[SelectedIndex];
+
+    bool ShowConfirm = false;
+    bool ShowRapoza = false;
+
+    void Voltar()
+    {
+        if (!string.IsNullOrEmpty(Nome))
+            NavigationManager.NavigateTo($"/detalhes-sorteio/{Uri.EscapeDataString(Nome)}");
+        else
+            NavigationManager.NavigateTo("/lotaria");
+    }
+
+    void OpenConfirmModal() => ShowConfirm = true;
+
+    void CloseConfirm() => ShowConfirm = false;
+
+    async void ConfirmPurchase()
+    {
+        ShowConfirm = false;
+        await Task.Delay(150);
+
+        NavigationManager.NavigateTo(
+            $"/sorteio-detalhes?produto={Uri.EscapeDataString(Nome!)}" +
+            $"&meus={SelectedNumber}" +
+            $"&total=200" +
+            $"&usados=174" +
+            $"&data=30-09-2025"
+        );
+    }
+
+    void RapozaChoose()
+    {
+        var r = new Random();
+        SelectedIndex = r.Next(0, Numeros.Count);
+        _ = JS.InvokeVoidAsync("pickerScrollTo", PickerRef, SelectedIndex);
+        ShowRapoza = true;
+        StateHasChanged();
+    }
+
+    void CloseRapoza() => ShowRapoza = false;
+
+    void AcceptRapoza()
+    {
+        ShowRapoza = false;
+
+        NavigationManager.NavigateTo(
+            $"/sorteio-detalhes?produto={Uri.EscapeDataString(Nome!)}" +
+            $"&meus={SelectedNumber}" +
+            $"&total=200" +
+            $"&usados=174" +
+            $"&data=30-09-2025"
+        );
+    }
+
+    [JSInvokable("SetCenterIndex")]
+    public void SetCenterIndex(int i)
+    {
+        SelectedIndex = Math.Clamp(i, 0, Numeros.Count - 1);
+        StateHasChanged();
+    }
+
+    async Task ScrollToIndexAsync(int i)
+    {
+        SelectedIndex = Math.Clamp(i, 0, Numeros.Count - 1);
+        await JS.InvokeVoidAsync("pickerScrollTo", PickerRef, SelectedIndex);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("pickerAttach", PickerRef, DotNetObjectReference.Create(this));
+            await JS.InvokeVoidAsync("pickerScrollTo", PickerRef, SelectedIndex);
+        }
+    }
+}
+
+<MudContainer MaxWidth="MaxWidth.False" Class="px-4 pt-4 pb-10">
+
+    <!-- TOP ICONS -->
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:8px;">
+            <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" OnClick="@Voltar" />
+            <MudText Typo="Typo.h6" Style="font-weight:600;">Lotaria</MudText>
+        </div>
+        <div style="display:flex; gap:8px;">
+            <MudIconButton Icon="@Icons.Material.Filled.FolderOpen" />
+            <MudIconButton Icon="@Icons.Material.Filled.Refresh" />
+        </div>
+    </div>
+
+    <!-- TITULO -->
+    <MudText Typo="Typo.h4" Align="Align.Center"
+             Style="color:#FF8800;font-weight:800;margin-top:12px;line-height:1.1;">
+        Escolhe os teus<br />números
+    </MudText>
+
+    <MudText Typo="Typo.caption" Class="center-text" Style="color:#999; margin-top:18px;">
+        Cada número tem o valor de 5 Hiquos
+    </MudText>
+
+    <!-- ORANGE LABEL -->
+    <div style="margin-top:16px;">
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Warning"
+                   Disabled="true"
+                   Style="width:100%;height:46px;border-radius:6px;font-weight:700;">
+            QUAL É O TEU NÚMERO DA SORTE?
+        </MudButton>
+    </div>
+
+    <!-- PICKER -->
+    <div class="picker-shell">
+
+        <div class="picker-bg"></div>
+
+        <div class="picker-list" @ref="PickerRef">
+            @for (int i = 0; i < Numeros.Count; i++)
+            {
+                var cls = i == SelectedIndex ? "picker-row selected" :
+                (i == SelectedIndex - 1 || i == SelectedIndex + 1) ? "picker-row adjacent" : "picker-row";
+                <div class="@cls" @onclick="(() => ScrollToIndexAsync(i))">@Numeros[i]</div>
+            }
+        </div>
+
+        <!-- OK button -->
+        <div style="display:flex; justify-content:center; margin-top:10px;">
+            <MudButton Variant="Variant.Outlined"
+                       Color="Color.Warning"
+                       Style="border-radius:36px; padding:8px 42px; border:3px solid #FFD6B0; font-weight:700;"
+                       OnClick="OpenConfirmModal">
+                OK
+            </MudButton>
+        </div>
+    </div>
+
+    <!-- selection -->
+    <MudText Typo="Typo.caption" Align="Align.Center" Style="color:#999; margin-top:18px;">
+        A tua seleção:
+    </MudText>
+
+    <MudText Typo="Typo.h6" Align="Align.Center" Style="color:#C1C1C1; font-weight:600;">
+        @SelectedNumber
+    </MudText>
+
+    <!-- helper text -->
+    <MudText Typo="Typo.h6" Align="Align.Center" Style="color:#C1C1C1; margin-top:18px; font-weight:600;">
+        DEIXA O HIQUO<br />ESCOLHER UM NÚMERO
+    </MudText>
+
+    <!-- mascote -->
+    <div style="display:flex; justify-content:center; margin-top:14px;">
+        <MudImage Src="images/Rapoza.jpg"
+                  Width="110"
+                  Style="cursor:pointer;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,0.12);border:6px solid #fff;"
+                  @onclick="RapozaChoose" />
+    </div>
+
+    <!-- MODAL CONFIRMAÇÃO -->
+    @if (ShowConfirm)
+    {
+        <div class="modal-overlay" @onclick="CloseConfirm">
+            <MudPaper Class="modal-card" Elevation="8" @onclick:stopPropagation="true">
+                <div class="modal-header-orange">BOA SORTE</div>
+                <div style="text-align:center;padding:18px;">
+                    <p style="margin-bottom:6px;">Acaba de escolher para participar neste sorteio o número</p>
+                    <MudText Typo="Typo.h3" Style="font-weight:800;">@SelectedNumber</MudText>
+                    <p style="margin-top:10px;color:#666;font-size:0.9rem;">
+                        5 Hiquos serão descontados após confirmação.
+                    </p>
+                    <div style="margin-top:14px;">
+                        <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="ConfirmPurchase">
+                            Confirmar
+                        </MudButton>
+                    </div>
+                </div>
+            </MudPaper>
+        </div>
+    }
+
+    <!-- MODAL RAPOZA -->
+    @if (ShowRapoza)
+    {
+        <div class="modal-overlay" @onclick="CloseRapoza">
+            <MudPaper Class="modal-card" Elevation="8" @onclick:stopPropagation="true">
+
+                <div class="modal-header-green">NÚMERO DA SORTE</div>
+
+                <div style="text-align:center;padding:18px;">
+
+                    <div style="display:flex; justify-content:center; margin-top:10px; margin-bottom:6px;">
+                        <MudIcon Icon="@Icons.Material.Outlined.Star"
+                                 Color="Color.Success"
+                                 Size="Size.Large"
+                                 Style="font-size:34px;" />
+                    </div>
+
+                    <MudText Typo="Typo.h5" Style="font-weight:700;margin-bottom:6px;">PARABÉNS!</MudText>
+
+                    <p style="margin:0 0 12px 0;">O Hiquo escolheu por ti e sugere participares com o número:</p>
+
+                    <MudText Typo="Typo.h3" Style="font-weight:800;">@SelectedNumber</MudText>
+
+                    <div style="margin-top:14px;">
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Success"
+                                   OnClick="AcceptRapoza">
+                            Aceitar
+                        </MudButton>
+                    </div>
+
+                </div>
+
+            </MudPaper>
+        </div>
+    }
+
+</MudContainer>
+
+
+
+<style>
+    /* ======================
+       STYLE CORRIGIDO FINAL
+       ====================== */
+
+    /* fonts */
+    .mud-container {
+        font-family: Roboto, sans-serif;
+    }
+
+    /* disable button (laranja grande) */
+    .mud-button[disabled] {
+        background: #FF8800 !important;
+        color: white !important;
+    }
+
+    /* ---------- PICKER ---------- */
+    .picker-shell {
+        max-width: 420px;
+        margin: 18px auto 0;
+        position: relative;
+        text-align: center;
+    }
+
+    /* lista */
+    .picker-list {
+        height: 168px; /* 3 × 56 */
+        overflow-y: auto;
+        scroll-snap-type: y proximity;
+
+        -webkit-overflow-scrolling: touch;
+        margin: 0 auto;
+        width: 78%;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+        .picker-list::-webkit-scrollbar {
+            display: none;
+        }
+
+    .picker-list {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    /* cada número */
+    .picker-row {
+        height: 56px;
+        line-height: 56px;
+        scroll-snap-align: center;
+        font-size: 18px;
+        color: #C9C9C9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        user-select: none;
+        transition: 0.15s ease;
+    }
+
+        /* números perto do centro */
+        .picker-row.adjacent {
+            color: #B6B6B6;
+            font-size: 18px;
+        }
+
+        /* número selecionado (agora COM fundo cinzento e acompanha o scroll) */
+        .picker-row.selected {
+            background: #F2F4F6;
+            color: #222;
+            font-weight: 800;
+            font-size: 24px;
+            border-radius: 10px;
+        }
+
+    /* ---------- BOTÃO OK ---------- */
+    .mud-button.mud-button-outlined {
+        border-radius: 36px;
+        padding: 8px 42px;
+        border: 3px solid #FFD6B0;
+        color: #FF8800;
+        font-weight: 700;
+        background: transparent;
+    }
+
+    /* ---------- MODAIS ---------- */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .modal-card {
+        width: 85%;
+        max-width: 340px;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .modal-header-orange {
+        background: #FF8800;
+        color: white;
+        padding: 12px;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .modal-header-green {
+        background: #16A34A;
+        color: white;
+        padding: 12px;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    /* ---------- CENTRALIZA TUDO O QUE PEDISTE ---------- */
+
+    .center-text {
+        text-align: center;
+        width: 100%;
+        display: block;
+    }
+
+    .mud-typography.mud-typography-caption {
+        text-align: center !important;
+    }
+
+
+
+    /* Responsividade */
+    @@media (max-width:420px) {
+        .picker-list
+
+    {
+        height: 160px;
+        width: 92%;
+    }
+
+    .picker-row {
+        height: 50px;
+        line-height: 50px;
+    }
+
+        .picker-row.selected {
+            font-size: 22px;
+        }
+
+    }
+</style>

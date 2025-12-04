@@ -1,0 +1,238 @@
+﻿@page "/novoartigo/{tipo?}"
+@inject NavigationManager NavigationManager
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="pa-6"
+              Style="background-color:white;
+                     border:none;
+                     box-shadow:none;
+                     border-radius:0;
+                     margin-top:15px;
+                     margin-bottom:50px;
+                     position:relative;">
+
+
+    <!-- 🔙 Botão Voltar (seta imagem no canto superior esquerdo) -->
+    <div class="topbar">
+        <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" OnClick="@(() => NavigationManager.NavigateTo("/addpost"))" Edge="Edge.Start" />
+    </div>
+
+    <!-- Título -->
+    <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Warning" Class="mb-4 mt-3">
+        Novo Artigo
+    </MudText>
+
+    <!-- Upload -->
+    <MudPaper Elevation="0"
+              Class="d-flex flex-column align-center justify-center pa-0"
+              style="background-color:#dcdcdc;border-radius:10px;margin-bottom:25px;height:300px;position:relative;overflow:hidden;text-align:center;">
+        @if (imagens.Count == 0)
+        {
+            <label for="uploadInput"
+                   style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin:0;">
+                <MudIcon Icon="@Icons.Material.Filled.Image" Size="Size.Large" Color="Color.Default" />
+                <MudText Typo="Typo.subtitle1" Align="Align.Center" Class="mt-2" Style="color:#333;">
+                    Carrega aqui as fotos do teu artigo
+                </MudText>
+                <MudText Typo="Typo.caption" Align="Align.Center" Class="mt-3" Style="color:#333;font-weight:bold;">
+                    NOTA: Podes carregar até 5 fotos.
+                </MudText>
+            </label>
+        }
+        else
+        {
+            @RenderCarousel()
+        }
+
+        <InputFile id="uploadInput"
+                   OnChange="OnInputFileChange"
+                   multiple accept="image/*"
+                   style="display:none;" />
+    </MudPaper>
+
+    <!-- Campos principais -->
+    <MudTextField T="string" Label="Título do artigo" Variant="Variant.Outlined" FullWidth="true"
+                  Placeholder="Escreve o nome do teu artigo" Required="true" />
+
+    <MudSelect Label="Categoria" T="string" Variant="Variant.Outlined" FullWidth="true"
+               Placeholder="Escolhe categoria" Required="true" Class="mt-4">
+        <MudSelectItem T="string">Eletrónica</MudSelectItem>
+        <MudSelectItem T="string">Moda e Vestuário</MudSelectItem>
+        <MudSelectItem T="string">Comida e Bebida</MudSelectItem>
+        <MudSelectItem T="string">Casas / Imóveis</MudSelectItem>
+        <MudSelectItem T="string">Carros e Acessórios</MudSelectItem>
+        <MudSelectItem T="string">Decoração e Mobiliário</MudSelectItem>
+        <MudSelectItem T="string">Brinquedos e Hobbies</MudSelectItem>
+        <MudSelectItem T="string">Material de Bricolage e DIY</MudSelectItem>
+        <MudSelectItem T="string">Emprego</MudSelectItem>
+        <MudSelectItem T="string">Diversos</MudSelectItem>
+    </MudSelect>
+
+    <MudTextField T="string" Label="Descrição" Variant="Variant.Outlined" FullWidth="true" Required="true" Lines="4"
+                  Placeholder="Escreve aqui uma descrição que explique da melhor forma possível o teu artigo"
+                  Class="mt-4" />
+
+    <MudTextField T="string" Label="Características (opcional)" Variant="Variant.Outlined" FullWidth="true" Lines="2"
+                  Placeholder="Descreve aqui as características técnicas do teu artigo"
+                  Class="mt-4" />
+
+    <MudTextField T="string" Label="Elementos (opcional)" Variant="Variant.Outlined" FullWidth="true" Lines="2"
+                  Placeholder="Coloca aqui todos os elementos ou extras incluídos na transação do teu artigo"
+                  Class="mt-4" />
+
+    <MudTextField T="string" Label="Localização" Variant="Variant.Outlined" FullWidth="true"
+                  Placeholder="Ex: Lisboa, Portugal" Class="mt-4" Required="true" />
+
+    <!-- Entrega -->
+    <div class="mt-4">
+        <MudMenu @ref="menuEntrega"
+                 CloseOnClick="false"
+                 AnchorOrigin="Origin.BottomCenter"
+                 TransformOrigin="Origin.TopCenter"
+                 OffsetY="true"
+                 Class="w-100">
+            <ActivatorContent>
+                <MudTextField T="string"
+                              Label="Entrega"
+                              Variant="Variant.Outlined"
+                              ReadOnly="true"
+                              Value="@DisplayEntrega"
+                              Placeholder="Disponibilidade"
+                              Style="width:100%;"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@Icons.Material.Filled.ArrowDropDown" />
+            </ActivatorContent>
+
+            <ChildContent>
+                <div style="padding:12px;min-width:280px;max-width:420px;">
+                    <MudRadioGroup T="string" @bind-SelectedOption="selectedEntrega" Orientation="Orientation.Vertical">
+                        <MudRadio T="string" Option="Total" Label="Total" />
+                        <MudRadio T="string" Option="País (Continente e Ilhas)" Label="País (Continente e Ilhas)" />
+                        <MudRadio T="string" Option="Cidade" Label="Cidade" />
+                        <MudRadio T="string" Option="Específica" Label="Específica" />
+                    </MudRadioGroup>
+
+                    <MudDivider Class="my-3" />
+
+                    <MudText Typo="Typo.body2" Class="mb-1">Distância</MudText>
+                    <MudTextField T="string"
+                                  Placeholder="Raio de 20 km (da morada do perfil)"
+                                  Variant="Variant.Outlined"
+                                  FullWidth="true"
+                                  Dense="true"
+                                  Disabled="@(!PodeEditarDistancia)"
+                                  @bind-Value="distanciaValor"
+                                  @onclick:stopPropagation="true"
+                                  @onkeydown:stopPropagation="true" />
+
+                    <div class="d-flex justify-end mt-2">
+                        <MudButton Variant="Variant.Text"
+                                   OnClick="@(async () => await menuEntrega!.CloseMenuAsync())">
+                            OK
+                        </MudButton>
+                    </div>
+                </div>
+            </ChildContent>
+        </MudMenu>
+    </div>
+
+    <!-- Transação -->
+    <MudSelect T="string" Label="Transação" Variant="Variant.Outlined" FullWidth="true" Required="true"
+               Class="mt-4" Placeholder="O que queres fazer?" @bind-Value="tipoSelecionado">
+        <MudSelectItem T="string">Vender</MudSelectItem>
+        <MudSelectItem T="string">Trocar</MudSelectItem>
+        <MudSelectItem T="string">Alugar</MudSelectItem>
+        <MudSelectItem T="string">Doar</MudSelectItem>
+    </MudSelect>
+
+    <!-- Botão -->
+    <MudButton Variant="Variant.Filled" Color="Color.Warning" FullWidth="true"
+               Class="mt-6 py-2" Style="text-transform:none;font-weight:bold;border-radius:10px;">
+        Publicar
+    </MudButton>
+</MudContainer>
+
+<Footer />
+
+@code {
+    [Parameter] public string? tipo { get; set; }
+    [Inject] private NavigationManager Nav { get; set; } = default!;
+
+    private string tipoSelecionado = "Vender";
+    private List<string> imagens = new();
+
+    private MudMenu? menuEntrega;
+    private string? selectedEntrega;
+    private string? distanciaValor;
+    private bool PodeEditarDistancia => selectedEntrega == "Específica";
+    private string? DisplayEntrega => string.IsNullOrEmpty(selectedEntrega) ? null : selectedEntrega;
+
+    protected override void OnInitialized()
+    {
+        if (!string.IsNullOrWhiteSpace(tipo))
+            tipoSelecionado = char.ToUpper(tipo[0]) + tipo.Substring(1).ToLower();
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        imagens.Clear();
+        foreach (var file in e.GetMultipleFiles(5))
+        {
+            using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+            var buffer = new byte[file.Size];
+            await stream.ReadAsync(buffer);
+            var imageData = $"data:{file.ContentType};base64,{Convert.ToBase64String(buffer)}";
+            imagens.Add(imageData);
+        }
+    }
+
+    private void VoltarParaAddPost()
+    {
+        Nav.NavigateTo("/addpost");
+    }
+
+    private RenderFragment RenderCarousel() => __builder =>
+    {
+        __builder.OpenComponent<MudCarousel<string>>(0);
+        __builder.AddAttribute(1, "Style", "width:100%;height:100%;");
+        __builder.AddAttribute(2, "AutoCycle", false);
+        __builder.AddAttribute(3, "ShowArrows", false);
+        __builder.AddAttribute(4, "ShowIndicators", true);
+        __builder.AddAttribute(5, "ChildContent", (RenderFragment)((builder2) =>
+        {
+            int seq = 0;
+            foreach (var imagem in imagens)
+            {
+                builder2.OpenComponent<MudCarouselItem>(seq++);
+                builder2.AddAttribute(seq++, "ChildContent", (RenderFragment)((builder3) =>
+                {
+                    builder3.AddMarkupContent(seq++, $"<img src='{imagem}' style='width:100%;height:100%;object-fit:cover;' />");
+                }));
+                builder2.CloseComponent();
+            }
+        }));
+        __builder.CloseComponent();
+    };
+}
+
+<style>
+    .mud-input, .mud-select {
+        border-radius: 10px !important;
+    }
+
+    .mud-container {
+        background-color: #ffffff;
+    }
+
+    .w-100 {
+        width: 100%;
+    }
+
+    .mud-input-label {
+        font-weight: 500;
+        color: #333 !important;
+    }
+
+    .mud-input-input, .mud-select-input {
+        font-size: 0.95rem;
+    }
+</style>

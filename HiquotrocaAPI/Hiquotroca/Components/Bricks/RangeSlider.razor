@@ -1,0 +1,98 @@
+﻿@using Microsoft.AspNetCore.Components
+
+<div class="range-slider">
+    <input type="range" min="@Min" max="@Max" step="@Step" value="@ValueStart"
+           @oninput="OnStartChanged" class="thumb thumb-left" />
+    <input type="range" min="@Min" max="@Max" step="@Step" value="@ValueEnd"
+           @oninput="OnEndChanged" class="thumb thumb-right" />
+
+    <div class="slider-track"></div>
+    <div class="slider-range" style="@RangeStyle"></div>
+</div>
+
+<style>
+    .range-slider {
+        position: relative;
+        width: 100%;
+        height: 2px;
+        margin: 20px 0;
+    }
+
+    .slider-track {
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        background: #000000;
+        border-radius: 3px;
+    }
+
+    .slider-range {
+        position: absolute;
+        height: 2px;
+        background: #FC8404;
+        border-radius: 3px;
+    }
+
+    .thumb {
+        position: absolute;
+        width: 100%;
+        height: 6px;
+        background: none;
+        pointer-events: none;
+        -webkit-appearance: none;
+    }
+
+        .thumb::-webkit-slider-thumb {
+            pointer-events: all;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #FC8404;
+            border: 2px solid white;
+            cursor: pointer;
+            -webkit-appearance: none;
+        }
+
+        .thumb::-moz-range-thumb {
+            pointer-events: all;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #FC8404;
+            border: 2px solid white;
+            cursor: pointer;
+        }
+
+</style>
+
+@code {
+    [Parameter] public double Min { get; set; } = 0;
+    [Parameter] public double Max { get; set; } = 100;
+    [Parameter] public double Step { get; set; } = 1;
+
+    [Parameter] public double ValueStart { get; set; } = 25;
+    [Parameter] public double ValueEnd { get; set; } = 75;
+
+    [Parameter] public EventCallback<(double, double)> ValueChanged { get; set; }
+
+    private void OnStartChanged(ChangeEventArgs e)
+    {
+        ValueStart = Math.Min(Convert.ToDouble(e.Value), ValueEnd);
+        NotifyValueChanged();
+    }
+
+    private void OnEndChanged(ChangeEventArgs e)
+    {
+        ValueEnd = Math.Max(Convert.ToDouble(e.Value), ValueStart);
+        NotifyValueChanged();
+    }
+
+    private async void NotifyValueChanged()
+    {
+        await ValueChanged.InvokeAsync((ValueStart, ValueEnd));
+    }
+
+    private string RangeStyle =>
+        $"left:{(ValueStart - Min) / (Max - Min) * 100}%; width:{(ValueEnd - ValueStart) / (Max - Min) * 100}%;";
+}
+

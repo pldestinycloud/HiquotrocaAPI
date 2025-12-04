@@ -1,0 +1,80 @@
+﻿@page "/detalhes-sorteio/{nome}"
+@inject NavigationManager NavigationManager
+
+@code {
+    [Parameter] public string? Nome { get; set; }
+    string Imagem = "images/default.png";
+    double Progresso = 65;
+    TimeSpan TempoRestante = TimeSpan.FromMinutes(59).Add(TimeSpan.FromSeconds(30));
+
+    protected override void OnParametersSet()
+    {
+        var imgs = new Dictionary<string, string>
+        {
+            ["iPhone 17 Apple 6.3\" - 256 GB, preto"] = "images/iphone17.png",
+            ["Bicicleta Elétrica criança 350W 16\""] = "images/bicicleta.png",
+            ["Relógio Smartwatch X-watch"] = "images/relogio.png",
+            ["Viagem - 3 pax Disneyland Paris"] = "images/disney.png"
+        };
+
+        if (Nome != null && imgs.ContainsKey(Nome))
+            Imagem = imgs[Nome];
+    }
+
+    void Voltar() => NavigationManager.NavigateTo("/lotaria");
+
+    void IrParaConfirmacao()
+    {
+        NavigationManager.NavigateTo($"/confirmacao-identidade/{Uri.EscapeDataString(Nome!)}");
+    }
+}
+
+<MudContainer MaxWidth="MaxWidth.False" Class="px-4 pt-4 pb-10">
+
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack"
+                   OnClick="@Voltar"
+                   Style="position:absolute;top:16px;left:10px;" />
+
+    <MudText Typo="Typo.h4" Style="margin-top:45px;">Lotaria</MudText>
+
+    <MudDivider Class="mb-3" />
+
+    <MudImage Src="@Imagem" Style="width:90%;margin:auto;height:300px;object-fit:cover;border-radius:10px;" />
+
+    <MudText Typo="Typo.subtitle1" Class="mt-3">@Nome</MudText>
+
+    <MudText Typo="Typo.body2" Style="color:#777;">
+        O @Nome combina design elegante com desempenho avançado.
+    </MudText>
+
+    <MudText Typo="Typo.subtitle1" Class="mt-4">PRÓXIMO SORTEIO</MudText>
+    <div style="background:#333;color:white;text-align:center;padding:12px;border-radius:8px;">
+        @TempoRestante.ToString(@"hh\:mm\:ss")
+    </div>
+
+    <MudText Typo="Typo.subtitle1" Class="mt-4">NÚMEROS DISPONÍVEIS</MudText>
+    <MudProgressLinear Color="Color.Warning" Value="@Progresso" />
+
+    <div style="text-align:center;margin-top:25px;">
+        <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="@IrParaConfirmacao">
+            COMPRAR NÚMEROS
+        </MudButton>
+    </div>
+
+</MudContainer>
+
+<Footer />
+
+<style>
+    /* Estilo do botão */
+    .mud-button-filled.mud-button-warning {
+        background-color: #FF9800 !important;
+        color: white !important;
+        font-weight: 600;
+    }
+
+    /* Barra de progresso */
+    .mud-progress-linear .mud-progress-linear-bar {
+        border-radius: 4px;
+    }
+</style>

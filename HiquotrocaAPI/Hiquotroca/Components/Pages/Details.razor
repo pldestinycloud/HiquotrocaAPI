@@ -1,0 +1,187 @@
+﻿@page "/details"
+
+<div style="display:flex;z-index:3;position:fixed;top:0px;padding:8px 12px;padding-top:12px;background-color:#605B5980;width:100%;">
+    <MudIconButton Icon="@Icons.Material.Outlined.ArrowCircleLeft" Style="color:white" Href="/"></MudIconButton>
+    <MudSpacer></MudSpacer>
+    <MudIcon Icon="@Icons.Material.Outlined.Share" Style="color:white"></MudIcon>
+</div>
+
+<MudCarousel Style="aspect-ratio:390 / 321;width:100%" ShowArrows="false" ShowBullets="true" EnableSwipeGesture="true" TData="object" AutoCycle="false" SelectedIndex="_value">
+    <MudCarouselItem Transition="Transition.Slide" Color="Color.Primary">
+        <img src="images/dog.png" style="width:100%;aspect-ratio:3/4" />
+    </MudCarouselItem>
+    <MudCarouselItem Transition="Transition.Slide" Color="Color.Primary">
+        <img src="images/dog.png" style="width:100%;aspect-ratio:3/4" />
+    </MudCarouselItem>
+    <MudCarouselItem Transition="Transition.Slide" Color="Color.Primary">
+        <img src="images/dog.png" style="width:100%;aspect-ratio:3/4" />
+    </MudCarouselItem>
+    <MudCarouselItem Transition="Transition.Slide" Color="Color.Primary">
+        <img src="images/dog.png" style="width:100%;aspect-ratio:3/4" />
+    </MudCarouselItem>
+    <MudCarouselItem Transition="Transition.Slide" Color="Color.Primary">
+        <img src="images/dog.png" style="width:100%;aspect-ratio:3/4" />
+    </MudCarouselItem>
+</MudCarousel>
+
+
+    <MudToggleGroup T="int" Style="overflow:scroll;display:flex;margin-top:8px;scrollbar-width:none" @bind-Value="_value" Outlined="false" SelectedClass="white">
+    @foreach (int i in ints) {
+    <MudToggleItem Value="@(i)">
+            <div style="@("aspect-ratio:1/1;width:71;height:71px;display:flex;align-items:center;justify-content:center;" + (_value == i ? "border-radius:13px;border:solid 1px #000000" : ""))">
+            <MudImage Src="images/dog.png" Height="63" Width="63" Style="border-radius:10px !important" ObjectFit="ObjectFit.Cover"></MudImage>
+        </div>
+    </MudToggleItem>
+    }
+    </MudToggleGroup>
+
+<div style="display:flex;align-items:center;margin:16px;height:20px">
+    <MudText Style="font-weight:600;font-size:19px">Titulo</MudText>
+    <MudSpacer></MudSpacer>
+    <MudToggleIconButton Icon="@Icons.Material.Outlined.FavoriteBorder" ToggledIcon="@Icons.Material.Filled.Favorite" ToggledColor="Color.Warning"></MudToggleIconButton>
+</div>
+<div style="display:flex;margin:16px">
+    <MudText Style="font-weight:400;font-size:8px;color:#605B59">Data de Publicação: 03 Set</MudText>
+</div>
+
+<MudTabs Centered="true" MinimumTabWidth="0">
+    <MudTabPanel Text="Descrição">
+        <MudText>
+            Canon EOS 70D + Objectiva 18-55mm STM
+
+            Vendo a minha Canon EOS 70D em excelente estado, combinada com a objectiva Canon 18-55mm IS STM.
+            Perfeita para fotografia e vídeo, especialmente para principiantes e entusiastas.
+        </MudText>
+    </MudTabPanel>
+    <MudTabPanel Text="Características">
+        <MudText>
+            Principais Características:
+            • Sensor CMOS APS-C de 20,2 MP
+            • Processador de Imagem DIGIC 5+
+            • Dual Pixel CMOS AF (ótimo para uma focagem rápida e suave em vídeos)
+            • Gravação de vídeo Full HD 1080p a 30 fps
+            • Sistema de AF cruzado de 19 pontos
+            • Ecrã LCD touchscreen de 3,0" com ângulo variável
+            • Wi-Fi integrado
+        </MudText>
+    </MudTabPanel>
+    <MudTabPanel Text="Elementos">
+        <MudText>
+            Inclui:
+            • Máquina fotográfica
+            • Fita para pendurar
+            • 3 Tampas de lente
+            • 2 Baterias recarregáveis
+            • 1 Carregador de baterias
+            • 1 Embalagem de origem
+        </MudText>
+    </MudTabPanel>
+</MudTabs>
+
+<MudDivider Style="height:4px"></MudDivider>
+
+<div style="display:flex;align-items:center">
+    <MudBadge Dot="true" Color="Color.Success" Overlap="true" Bordered="true" Style="margin:8px">
+        <MudAvatar Style="height:52px;width:52px;" Variant="Variant.Outlined">
+            <MudIcon style="font-size:64px;margin-top:12px" Icon="@Icons.Material.Filled.Person" />
+        </MudAvatar>
+    </MudBadge>
+    <div>
+        <MudText Style="font-weight:700;font-size:8px;line-height:10px;color:#605B59;margin:3px">Responsável</MudText>
+        <MudText Style="font-weight:400;font-size:14px;line-height:10px;color:#605B59;margin:3px">Pessoa 1</MudText>
+        <MudText Style="font-weight:400;font-size:8px;line-height:10px;color:#605B59;margin:3px">No Hiquotroca desde: <strong>maio de 2025</strong></MudText>
+    </div>
+</div>
+
+<MudDivider Style="height:4px;margin:12px 0px"></MudDivider>
+
+<MudText Style="margin:5.128vw">Mais artigos publicados da Sonia</MudText>
+
+<div style="display:flex;justify-content:space-evenly">
+    <MudCard Style="border-radius:10px;overflow:hidden" Elevation="0">
+        <MudCardHeader Style="padding:0px">
+            <MudImage Style="aspect-ratio:165/123;width:42.31vw" ObjectFit="ObjectFit.Cover" Src="images/dog.png"></MudImage>
+        </MudCardHeader>
+        <MudCardContent Style="background-color:#EFEFEF">
+            <MudText>Descrição</MudText>
+            <MudToggleIconButton Style="float:right" Icon="@Icons.Material.Outlined.FavoriteBorder" ToggledColor="Color.Warning" ToggledIcon="@Icons.Material.Outlined.Favorite"></MudToggleIconButton>
+        </MudCardContent>
+    </MudCard>
+    <MudCard Style="border-radius:10px;overflow:hidden" Elevation="0">
+        <MudCardHeader Style="padding:0px">
+            <MudImage Style="aspect-ratio:165/123;width:42.31vw" ObjectFit="ObjectFit.Cover" Src="images/dog.png"></MudImage>
+        </MudCardHeader>
+        <MudCardContent Style="background-color:#EFEFEF">
+            <MudText>Descrição</MudText>
+            <MudToggleIconButton Style="float:right" Icon="@Icons.Material.Outlined.FavoriteBorder" ToggledColor="Color.Warning" ToggledIcon="@Icons.Material.Outlined.Favorite"></MudToggleIconButton>
+        </MudCardContent>
+    </MudCard>
+</div>
+
+<MudDivider Style="height:4px;margin:12px 0px"></MudDivider>
+
+<MudText Style="margin:5.128vw">Mais artigos relacionados</MudText>
+
+<div style="display:flex;justify-content:space-evenly">
+    <MudCard Style="border-radius:10px;overflow:hidden" Elevation="0">
+        <MudCardHeader Style="padding:0px">
+            <MudImage Style="aspect-ratio:165/123;width:42.31vw" ObjectFit="ObjectFit.Cover" Src="images/dog.png"></MudImage>
+        </MudCardHeader>
+        <MudCardContent Style="background-color:#EFEFEF">
+            <MudText>Descrição</MudText>
+            <MudToggleIconButton Style="float:right" Icon="@Icons.Material.Outlined.FavoriteBorder" ToggledColor="Color.Warning" ToggledIcon="@Icons.Material.Outlined.Favorite"></MudToggleIconButton>
+        </MudCardContent>
+    </MudCard>
+    <MudCard Style="border-radius:10px;overflow:hidden" Elevation="0">
+        <MudCardHeader Style="padding:0px">
+            <MudImage Style="aspect-ratio:165/123;width:42.31vw" ObjectFit="ObjectFit.Cover" Src="images/dog.png"></MudImage>
+        </MudCardHeader>
+        <MudCardContent Style="background-color:#EFEFEF">
+            <MudText>Descrição</MudText>
+            <MudToggleIconButton Style="float:right" Icon="@Icons.Material.Outlined.FavoriteBorder" ToggledColor="Color.Warning" ToggledIcon="@Icons.Material.Outlined.Favorite"></MudToggleIconButton>
+        </MudCardContent>
+    </MudCard>
+</div>
+
+<div style="height:90px"></div>
+
+<Footer></Footer>
+
+<style>
+    .mud-tabs-tabbar-content .mud-tabs-tabbar-wrapper {
+        width: 99% !important;
+        color: #605B59;
+    }
+
+    .mud-tab-active {
+        font-weight:800 !important;
+        color:black !important;
+    }
+
+    .mud-tooltip-root.mud-tooltip-inline {
+        display:flex;
+        flex:1;
+    }
+
+    .mud-tab {
+        font-size:10px;
+        text-transform:none;
+        min-height:0px;
+        font-weight:300;
+        color: #605B59;
+    }
+
+    .mud-tab-slider {
+        background:black;
+    }
+
+    html {
+        scrollbar-width:none;
+    }
+</style>
+
+@code {
+    private int _value = 0;
+
+    private int[] ints = new int[] { 0, 1, 2, 3, 4 };
+}

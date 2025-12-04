@@ -1,0 +1,52 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+
+<MudLayout class="content px-4" Style="padding-top:20px !important">
+<MudMainContent style="padding-top:0px !important">
+<div style="height:48px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-top:10px;width:100%;position:sticky;top:0px;background-color:white;z-index:3;padding:0px 0px 8px 0px;">
+    <MudAvatar  Class="avatar-click" @onclick="IrParaPerfil"></MudAvatar>
+    <input type="text" class="search"  placeholder="O que procuras?" @bind-value="@_search" />
+    <MudIconButton Icon="@Icons.Material.Filled.Equalizer" OnClick="@(()=> {drawer=true;StateHasChanged();})"></MudIconButton>
+</div>
+
+@foreach (var item in Enumerable.Range(1, 5))
+{
+    <Post />
+}
+
+<Footer />
+    </MudMainContent>
+<Filter @bind-IsOpen="drawer"></Filter>
+</MudLayout>
+
+<style>
+    .search {
+        border: 2px solid #D9D9D9;
+        border-radius: 9999px;
+        padding: 12px 16px;
+        width: 236px;
+        height: 38px;
+        transition: 230ms border ease-in;
+    }
+
+        .search:focus {
+            outline: none;
+            border: 2px solid #FC8404 !important;
+        }
+
+    /* Avatar com efeito */
+    .avatar-click {
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .avatar-click:hover,
+        .avatar-click:active {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(252, 132, 4, 0.5);
+        }
+
+    html {
+        scrollbar-width: none;
+    }
+</style>

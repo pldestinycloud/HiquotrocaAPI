@@ -1,0 +1,265 @@
+﻿@page "/servicos"
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="pa-6"
+              Style="background-color:white;border:none;box-shadow:none;border-radius:0;margin-top:15px;margin-bottom:50px;position:relative;">
+
+    <!-- 🔙 Botão Voltar -->
+    <img src="images/Arrow.png" alt="Voltar"
+         @onclick="Voltar"
+         style="position:absolute;top:10px;left:10px;width:24px;height:24px;cursor:pointer;" />
+
+    <!-- Título -->
+    <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Warning" Class="mb-4 mt-3">
+        Novo Serviço
+    </MudText>
+
+    <!-- Upload -->
+    <MudPaper Elevation="0"
+              Class="d-flex flex-column align-center justify-center pa-0"
+              style="background-color:#dcdcdc;border-radius:10px;margin-bottom:25px;height:300px;position:relative;overflow:hidden;text-align:center;">
+        @if (fotos.Count == 0)
+        {
+            <label for="uploadInput"
+                   style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin:0;">
+                <MudIcon Icon="@Icons.Material.Filled.Image" Size="Size.Large" Color="Color.Default" />
+                <MudText Typo="Typo.subtitle1" Align="Align.Center" Class="mt-2" Style="color:#333;">
+                    Carrega aqui uma foto do teu serviço
+                </MudText>
+                <MudText Typo="Typo.caption" Align="Align.Center" Class="mt-3" Style="color:#333;font-weight:bold;">
+                    NOTA: Este campo é opcional.
+                </MudText>
+            </label>
+        }
+        else
+        {
+            <div class="carousel-container"
+                 @onpointerdown="StartPointer"
+                 @onpointermove="MovePointer"
+                 @onpointerup="EndPointer"
+                 @onpointercancel="EndPointer"
+                 @onpointerleave="EndPointer">
+                @RenderCarousel()
+            </div>
+        }
+
+        <InputFile id="uploadInput"
+                   OnChange="OnFotoSelecionada"
+                   accept="image/*"
+                   style="display:none;" />
+    </MudPaper>
+
+    <!-- Campos principais -->
+    <MudTextField T="string" Label="Título do serviço*" Variant="Variant.Outlined" FullWidth="true"
+                  Placeholder="Título" @bind-Value="titulo" Required="true" />
+
+    <MudSelect Label="Categoria*" T="string" Variant="Variant.Outlined" FullWidth="true"
+               Placeholder="Escolhe categoria" Required="true" Class="mt-4" @bind-Value="categoria">
+        <MudSelectItem T="string">Limpezas</MudSelectItem>
+        <MudSelectItem T="string">Música</MudSelectItem>
+        <MudSelectItem T="string">Tecnologias</MudSelectItem>
+        <MudSelectItem T="string">Design</MudSelectItem>
+        <MudSelectItem T="string">Aulas</MudSelectItem>
+        <MudSelectItem T="string">Reparações</MudSelectItem>
+    </MudSelect>
+
+    <MudTextField T="string" Label="Descrição*" Variant="Variant.Outlined" FullWidth="true" Lines="4"
+                  Placeholder="Escreve uma descrição que explique da melhor forma possível o teu serviço"
+                  Required="true" @bind-Value="descricao" Class="mt-4" />
+
+    <MudSelect Label="Recursos*" T="string" Variant="Variant.Outlined" FullWidth="true"
+               Placeholder="Escolhe uma opção" Required="true" Class="mt-4" @bind-Value="recursos">
+        <MudSelectItem T="string">1 pessoa</MudSelectItem>
+        <MudSelectItem T="string">2 pessoas</MudSelectItem>
+        <MudSelectItem T="string">4 pessoas</MudSelectItem>
+        <MudSelectItem T="string">10 pessoas</MudSelectItem>
+    </MudSelect>
+
+    <!-- Preço -->
+    <MudText Typo="Typo.subtitle2" Class="mt-4 mb-1">Preço (opcional)</MudText>
+    <MudRadioGroup T="string" @bind-SelectedOption="preco" Orientation="Orientation.Horizontal">
+        <MudRadio T="string" Option="Fixo" Label="Fixo" />
+        <MudRadio T="string" Option="À hora" Label="À hora" />
+        <MudRadio T="string" Option="A combinar" Label="A combinar" />
+    </MudRadioGroup>
+
+    <MudTextField T="string" Label="Localização*" Variant="Variant.Outlined" FullWidth="true"
+                  Placeholder="Ex: Coimbra" @bind-Value="localizacao" Required="true" Class="mt-4" />
+
+    <!-- Idiomas -->
+    <MudSelect T="string"
+               Label="Idiomas"
+               Variant="Variant.Outlined"
+               FullWidth="true"
+               Placeholder="Escolhe uma ou mais opções"
+               MultiSelection="true"
+               SelectedValues="@idiomasSelecionados"
+               SelectedValuesChanged="@((IEnumerable<string> valores) => OnIdiomasChanged(valores))"
+               Class="mt-4">
+        @foreach (var idioma in idiomasDisponiveis)
+        {
+            <MudSelectItem Value="@idioma">@idioma</MudSelectItem>
+        }
+    </MudSelect>
+
+    <!-- Disponibilidade -->
+    <MudText Typo="Typo.subtitle2" Class="mt-4 mb-1">Disponibilidade</MudText>
+    <MudRadioGroup T="string" @bind-SelectedOption="disponibilidade" Orientation="Orientation.Horizontal">
+        <MudRadio T="string" Option="Manhã" Label="Manhã" />
+        <MudRadio T="string" Option="Tarde" Label="Tarde" />
+        <MudRadio T="string" Option="Todo dia" Label="Todo dia" />
+    </MudRadioGroup>
+
+    <!-- Tipo de Serviço -->
+    <MudText Typo="Typo.subtitle2" Class="mt-4 mb-1">Tipo de serviço</MudText>
+    <MudRadioGroup T="string" @bind-SelectedOption="tipoServico" Orientation="Orientation.Horizontal">
+        <MudRadio T="string" Option="Pontual" Label="Pontual" />
+        <MudRadio T="string" Option="Repetitivo" Label="Repetitivo" />
+    </MudRadioGroup>
+
+    <!-- Opções de pagamento -->
+    <MudText Typo="Typo.subtitle2" Class="mt-4 mb-1">Opções de pagamento</MudText>
+    <MudRadioGroup T="string" @bind-SelectedOption="pagamento" Orientation="Orientation.Horizontal">
+        <MudRadio T="string" Option="Hiquos" Label="Hiquos" />
+        <MudRadio T="string" Option="MBWay" Label="MBWay" />
+        <MudRadio T="string" Option="Transferência" Label="Transferência" />
+    </MudRadioGroup>
+
+    <!-- Botão -->
+    <MudButton Variant="Variant.Filled" Color="Color.Warning" FullWidth="true"
+               Class="mt-6 py-2" Style="text-transform:none;font-weight:bold;border-radius:10px;"
+               OnClick="PublicarServico">
+        Publicar
+    </MudButton>
+</MudContainer>
+
+<Footer />
+
+@code {
+    [Inject] NavigationManager Nav { get; set; } = default!;
+
+    private string titulo = "";
+    private string categoria = "";
+    private string descricao = "";
+    private string recursos = "";
+    private string preco = "";
+    private string localizacao = "";
+    private string disponibilidade = "";
+    private string tipoServico = "";
+    private string pagamento = "";
+
+    private List<string> fotos = new();
+    private int currentIndex = 0;
+
+    private double pointerStartX;
+    private bool isDragging = false;
+    private const double SWIPE_THRESHOLD = 50;
+
+    private void Voltar()
+    {
+        Nav.NavigateTo("/addpost");
+    }
+
+    private List<string> idiomasDisponiveis = new() { "Português", "Espanhol", "Inglês", "Francês" };
+    private HashSet<string> idiomasSelecionados = new();
+
+    private void OnIdiomasChanged(IEnumerable<string> novosIdiomas)
+    {
+        idiomasSelecionados = new HashSet<string>(novosIdiomas);
+    }
+
+    private async Task OnFotoSelecionada(InputFileChangeEventArgs e)
+    {
+        if (e == null) return;
+
+        var file = e.File;
+        using var stream = file.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
+        var buffer = new byte[file.Size];
+        await stream.ReadAsync(buffer);
+        var imageData = $"data:{file.ContentType};base64,{Convert.ToBase64String(buffer)}";
+        fotos.Clear();
+        fotos.Add(imageData);
+    }
+
+    private void StartPointer(PointerEventArgs e)
+    {
+        if (fotos.Count <= 1) return;
+        isDragging = true;
+        pointerStartX = e.ClientX;
+    }
+
+    private void MovePointer(PointerEventArgs e)
+    {
+        if (!isDragging) return;
+        // (feedback visual opcional)
+    }
+
+    private void EndPointer(PointerEventArgs e)
+    {
+        if (!isDragging) return;
+        isDragging = false;
+        var delta = e.ClientX - pointerStartX;
+
+        if (delta > SWIPE_THRESHOLD)
+            currentIndex = Math.Max(0, currentIndex - 1);
+        else if (delta < -SWIPE_THRESHOLD)
+            currentIndex = Math.Min(fotos.Count - 1, currentIndex + 1);
+    }
+
+    private void PublicarServico()
+    {
+        Console.WriteLine($"Serviço publicado: {titulo}, {categoria}, {descricao}, {localizacao}");
+        Nav.NavigateTo("/addpost");
+    }
+
+    private RenderFragment RenderCarousel() => __builder =>
+    {
+        __builder.OpenComponent<MudCarousel<string>>(0);
+        __builder.AddAttribute(1, "Style", "width:100%;height:100%;");
+        __builder.AddAttribute(2, "AutoCycle", false);
+        __builder.AddAttribute(3, "ShowArrows", false);
+        __builder.AddAttribute(4, "ShowIndicators", true);
+        __builder.AddAttribute(5, "ChildContent", (RenderFragment)((builder2) =>
+        {
+            int seq = 0;
+            foreach (var foto in fotos)
+            {
+                builder2.OpenComponent<MudCarouselItem>(seq++);
+                builder2.AddAttribute(seq++, "ChildContent", (RenderFragment)((builder3) =>
+                {
+                    builder3.AddMarkupContent(seq++, $"<img src='{foto}' style='width:100%;height:100%;object-fit:cover;' />");
+                }));
+                builder2.CloseComponent();
+            }
+        }));
+        __builder.CloseComponent();
+    };
+}
+
+<style>
+    .mud-input, .mud-select {
+        border-radius: 10px !important;
+    }
+
+    .mud-container {
+        background-color: #ffffff;
+    }
+
+    .mud-input-label {
+        font-weight: 500;
+        color: #333 !important;
+    }
+
+    .mud-input-input, .mud-select-input {
+        font-size: 0.95rem;
+    }
+
+    .mud-carousel-indicators {
+        bottom: 10px !important;
+    }
+
+    .carousel-container {
+        width: 100%;
+        height: 100%;
+        touch-action: pan-y;
+    }
+</style>

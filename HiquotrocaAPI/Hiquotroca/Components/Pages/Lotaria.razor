@@ -1,0 +1,60 @@
+﻿@page "/lotaria"
+@inject NavigationManager NavigationManager
+
+<MudContainer MaxWidth="MaxWidth.False" Class="px-4 pt-2 pb-10">
+
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack"
+                   OnClick="@Voltar"
+                   Style="position:absolute;top:16px;left:10px;" />
+
+    <MudText Typo="Typo.h4" Style="margin-top:45px;margin-left:5px;">Lotaria</MudText>
+
+    <MudText Typo="Typo.subtitle1" Style="margin-left:5px;">Sorteios em vigor</MudText>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:20px;">
+        @foreach (var s in Sorteios)
+        {
+            <MudPaper Style="border-radius:20px;overflow:hidden;cursor:pointer;"
+                      @onclick="@(() => AbrirDetalhes(s))">
+
+                <MudImage Src="@s.Imagem" Style="width:100%;height:160px;object-fit:cover;" />
+
+                <div style="padding:10px;">
+                    <MudText Typo="Typo.body1">@s.Nome</MudText>
+                    <MudText Typo="Typo.caption">
+                        Data de Sorteio: @s.DataSorteio.ToString("dd MMMM")
+                    </MudText>
+                </div>
+
+            </MudPaper>
+        }
+    </div>
+
+</MudContainer>
+
+<Footer />
+
+@code {
+
+    void Voltar() => NavigationManager.NavigateTo("/");
+
+    class Sorteio
+    {
+        public string Nome { get; set; } = "";
+        public string Imagem { get; set; } = "";
+        public DateTime DataSorteio { get; set; }
+    }
+
+    List<Sorteio> Sorteios = new()
+    {
+        new() { Nome = "iPhone 17 Apple 6.3\" - 256 GB, preto", Imagem="images/iphone17.png", DataSorteio=new(2025,11,7)},
+        new() { Nome = "Bicicleta Elétrica criança 350W 16\"", Imagem="images/bicicleta.png", DataSorteio=new(2025,11,12)},
+        new() { Nome = "Relógio Smartwatch X-watch", Imagem="images/relogio.png", DataSorteio=new(2025,11,14)},
+        new() { Nome = "Viagem - 3 pax Disneyland Paris", Imagem="images/disney.png", DataSorteio=new(2025,12,01)}
+    };
+
+    void AbrirDetalhes(Sorteio s)
+    {
+        NavigationManager.NavigateTo($"/detalhes-sorteio/{Uri.EscapeDataString(s.Nome)}");
+    }
+}

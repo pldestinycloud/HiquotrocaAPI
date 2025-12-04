@@ -1,0 +1,238 @@
+@page "/addpost"
+@inject NavigationManager Navigation
+
+<MudPaper Class="addpost-container" Square="true">
+
+    <img src="images/Arrow.png" alt="Voltar"
+         @onclick="Voltar"
+         style="position:absolute;top:10px;left:10px;width:24px;height:24px;cursor:pointer;" />
+
+    <MudText Typo="Typo.h5">Publicar</MudText>
+
+    <MudPaper Class="header-box" Square="true">
+        <p class="header-text">O que vamos fazer hoje?</p>
+    </MudPaper>
+
+    <div class="addpost-buttons">
+
+        <MudButton Class="btn-card trocar" OnClick="@(() => GoToPage("Trocar"))">
+            <span class="btn-text">Trocar</span>
+            <img src="images/Trocar.png" class="btn-icon" />
+        </MudButton>
+
+        <MudButton Class="btn-card vender" OnClick="@(() => GoToPage("Vender"))">
+            <span class="btn-text">Vender</span>
+            <img src="images/gitlab.png" class="btn-icon" />
+        </MudButton>
+
+        <MudButton Class="btn-card alugar" OnClick="@(() => GoToPage("Alugar"))">
+            <span class="btn-text">Alugar</span>
+            <div class="double-icons">
+                <img src="images/Vector.png" class="arrow up" />
+                <img src="images/Vector.png" class="arrow down" />
+            </div>
+        </MudButton>
+
+        <MudButton Class="btn-card doar" OnClick="@(() => GoToPage("Doar"))">
+            <span class="btn-text">Doar</span>
+            <img src="images/Oportunidades.png" class="btn-icon" />
+        </MudButton>
+
+        <MudButton Class="btn-card pedir" OnClick="@(() => Navigation.NavigateTo("/pedir"))">
+            <span class="btn-text">Pedir</span>
+            <img src="images/target.png" class="btn-icon" />
+        </MudButton>
+
+        <MudButton Class="btn-card servicos" OnClick="@(() => Navigation.NavigateTo("/servicos"))">
+            <span class="btn-text">Serviços</span>
+            <img src="images/slack.png" class="btn-icon" />
+        </MudButton>
+
+    </div>
+
+</MudPaper>
+
+<Footer />
+
+@code {
+    private void GoToPage(string tipo)
+    {
+        Navigation.NavigateTo($"/novoartigo/{Uri.EscapeDataString(tipo)}");
+    }
+
+    private void Voltar()
+    {
+        Navigation.NavigateTo("/");
+    }
+}
+
+<style>
+    /* ====== Layout base ====== */
+    .addpost-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1.5rem 0.5rem;
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #fff;
+        min-height: 100vh;
+    }
+
+        .addpost-container h2 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 1.2rem;
+        }
+
+    /* ====== Header ====== */
+    .header-box {
+        position: relative;
+        width: 100%;
+        max-width: 550px;
+        height: 130px;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 2rem;
+        background-image: url("images/mascote.jpg");
+        background-size: cover;
+        background-position: center right;
+        background-repeat: no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 0.8rem;
+    }
+
+    .header-text {
+        font-size: 1.1rem;
+        color: #333;
+        font-weight: 500;
+        margin: 0;
+        max-width: 45%;
+        line-height: 1.3;
+        word-break: break-word;
+    }
+
+    /* ====== Botões ====== */
+    .addpost-buttons {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.9rem;
+        width: 100%;
+        max-width: 520px;
+        padding: 0 0.5rem;
+    }
+
+    .btn-card {
+        position: relative;
+        border: none;
+        border-radius: 16px;
+        color: #fff;
+        aspect-ratio: 1 / 1;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .btn-text {
+        font-size: 1.1rem;
+        color: white
+    }
+
+    .btn-icon {
+        width: 28px;
+        height: 28px;
+        position: absolute;
+        bottom: 10px;
+        right: 12px;
+    }
+
+    /* ====== Ícones duplos (Alugar) ====== */
+    .double-icons {
+        position: absolute;
+        bottom: 10px;
+        right: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .double-icons .arrow {
+            width: 26px;
+            height: 12px;
+            filter: brightness(0) invert(1);
+        }
+
+            .double-icons .arrow.up {
+                transform: rotate(180deg);
+            }
+
+    .btn-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ====== Cores ====== */
+    .trocar {
+        background-color: #4f75e4;
+    }
+
+    .vender {
+        background-color: #f7b9a2;
+        color: #333;
+    }
+
+    .alugar {
+        background-color: #6fc2c5;
+    }
+
+    .doar {
+        background-color: #a36fd8;
+    }
+
+    .pedir {
+        background-color: #c46a77;
+    }
+
+    .servicos {
+        background-color: #8a8a8a;
+    }
+
+    /* ====== Responsivo ====== */
+    @@media (max-width: 480px) {
+        .addpost-buttons
+
+    {
+        gap: 0.8rem;
+        padding: 0 0.3rem;
+    }
+
+    .btn-card {
+        padding: 0.8rem;
+    }
+
+    .btn-text {
+        font-size: 1rem;
+    }
+
+    .btn-icon,
+    .double-icons {
+        bottom: 8px;
+        right: 10px;
+    }
+
+        .double-icons .arrow {
+            width: 22px;
+            height: 10px;
+        }
+
+    }
+</style>
+

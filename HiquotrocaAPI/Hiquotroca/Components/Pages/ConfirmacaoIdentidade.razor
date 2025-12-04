@@ -1,0 +1,78 @@
+﻿@page "/confirmacao-identidade/{nome}"
+@inject NavigationManager NavigationManager
+
+@code {
+    [Parameter] public string? Nome { get; set; }
+
+    string Email = "";
+    string Password = "";
+    bool _showPass = false;
+    bool AceitoTermos = false;
+    bool AceitoPrivacidade = false;
+
+    void Voltar() => NavigationManager.NavigateTo($"/detalhes-sorteio/{Uri.EscapeDataString(Nome!)}");
+
+    void IrParaNumeroSorte()
+    {
+        NavigationManager.NavigateTo($"/numero-sorte/{Uri.EscapeDataString(Nome!)}");
+    }
+}
+
+<MudContainer MaxWidth="MaxWidth.False" Class="px-4 pt-4 pb-10">
+
+    <MudIconButton Icon="@Icons.Material.Filled.Close"
+                   OnClick="@Voltar"
+                   Style="position:absolute;top:16px;left:16px;" />
+
+    <MudText Typo="Typo.h5" Style="margin-top:45px;">Lotaria</MudText>
+
+    <MudText Typo="Typo.h4" Align="Align.Center" Style="color:#FF8800;">
+        És mesmo tu?
+    </MudText>
+
+    <!-- Campo Email -->
+    <MudTextField T="string"
+                  Label="Email/Telemóvel"
+                  Variant="Variant.Outlined"
+                  FullWidth="true"
+                  Placeholder="Email/Telemóvel"
+                  Class="mt-3"
+                  @bind-Value="Email"
+                  Style="background:#E9F2FF;border:none;border-radius:12px;" />
+
+    <!-- Campo Password -->
+    <MudTextField T="string"
+                  Label="Palavra passe"
+                  Variant="Variant.Outlined"
+                  FullWidth="true"
+                  InputType="@(_showPass ? InputType.Text : InputType.Password)"
+                  Placeholder="••••••"
+                  Adornment="Adornment.End"
+                  AdornmentIcon="@(_showPass ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)"
+                  OnAdornmentClick="@(() => _showPass = !_showPass)"
+                  Class="mt-3"
+                  @bind-Value="Password"
+                  Style="background:#E9F2FF;border:none;border-radius:12px;" />
+
+    <MudCheckBox T="bool"
+                 @bind-Checked="AceitoTermos"
+                 Color="Color.Warning"
+                 Class="mt-4">
+        Aceito e Concordo com os Termos e Condições do concurso.
+    </MudCheckBox>
+
+    <MudCheckBox T="bool"
+                 @bind-Checked="AceitoPrivacidade"
+                 Color="Color.Warning"
+                 Class="mt-2">
+        Aceito e Concordo com a Política de Privacidade.
+    </MudCheckBox>
+
+
+    <div style="text-align:center;margin-top:30px;">
+        <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="@IrParaNumeroSorte">
+            ENVIAR
+        </MudButton>
+    </div>
+
+</MudContainer>
