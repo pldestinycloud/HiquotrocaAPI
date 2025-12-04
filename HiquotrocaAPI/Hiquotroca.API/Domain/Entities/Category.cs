@@ -6,7 +6,6 @@ namespace Hiquotroca.API.Domain.Entities
 {
     public class Category : BaseEntity
     {
-        public long Id { get;  private set; }
         public string Name { get; private set; }
         public string? IconPath { get; private set; }
         public List<SubCategory> SubCategories { get; private set; }

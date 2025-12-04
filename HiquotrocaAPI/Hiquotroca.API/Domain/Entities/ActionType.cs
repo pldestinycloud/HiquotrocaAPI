@@ -7,7 +7,6 @@ namespace Hiquotroca.API.Domain.Entities
 {
     public class ActionType : BaseEntity
     {
-        public long Id { get; private set; }
         public string Name { get; private set; } = string.Empty;
         public string? Description { get; private set; }
 

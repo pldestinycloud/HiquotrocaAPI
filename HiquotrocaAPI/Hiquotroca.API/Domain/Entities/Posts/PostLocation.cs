@@ -4,7 +4,6 @@ namespace Hiquotroca.API.Domain.Entities.Posts
 {
     public class PostLocation : BaseEntity
     {
-        public long Id { get; private set; }
         public string? Address { get; set; }
         public string? City { get; set; }
         public string? PostalCode { get; set; }

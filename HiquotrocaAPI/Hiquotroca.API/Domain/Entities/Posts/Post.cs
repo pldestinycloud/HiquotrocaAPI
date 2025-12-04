@@ -11,7 +11,6 @@ namespace Hiquotroca.API.Domain.Entities.Posts
 {
     public class Post : BaseEntity
     {
-        public long Id { get; private set; }
         public string Title { get; private set; } = string.Empty;
         public string? Description { get; private set; }
         public long UserId { get; private set; }

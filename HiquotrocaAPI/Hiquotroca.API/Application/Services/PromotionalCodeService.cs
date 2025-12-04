@@ -2,6 +2,7 @@
 using Hiquotroca.API.Domain.Entities;
 using Hiquotroca.API.DTOs.PromotionalCode;
 using Hiquotroca.API.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hiquotroca.API.Application.Services
@@ -16,30 +17,33 @@ namespace Hiquotroca.API.Application.Services
         }
 
 
-        public async Task<BaseResult<long>> CreateAsync(CreatePromotionalCodeDto dto)
+        public async Task<BaseResult<long>> CreateAsync(CreatePromotionalCodeDto dto, long userId)
         {
             var code = new PromotionalCode
             {
                 Code = dto.Code,
                 ExpiryDate = dto.ExpiryDate,
                 IsActive = true,
-                UserId = dto.UserId
+                UserId = dto.UserId,
+
+                CreatedBy = userId,
+                CreatedDate = DateTime.UtcNow
             };
 
             _context.PromotionalCodes.Add(code);
             await _context.SaveChangesAsync();
 
-            return code.Id;
+            return BaseResult<long>.Ok(code.Id);
         }
-        public async Task<PromotionalCode?> GetByIdAsync(long id)
+        public async Task<BaseResult<PromotionalCode?>> GetByIdAsync(long id)
         {
             return await _context.PromotionalCodes.FindAsync(id);
         }
-        public async Task<List<PromotionalCode>> GetAllAsync()
+        public async Task<BaseResult<List<PromotionalCode>>> GetAllAsync()
         {
             return await _context.PromotionalCodes.ToListAsync();
         }
-        public async Task<PromotionalCode> UpdateAsync(UpdatePromotionalCodeDto dto)
+        public async Task<BaseResult<PromotionalCode>> UpdateAsync(UpdatePromotionalCodeDto dto, long currentUserId)
         {
             var code = await _context.PromotionalCodes.FindAsync(dto.Id);
 
@@ -50,20 +54,28 @@ namespace Hiquotroca.API.Application.Services
             code.ExpiryDate = dto.ExpiryDate;
             code.IsActive = dto.IsActive;
 
+            code.UpdatedBy = currentUserId;
+            code.UpdatedDate = DateTime.UtcNow;
+
             await _context.SaveChangesAsync();
 
             return code;
         }
-        public async Task<bool> DeleteAsync(long id)
+        public async Task<BaseResult<bool>> DeleteAsync(long id, long currentUserId)
         {
-            var code = await _context.PromotionalCodes.FindAsync(id);
-            if (code == null)
-                return false;
+            var code = await _context.PromotionalCodes
+                .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
 
-            _context.PromotionalCodes.Remove(code);
+            if (code == null)
+                return BaseResult<bool>.Failure(new Error(ErrorCode.NotFound, "Promotional code not found"));
+
+            code.IsDeleted = true;
+            code.UpdatedBy = currentUserId;
+            code.UpdatedDate = DateTime.UtcNow;
+
             await _context.SaveChangesAsync();
 
-            return true;
+            return BaseResult<bool>.Ok(true);
         }
     }
 }

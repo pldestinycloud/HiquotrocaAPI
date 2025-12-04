@@ -8,7 +8,6 @@ namespace Hiquotroca.API.Domain.Entities.Chat
 {
     public class Message : BaseEntity
     {
-        public long Id { get; private set; }
         public long ChatId { get; private set; }
         public long SenderId { get; private set; }
         public long ReceiverId { get; private set; }

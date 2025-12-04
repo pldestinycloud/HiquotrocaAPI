@@ -7,7 +7,6 @@ namespace Hiquotroca.API.Domain.Entities
 {
     public class PostImage : BaseEntity
     {
-        public long Id { get; private set; } 
         public bool IsPrimary { get; set; } = false;
         public string Url { get; set; } = string.Empty;
 

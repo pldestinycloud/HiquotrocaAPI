@@ -9,7 +9,6 @@ namespace Hiquotroca.API.Domain.Entities.Chat
 {
     public class Chat : BaseEntity
     {
-        public long Id { get; private set; }
         public long UserId1 { get; private set; }
         public long UserId2 { get; private set; }
         public long? PostId { get; private set; } // conversa ligada a um post

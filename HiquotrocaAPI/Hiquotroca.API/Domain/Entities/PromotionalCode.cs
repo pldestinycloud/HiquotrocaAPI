@@ -5,7 +5,6 @@ namespace Hiquotroca.API.Domain.Entities
 {
     public class PromotionalCode : BaseEntity
     {
-        public long Id { get; set; }
         public string Code { get; set; } = string.Empty;
         public DateTime ExpiryDate { get; set; }
         public bool IsActive { get; set; }

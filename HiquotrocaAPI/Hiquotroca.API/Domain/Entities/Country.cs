@@ -8,7 +8,6 @@ namespace Hiquotroca.API.Domain.Entities
 {
     public class Country : BaseEntity
     {
-        public long Id { get; private set; }
         public string Name { get; private set; } = string.Empty;
         public string? IsoCode { get; private set; }
 

@@ -7,7 +7,6 @@ namespace Hiquotroca.API.Domain.Entities.Users
 {
     public class User : BaseEntity
     {
-        public long Id { get; private set; }
         public string Email { get; private set; } = string.Empty;
         public string? PasswordHash { get; private set; }
         public string? PhoneNumber { get; private set; }
