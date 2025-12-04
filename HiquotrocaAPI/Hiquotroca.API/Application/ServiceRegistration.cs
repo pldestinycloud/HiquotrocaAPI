@@ -14,6 +14,7 @@ public static class ServiceRegistration
         services.AddScoped <UserService>();
         services.AddScoped<AuthService>();
         services.AddScoped<PostService>();
+        services.AddScoped<PromotionalCodeService>();
 
         return services;
     }

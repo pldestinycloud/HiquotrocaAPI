@@ -16,7 +16,7 @@ namespace Hiquotroca.API.Infrastructure.Persistence.Configurations
                    .IsRequired()
                    .HasMaxLength(50);
 
-            builder.Property(x => x.ExpirationDate)
+            builder.Property(x => x.ExpiryDate)
                    .IsRequired();
 
             builder.HasOne(pc => pc.User)
