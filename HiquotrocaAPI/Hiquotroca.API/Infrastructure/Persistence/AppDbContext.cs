@@ -22,6 +22,8 @@ namespace Hiquotroca.API.Infrastructure.Persistence
         public DbSet<Message> Messages => Set<Message>();
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<SubCategory> SubCategories => Set<SubCategory>();
+        public DbSet<PromotionalCode> PromotionalCodes => Set<PromotionalCode>();
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
