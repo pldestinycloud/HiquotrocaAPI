@@ -1,4 +1,5 @@
-﻿using Hiquotroca.API.Domain.Entities.Users;
+﻿using Hiquotroca.API.Domain.Entities;
+using Hiquotroca.API.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hiquotroca.API.Infrastructure.Persistence.Configurations
