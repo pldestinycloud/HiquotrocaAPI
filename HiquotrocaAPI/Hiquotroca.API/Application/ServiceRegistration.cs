@@ -15,6 +15,7 @@ public static class ServiceRegistration
         services.AddScoped<AuthService>();
         services.AddScoped<PostService>();
         services.AddScoped<PromotionalCodeService>();
+        services.AddScoped<ChatService>();
 
         return services;
     }
