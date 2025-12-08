@@ -4,6 +4,7 @@ using Hiquotroca.API.Domain.Entities.Users;
 using Hiquotroca.API.DTOs.Auth.Requests;
 using Hiquotroca.API.DTOs.Users.Requests;
 using Hiquotroca.API.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,20 +16,10 @@ namespace Hiquotroca.API.Presentation.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly AppDbContext _db;
-        private readonly PasswordHasher<User> _passwordHasher;
-        private readonly IEmailSender _emailSender;
         private readonly AuthService _authService;
 
-        public AuthController(
-            AppDbContext db,
-            PasswordHasher<User> passwordHasher,
-            IEmailSender emailSender,
-            AuthService authService)
+        public AuthController(AuthService authService)
         {
-            _db = db;
-            _passwordHasher = passwordHasher;
-            _emailSender = emailSender;
             _authService = authService;
         }
 
@@ -51,6 +42,16 @@ namespace Hiquotroca.API.Presentation.Controllers
             var result = await _authService.LoginUser(request);
             if (!result.isSuccess)
                 return BadRequest(result.Errors);
+            return Ok(result);
+        }
+
+        [HttpPost("get-access-token")]
+        public async Task<IActionResult> GetAccessToken(long userId,string refreshToken)
+        {
+            var result = await _authService.GetAccessTokenWithRefreshToken(userId, refreshToken);
+            if (!result.isSuccess)
+                return Forbid();
+
             return Ok(result);
         }
 

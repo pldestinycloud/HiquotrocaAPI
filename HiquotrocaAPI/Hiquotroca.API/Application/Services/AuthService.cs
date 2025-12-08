@@ -7,6 +7,11 @@ using Hiquotroca.API.Infrastructure.Persistence;
 using Hiquotroca.API.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames;
 
 namespace Hiquotroca.API.Application.Services
 {
@@ -20,14 +25,15 @@ namespace Hiquotroca.API.Application.Services
         ******* PARA UMA VERSAO 2 MUDAR *******
         */
 
-        private readonly UserRepository _userRepository;
         private readonly AppDbContext _context;
         private readonly PasswordHasher<User> _passwordHasher;
-        public AuthService(UserRepository userService, AppDbContext context, PasswordHasher<User> passwordHasher)
+        private readonly IConfiguration _configuration;
+
+        public AuthService(AppDbContext context, PasswordHasher<User> passwordHasher, IConfiguration configuration)
         {
-            _userRepository = userService;
             _context = context;
             _passwordHasher = passwordHasher;
+            _configuration = configuration;
         }
 
         //Aqui novamente o serviço devia ser unware de como é que os dados chegam à aplicação, porque agora recebe por htttp, mas podia muito bem receber por outro protocolo
@@ -52,7 +58,8 @@ namespace Hiquotroca.API.Application.Services
 
             try
             {
-                await _userRepository.AddAsync(newUser);
+                await _context.Users.AddAsync(newUser);
+                await _context.SaveChangesAsync();
                 return BaseResult.Ok();
             }
             catch (Exception ex)
@@ -76,11 +83,18 @@ namespace Hiquotroca.API.Application.Services
             }
 
             // Generate JWT token
-            var accessToken = "Mocked Access Token";
-            // Generate Refresh Token
-            var refreshToken = "Mocked Refresh Token";
+            var accessToken = GenerateJwtToken(user);
 
-            LoginResponse response = new LoginResponse
+            // Generate Refresh Token
+            var refreshToken = Guid.NewGuid().ToString().Replace("-", "");
+
+            user.UpdateRefreshToken(
+                refreshToken: refreshToken,
+                expiry: DateTime.UtcNow.AddDays(_configuration.GetValue<int>("Jwt:RefreshTokenDurationInDays")));
+
+            await _context.SaveChangesAsync();
+
+            var response = new LoginResponse
             {
                 UserId = user.Id,
                 Email = user.Email,
@@ -89,6 +103,55 @@ namespace Hiquotroca.API.Application.Services
             };
 
             return BaseResult<LoginResponse>.Ok(response);
+        }
+
+
+        //No futuro mudar para uma classe Independente do estilo TokenProvider or wtv
+        private string GenerateJwtToken(User user)
+        {
+            var secretKey = _configuration.GetValue<string>("Jwt:SecretKey")!;
+            var securityKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secretKey));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var token = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("Jwt:DurationInMinutes")),
+                Issuer = _configuration.GetValue<string>("Jwt:Issuer"),
+                Audience = _configuration.GetValue<string>("Jwt:Audience"),
+                SigningCredentials = credentials
+            };
+
+            return new JsonWebTokenHandler().CreateToken(token);
+        }
+
+        //SE calhar nao devia retornar um LoginResponse mas sim um objecto mais adequado
+        //No entanto o LoginResponse ja tem os campos necessarios
+        public async Task<BaseResult<LoginResponse>> GetAccessTokenWithRefreshToken(long userId, string refreshToken)
+        {
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null
+                || user.RefreshTokenExpiry == null
+                || user.RefreshTokenExpiry < DateTime.UtcNow
+                || user.RefreshToken != refreshToken)
+            {
+                return BaseResult<LoginResponse>.Failure(new Error(ErrorCode.AccessDenied, "A valid refresh token needs to be sent to"));
+            }
+
+            var newAccessToken = GenerateJwtToken(user);
+
+            return BaseResult<LoginResponse>.Ok(new LoginResponse
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                AccessToken = newAccessToken,
+                RefreshToken = user.RefreshToken
+            });
         }
     }
 }
