@@ -1,5 +1,6 @@
 using Hiquotroca.API.Infrastructure;
 using Hiquotroca.API.Application;
+using Hiquotroca.API.Presentation;
 using Hiquotroca.API.Presentation.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -35,7 +36,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy("OpenPolicy", policy =>
     {
         policy.AllowAnyOrigin()
               .AllowAnyHeader()
@@ -56,12 +57,18 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
-//app.UseAuthorization();
-
-app.MapControllers();
-app.MapHub<ChatHub>("/chat").AllowAnonymous();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+//Aggregate roots endpoints
+app.MapControllers();
+app.MapHub<ChatHub>("/chat").AllowAnonymous();
+
+//Value objects endpoints
+app.MapValueObjectsEndpoints();
+//Nota Critica: Utilizar minimal api endpoints e controllers normais pode criar confusão na organização do projeto.
+//No entanto, como o ojectivo é apenas retornar as coleções dos value ojects, é mais rápido e simples do que criar toda a estrtutura de controllers, services, etc.
+//Não obstante, deve ser alterada no futuro uma vez que se se chega a conclusões mais definitivas sobre a arquitetura da aplicação.
 
 app.Run();
