@@ -116,5 +116,18 @@ namespace Hiquotroca.API.Application.Services
             await _chatRepository.AddAsync(chat);
             return BaseResult.Ok();
         }
+
+        public async Task AddMessageAsync(long chatId, long senderId, long receiverId, string content)
+        {
+            var chat = await _chatRepository.GetChatWithMessagesAsync(chatId);
+
+            //Ainda Tenho de pensar no que fazer quando o user tentar mandar uma mensagem para um chat que não existe
+            if (chat == null)
+               return;
+
+            var message = new Message(chatId, senderId, receiverId, content);
+            chat.Messages.Add(message);
+            await _chatRepository.UpdateAsync(chat);
+        }
     }
 }
