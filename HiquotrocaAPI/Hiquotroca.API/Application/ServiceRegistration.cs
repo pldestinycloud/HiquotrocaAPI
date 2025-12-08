@@ -9,11 +9,17 @@ public static class ServiceRegistration
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
+        //Auth Services
         services.AddScoped<PasswordHasher<User>>();
-        services.AddScoped<ActionTypeService>();
-        services.AddScoped <UserService>();
         services.AddScoped<AuthService>();
+
+        //Aggregate Root Services
+        services.AddScoped<UserService>();
         services.AddScoped<PostService>();
+        services.AddScoped<ChatService>();
+
+        //Other Entities Services
+        services.AddScoped<ActionTypeService>();
         services.AddScoped<PromotionalCodeService>();
 
         return services;

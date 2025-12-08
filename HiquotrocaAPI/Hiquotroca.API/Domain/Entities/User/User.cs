@@ -13,13 +13,11 @@ namespace Hiquotroca.API.Domain.Entities.Users
         public DateTime? BirthDate { get; private set; }
         public string FirstName { get; private set; } = string.Empty;
         public string? LastName { get; private set; }
-        public string? ResetToken { get; private set; }
-        public DateTime? ResetTokenExpiry { get; private set; }
-
+        public string? RefreshToken { get; private set; }
+        public DateTime? RefreshTokenExpiry { get; private set; }
         public UserAddress? Address { get; private set; }
         public List<long> FavoritePosts { get; private set; }
         public List<long> FollowingUsers { get; private set; }
-        public long? PromotionalCodeId { get; private set; }
         public PromotionalCode? PromotionalCode { get; private set; }
 
         public User(string email, string firstName, string lastName, string? phoneNumber = null, DateTime? birthDate = null)
@@ -121,6 +119,16 @@ namespace Hiquotroca.API.Domain.Entities.Users
                 return this;
             }
             this.FavoritePosts.Remove(post);
+            return this;
+        }
+
+        //Isto Tá muito mal aqui mas pronto. Um dos motivos pelos quais o modelo de negócio nao deve ser misturado
+        //com questoes de segurança 
+        //No Futuro ao segregar as responsabilidades eliminar este metodo
+        public User UpdateRefreshToken(string refreshToken, DateTime expiry)
+        {
+            this.RefreshToken = refreshToken;
+            this.RefreshTokenExpiry = expiry;
             return this;
         }
     }    
