@@ -1,4 +1,4 @@
-﻿using Hiquotroca.API.Domain.Entities.Posts;
+﻿using Hiquotroca.API.Domain.Entities.Post;
 
 namespace Hiquotroca.API.Infrastructure.Persistence.Repositories
 {
