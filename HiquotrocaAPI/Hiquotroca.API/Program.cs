@@ -46,7 +46,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -65,10 +64,10 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<ChatHub>("/chat").AllowAnonymous();
 
-//Value objects endpoints
-app.MapValueObjectsEndpoints();
+//LoopUp entitities endpoints
+app.MapLookUpEntitiesEndpoints();
 //Nota Critica: Utilizar minimal api endpoints e controllers normais pode criar confusão na organização do projeto.
-//No entanto, como o ojectivo é apenas retornar as coleções dos value ojects, é mais rápido e simples do que criar toda a estrtutura de controllers, services, etc.
+//No entanto, como o ojectivo é apenas retornar as coleções das lookup entities, é mais rápido e simples do que criar toda a estrtutura de controllers, services, etc.
 //Não obstante, deve ser alterada no futuro uma vez que se se chega a conclusões mais definitivas sobre a arquitetura da aplicação.
 
 app.Run();
