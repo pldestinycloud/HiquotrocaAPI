@@ -19,100 +19,74 @@ namespace Hiquotroca.API.Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
-        {
-            var result = await _service.GetAllUsersAsync();
-
-            if (!result.isSuccess)
-                return BadRequest(result);
-
-            if (result.Data == null || !result.Data!.Any())
-                return NotFound();
-
-            return Ok(result);
-        }
+        public async Task<IActionResult> GetUsers() =>
+            Ok(await _service.GetAllUsersAsync());
 
         [HttpGet("{id:long}")]
         public async Task<IActionResult> GetUserById(long id)
         {
-            var result = await _service.GetUserByIdAsync(id);
+            var user = await _service.GetUserByIdAsync(id);
 
-            if (!result.isSuccess)
-                return BadRequest(result);
-
-            if (result.Data == null)
+            if (user == null)
                 return NotFound();
 
-            return Ok(result);
+            return Ok(user);
         }
 
         [HttpPut("{id:long}")]
-        public async Task<IActionResult> UpdateUser(long id, [FromBody]  UpdateUserRequest updateUserRequest)
+        public async Task<IActionResult> UpdateUser(long id, [FromBody] UpdateUserDto updateUserDto)
         {
-            var result = await _service.UpdateUserAsync(id, new UserDto());
-
-            if (!result.isSuccess)
-                return BadRequest(result);
-
-            if (result.Data == null)
-                return NotFound();
-
-            return Ok(result);
+            await _service.UpdateUserAsync(id, updateUserDto);
+            return NoContent();
         }
 
         [HttpDelete("{id:long}")]
         public async Task<IActionResult> DeleteUser(long id)
         {
-            var result = await _service.DeleteUserAsync(id);
-
-            if (!result.isSuccess)
-                return BadRequest(result);
-
-            return Ok(result);
+            await _service.DeleteUserAsync(id);
+            return NoContent();
         }
 
         [HttpPost("{userId:long}/favorites/{postId:long}")]
         public async Task<IActionResult> AddFavoritePost(long userId, long postId)
         {
-            var result = await _service.AddFavoritePostAsync(userId, postId);
-
-            if (!result.isSuccess)
-                return BadRequest(result);
-
-            return Ok(result);
+            await _service.AddFavoritePostAsync(userId, postId);
+            return NoContent();
         }
 
         [HttpDelete("{userId:long}/favorites/{postId:long}")]
         public async Task<IActionResult> RemoveFavoritePost(long userId, long postId)
         {
-            var result = await _service.RemoveFavoritePostAsync(userId, postId);
-
-            if (!result.isSuccess)
-                return BadRequest(result);
-
-            return Ok(result);
+            await _service.RemoveFavoritePostAsync(userId, postId);
+            return NoContent();
         }
 
         [HttpPost("{userId:long}/follow/{targetUserId:long}")]
         public async Task<IActionResult> FollowUser(long userId, long targetUserId)
         {
-            var result = await _service.FollowUserAsync(userId, targetUserId);
-
-            if (!result.isSuccess)
-                return BadRequest(result);
-
-            return Ok(result);
+            await _service.FollowUserAsync(userId, targetUserId);
+            return NoContent();
         }
 
         [HttpDelete("{userId:long}/follow/{targetUserId:long}")]
         public async Task<IActionResult> UnfollowUser(long userId, long targetUserId)
         {
-            var result = await _service.UnfollowUserAsync(userId, targetUserId);
+            await _service.UnfollowUserAsync(userId, targetUserId);
+            return NoContent();
+        }
 
-            if (!result.isSuccess)
-                return BadRequest(result);
+        [HttpPost("{userId:long}/promotional-codes/{promotionalCodeId:long}")]
+        public async Task<IActionResult> ApplyPromoCode(long userId, long promotionalCodeId)
+        {
+            await _service.AttributePromotionalCode(userId, promotionalCodeId);
+            return NoContent();
+        }
 
-            return Ok(result);
+        [HttpDelete("{userId:long}/promotional-codes/{promotionalCodeId:long}")]
+        public async Task<IActionResult> RemovePromoCode(long userId, long promotionalCodeId)
+        {
+            await _service.RemovePromotionalCode(userId, promotionalCodeId);
+            return NoContent();
         }
     }
 }
