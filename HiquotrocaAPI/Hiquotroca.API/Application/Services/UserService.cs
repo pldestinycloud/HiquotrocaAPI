@@ -14,15 +14,15 @@ namespace Hiquotroca.API.Application.Services
         {
             _userRepository = userRepository;
         }
-        
-        public async Task<BaseResult<List<UserDto>>> GetAllUsersAsync()
+
+        public async Task<List<UserDto>?> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllAsync();
 
             if (users == null || !users.Any())
-                return BaseResult<List<UserDto>>.Failure(new Error(ErrorCode.NotFound, "No users found"));
+                return new List<UserDto>();
 
-            var userDtos = users.Select(user => new UserDto
+            return users.Select(user => new UserDto
             {
                 Id = user.Id,
                 Nome = user.FirstName,
@@ -31,17 +31,15 @@ namespace Hiquotroca.API.Application.Services
                 PhoneNumber = user.PhoneNumber,
                 BirthDate = user.BirthDate,
             }).ToList();
-
-            return BaseResult<List<UserDto>>.Ok(userDtos);
         }
 
-        public async Task<BaseResult<UserDto>> GetUserByIdAsync(long id)
+        public async Task<UserDto?> GetUserByIdAsync(long id)
         {
             var user = await _userRepository.GetByIdAsync(id);
             if (user == null)
-                return BaseResult<UserDto>.Failure(new Error(ErrorCode.NotFound, "User not found"));
+                return null;
 
-            return BaseResult<UserDto>.Ok(new UserDto
+            return new UserDto
             {
                 Id = user.Id,
                 Nome = user.FirstName,
@@ -49,37 +47,102 @@ namespace Hiquotroca.API.Application.Services
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 BirthDate = user.BirthDate,
-            });
+            };
+        }
+        
+        public async Task UpdateUserAsync(long id, UpdateUserDto updateUserDto)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+                return;
+
+            user = user.UpdateUser(updateUserDto.FirstName,
+                updateUserDto.LastName,
+                updateUserDto.PhoneNumber,
+                updateUserDto.BirthDate
+            );
+
+            if(updateUserDto.Address != null)
+            {
+                user = user.SetUserAddress(
+                    updateUserDto.Address.Address,
+                    updateUserDto.Address.City,
+                    updateUserDto.Address.PostalCode,
+                    updateUserDto.Address.CountryId
+                );
+            }
+
+            await _userRepository.UpdateAsync(user);
         }
 
-        public async Task<BaseResult<UserDto>> UpdateUserAsync(long id, UserDto newUserDto)
+        public async Task DeleteUserAsync(long id)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+                return;
+
+            await _userRepository.DeleteAsync(user);
         }
 
-        public async Task<BaseResult> DeleteUserAsync(long id)
+        public async Task AddFavoritePostAsync(long userId, long postId)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                return;
+
+            user.AddFavoritePost(postId);
+            await _userRepository.UpdateAsync(user);
         }
 
-        public async Task<BaseResult> AddFavoritePostAsync(long userId, long postId)
+        public async Task RemoveFavoritePostAsync(long userId, long postId)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                return;
+            user.RemoveFavoritePost(postId);
+
+            await _userRepository.UpdateAsync(user);
+
         }
 
-        public async Task<BaseResult> RemoveFavoritePostAsync(long userId, long postId)
+        public async Task FollowUserAsync(long userId, long targetUserId)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                return;
+
+            user.StartFollowing(targetUserId);
+            await _userRepository.UpdateAsync(user);
         }
 
-        public async Task<BaseResult> FollowUserAsync(long userId, long targetUserId)
+        public async Task UnfollowUserAsync(long userId, long targetUserId)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                return;
+
+            user.StopFollowing(targetUserId);
+            await _userRepository.UpdateAsync(user);
         }
 
-        public async Task<BaseResult> UnfollowUserAsync(long userId, long targetUserId)
+        internal async Task AttributePromotionalCode(long userId, long promoCodeId)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                return;
+
+            user.AddPromotionalCode(promoCodeId);
+            await _userRepository.UpdateAsync(user);
+        }
+
+        internal async Task RemovePromotionalCode(long userId, long promoCodeId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                return;
+
+            user.RemovePromotionalCode(promoCodeId);
+            await _userRepository.UpdateAsync(user);
         }
     }
 }

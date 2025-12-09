@@ -1,24 +1,28 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Hiquotroca.API.Domain.Common;
+﻿using Hiquotroca.API.Domain.Common;
 
 namespace Hiquotroca.API.Domain.Entities.Users
 {
     public class User : BaseEntity
     {
-        public string Email { get; private set; } = string.Empty;
-        public string? PasswordHash { get; private set; }
-        public string? PhoneNumber { get; private set; }
-        public DateTime? BirthDate { get; private set; }
+        //User Personal Info 
         public string FirstName { get; private set; } = string.Empty;
         public string? LastName { get; private set; }
+        public string? PhoneNumber { get; private set; }
+        public DateTime? BirthDate { get; private set; }
+
+        //User Auth Info
+        public string Email { get; private set; } = string.Empty;
+        public string? PasswordHash { get; private set; }
         public string? RefreshToken { get; private set; }
         public DateTime? RefreshTokenExpiry { get; private set; }
+
+        //User Address Info
         public UserAddress? Address { get; private set; }
+
+        //User Relations
         public List<long> FavoritePosts { get; private set; }
         public List<long> FollowingUsers { get; private set; }
-        public PromotionalCode? PromotionalCode { get; private set; }
+        public List<long> PromotionalCodes { get; private set; }
 
         public User(string email, string firstName, string lastName, string? phoneNumber = null, DateTime? birthDate = null)
         {
@@ -29,6 +33,7 @@ namespace Hiquotroca.API.Domain.Entities.Users
             BirthDate = birthDate;
             FavoritePosts = new List<long>();
             FollowingUsers = new List<long>();
+            PromotionalCodes = new List<long>();
         }
 
         public User UpdateUser(string firstName, string? lastName, string? phoneNumber, DateTime? birthDate)
@@ -46,7 +51,7 @@ namespace Hiquotroca.API.Domain.Entities.Users
             return this;
         }
 
-        public User UpsertUserAddress(string address, string city, string? postalCode, long countryId)
+        public User SetUserAddress(string address, string city, string? postalCode, long countryId)
         {
             this.Address = new UserAddress(address, city, postalCode, countryId);
 
@@ -61,64 +66,55 @@ namespace Hiquotroca.API.Domain.Entities.Users
 
         public User StartFollowing(long targetFollowerId)
         {
-            if(this.FollowingUsers == null)
-            {
-                this.FollowingUsers = new List<long>();
-            }
-
-            if(this.FollowingUsers.Any(f => f == targetFollowerId))
-            {
-                // Already following this user
+            if (this.FollowingUsers.Contains(targetFollowerId))
                 return this;
-            }
+            
             this.FollowingUsers.Add(targetFollowerId);
             return this;
         }
 
         public User StopFollowing(long targetFollowerId)
         {
-            if(this.FollowingUsers == null)
-            {
-                this.FollowingUsers = new List<long>();
-            }
-            var follower = this.FollowingUsers.FirstOrDefault(f => f == targetFollowerId);
-            if(follower == 0)
-            {
-                // Not following this user
+            if(!this.FollowingUsers.Contains(targetFollowerId))
                 return this;
-            }
-            this.FollowingUsers.Remove(follower);
+
+            this.FollowingUsers.Remove(targetFollowerId);
             return this;
         }
 
         public User AddFavoritePost(long postId)
         {
-            if(this.FavoritePosts == null)
-            {
-                this.FavoritePosts = new List<long>();
-            }
-            if(this.FavoritePosts.Any(p => p == postId))
-            {
-                // Post already favorited
+            if (this.FavoritePosts.Contains(postId))
                 return this;
-            }
+
             this.FavoritePosts.Add(postId);
             return this;
         }
 
         public User RemoveFavoritePost(long postId)
         {
-            if(this.FavoritePosts == null)
-            {
-                this.FavoritePosts = new List<long>();
-            }
-            var post = this.FavoritePosts.FirstOrDefault(p => p == postId);
-            if(post == 0)
-            {
-                // Post not in favorites
+            if (!this.FavoritePosts.Contains(postId))
                 return this;
-            }
-            this.FavoritePosts.Remove(post);
+
+            this.FavoritePosts.Remove(postId);
+            return this;
+        }
+
+        public User AddPromotionalCode(long promoCodeId)
+        {
+            if (this.PromotionalCodes.Contains(promoCodeId))
+                return this;
+
+            this.PromotionalCodes.Add(promoCodeId);
+            return this;
+        }
+
+        public User RemovePromotionalCode(long promoCodeId)
+        {
+            if (!this.PromotionalCodes.Contains(promoCodeId))
+                return this;
+
+            this.PromotionalCodes.Remove(promoCodeId);
             return this;
         }
 
@@ -131,5 +127,5 @@ namespace Hiquotroca.API.Domain.Entities.Users
             this.RefreshTokenExpiry = expiry;
             return this;
         }
-    }    
+    }
 }

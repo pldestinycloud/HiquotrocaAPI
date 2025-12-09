@@ -16,65 +16,37 @@ namespace Hiquotroca.API.Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPosts()
-        {
-            var result = await _service.GetAllPostsAsync();
-
-            if (!result.isSuccess)
-                return BadRequest(result);
-
-            if (result.Data == null || !result.Data.Any())
-                return NotFound();
-
-            return Ok(result);
-        }
+        public async Task<IActionResult> GetPosts() => 
+            Ok(await _service.GetAllPostsAsync());
 
         [HttpGet("{id:long}")]
         public async Task<IActionResult> GetPostById(long id)
         {
             var result = await _service.GetPostByIdAsync(id);
 
-            if (!result.isSuccess)
-                return BadRequest(result);
-
-            if (result.Data == null)
+            if (result == null)
                 return NotFound();
 
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePost([FromBody] CreatePostRequest createPostRequest)
+        public async Task<IActionResult> CreatePost([FromBody] CreatePostDto createPostDto)
         {
-            var result = await _service.CreatePostAsync(createPostRequest);
-            if (!result.isSuccess)
-                return BadRequest(result);
-            return Ok(result);
+            await _service.CreatePostAsync(createPostDto);
+            return NoContent();
         }
 
-        [HttpPut("{id:long}")]
+        /*[HttpPut("{id:long}")]
         public async Task<IActionResult> UpdatePost(long id, [FromBody] UpdatePostRequest updatePostRequest)
         {
-            var result = await _service.UpdatePostAsync(id, new PostDto());
-
-            if (!result.isSuccess)
-                return BadRequest(result);
-
-            if (result.Data == null)
-                return NotFound();
-
-            return Ok(result);
-        }
+        }*/
 
         [HttpDelete("{id:long}")]
         public async Task<IActionResult> DeletePost(long id)
         {
-            var result = await _service.DeletePostAsync(id);
-
-            if (!result.isSuccess)
-                return BadRequest(result);
-
-            return Ok(result);
+            await _service.DeletePostAsync(id);
+            return NoContent();
         }
     }
 }
