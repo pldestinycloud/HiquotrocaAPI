@@ -1,0 +1,109 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Gui\\Documents\\GitHub\\HiquotrocaAPI\\HiquotrocaAPI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{682E9CE8-FE23-2188-89BC-9C244E37CB78}|Hiquotroca.API\\Hiquotroca.API.csproj|c:\\users\\gui\\documents\\github\\hiquotrocaapi\\hiquotrocaapi\\hiquotroca.api\\presentation\\controllers\\promotionalcodecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{682E9CE8-FE23-2188-89BC-9C244E37CB78}|Hiquotroca.API\\Hiquotroca.API.csproj|solutionrelative:hiquotroca.api\\presentation\\controllers\\promotionalcodecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{682E9CE8-FE23-2188-89BC-9C244E37CB78}|Hiquotroca.API\\Hiquotroca.API.csproj|c:\\users\\gui\\documents\\github\\hiquotrocaapi\\hiquotrocaapi\\hiquotroca.api\\infrastructure\\persistence\\repositories\\promocionalcoderepositoy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{682E9CE8-FE23-2188-89BC-9C244E37CB78}|Hiquotroca.API\\Hiquotroca.API.csproj|solutionrelative:hiquotroca.api\\infrastructure\\persistence\\repositories\\promocionalcoderepositoy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{682E9CE8-FE23-2188-89BC-9C244E37CB78}|Hiquotroca.API\\Hiquotroca.API.csproj|c:\\users\\gui\\documents\\github\\hiquotrocaapi\\hiquotrocaapi\\hiquotroca.api\\application\\services\\promotionalcodeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{682E9CE8-FE23-2188-89BC-9C244E37CB78}|Hiquotroca.API\\Hiquotroca.API.csproj|solutionrelative:hiquotroca.api\\application\\services\\promotionalcodeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{682E9CE8-FE23-2188-89BC-9C244E37CB78}|Hiquotroca.API\\Hiquotroca.API.csproj|c:\\users\\gui\\documents\\github\\hiquotrocaapi\\hiquotrocaapi\\hiquotroca.api\\domain\\entities\\ticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{682E9CE8-FE23-2188-89BC-9C244E37CB78}|Hiquotroca.API\\Hiquotroca.API.csproj|solutionrelative:hiquotroca.api\\domain\\entities\\ticket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{682E9CE8-FE23-2188-89BC-9C244E37CB78}|Hiquotroca.API\\Hiquotroca.API.csproj|c:\\users\\gui\\documents\\github\\hiquotrocaapi\\hiquotrocaapi\\hiquotroca.api\\domain\\entities\\lottery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{682E9CE8-FE23-2188-89BC-9C244E37CB78}|Hiquotroca.API\\Hiquotroca.API.csproj|solutionrelative:hiquotroca.api\\domain\\entities\\lottery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PromotionalCodeController.cs",
+              "DocumentMoniker": "C:\\Users\\Gui\\Documents\\GitHub\\HiquotrocaAPI\\HiquotrocaAPI\\Hiquotroca.API\\Presentation\\Controllers\\PromotionalCodeController.cs",
+              "RelativeDocumentMoniker": "Hiquotroca.API\\Presentation\\Controllers\\PromotionalCodeController.cs",
+              "ToolTip": "C:\\Users\\Gui\\Documents\\GitHub\\HiquotrocaAPI\\HiquotrocaAPI\\Hiquotroca.API\\Presentation\\Controllers\\PromotionalCodeController.cs",
+              "RelativeToolTip": "Hiquotroca.API\\Presentation\\Controllers\\PromotionalCodeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-09T16:54:13.39Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PromocionalCodeRepositoy.cs",
+              "DocumentMoniker": "C:\\Users\\Gui\\Documents\\GitHub\\HiquotrocaAPI\\HiquotrocaAPI\\Hiquotroca.API\\Infrastructure\\Persistence\\Repositories\\PromocionalCodeRepositoy.cs",
+              "RelativeDocumentMoniker": "Hiquotroca.API\\Infrastructure\\Persistence\\Repositories\\PromocionalCodeRepositoy.cs",
+              "ToolTip": "C:\\Users\\Gui\\Documents\\GitHub\\HiquotrocaAPI\\HiquotrocaAPI\\Hiquotroca.API\\Infrastructure\\Persistence\\Repositories\\PromocionalCodeRepositoy.cs",
+              "RelativeToolTip": "Hiquotroca.API\\Infrastructure\\Persistence\\Repositories\\PromocionalCodeRepositoy.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-09T16:53:46.689Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PromotionalCodeService.cs",
+              "DocumentMoniker": "C:\\Users\\Gui\\Documents\\GitHub\\HiquotrocaAPI\\HiquotrocaAPI\\Hiquotroca.API\\Application\\Services\\PromotionalCodeService.cs",
+              "RelativeDocumentMoniker": "Hiquotroca.API\\Application\\Services\\PromotionalCodeService.cs",
+              "ToolTip": "C:\\Users\\Gui\\Documents\\GitHub\\HiquotrocaAPI\\HiquotrocaAPI\\Hiquotroca.API\\Application\\Services\\PromotionalCodeService.cs",
+              "RelativeToolTip": "Hiquotroca.API\\Application\\Services\\PromotionalCodeService.cs",
+              "ViewState": "AgIAADMAAAAAAAAAAAAwwFUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-09T16:52:45.379Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Ticket.cs",
+              "DocumentMoniker": "C:\\Users\\Gui\\Documents\\GitHub\\HiquotrocaAPI\\HiquotrocaAPI\\Hiquotroca.API\\Domain\\Entities\\Ticket.cs",
+              "RelativeDocumentMoniker": "Hiquotroca.API\\Domain\\Entities\\Ticket.cs",
+              "ToolTip": "C:\\Users\\Gui\\Documents\\GitHub\\HiquotrocaAPI\\HiquotrocaAPI\\Hiquotroca.API\\Domain\\Entities\\Ticket.cs",
+              "RelativeToolTip": "Hiquotroca.API\\Domain\\Entities\\Ticket.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-09T16:52:17.104Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Lottery.cs",
+              "DocumentMoniker": "C:\\Users\\Gui\\Documents\\GitHub\\HiquotrocaAPI\\HiquotrocaAPI\\Hiquotroca.API\\Domain\\Entities\\Lottery.cs",
+              "RelativeDocumentMoniker": "Hiquotroca.API\\Domain\\Entities\\Lottery.cs",
+              "ToolTip": "C:\\Users\\Gui\\Documents\\GitHub\\HiquotrocaAPI\\HiquotrocaAPI\\Hiquotroca.API\\Domain\\Entities\\Lottery.cs",
+              "RelativeToolTip": "Hiquotroca.API\\Domain\\Entities\\Lottery.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAA9wC0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-09T16:51:54.965Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
