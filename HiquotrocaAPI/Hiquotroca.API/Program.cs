@@ -66,8 +66,8 @@ app.MapHub<ChatHub>("/chat").AllowAnonymous();
 
 //LoopUp entitities endpoints
 app.MapLookUpEntitiesEndpoints();
-//Nota Critica: Utilizar minimal api endpoints e controllers normais pode criar confus„o na organizaÁ„o do projeto.
-//No entanto, como o ojectivo È apenas retornar as coleÁıes das lookup entities, È mais r·pido e simples do que criar toda a estrtutura de controllers, services, etc.
-//N„o obstante, deve ser alterada no futuro uma vez que se se chega a conclusıes mais definitivas sobre a arquitetura da aplicaÁ„o.
+//Nota Critica: Utilizar minimal api endpoints e controllers normais pode criar confus√£o na organiza√ß√£o do projeto.
+//No entanto, como o ojectivo √© apenas retornar as cole√ß√µes das lookup entities, √© mais r√°pido e simples do que criar toda a estrtutura de controllers, services, etc.
+//N√£o obstante, deve ser alterada no futuro uma vez que se se chega a conclus√µes mais definitivas sobre a arquitetura da aplica√ß√£o.
 
 app.Run();

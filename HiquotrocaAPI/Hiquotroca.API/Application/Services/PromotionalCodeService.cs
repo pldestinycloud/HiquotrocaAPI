@@ -1,21 +1,19 @@
 ﻿using Hiquotroca.API.Application.Wrappers;
 using Hiquotroca.API.Domain.Entities;
 using Hiquotroca.API.DTOs.PromotionalCode;
-using Hiquotroca.API.Infrastructure.Persistence;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
+using Hiquotroca.API.Infrastructure.Persistence.Repositories; // Importar Repositórios
 
 namespace Hiquotroca.API.Application.Services
 {
     public class PromotionalCodeService
     {
-        private readonly AppDbContext _context;
+        // Alterado de AppDbContext para o Repositório específico
+        private readonly PromotionalCodeRepository _repository;
 
-        public PromotionalCodeService(AppDbContext context)
+        public PromotionalCodeService(PromotionalCodeRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
-
 
         public async Task<BaseResult<long>> CreateAsync(CreatePromotionalCodeDto dto, long userId)
         {
@@ -25,45 +23,45 @@ namespace Hiquotroca.API.Application.Services
 
             return BaseResult<long>.Ok(code.Id);
         }
+
         public async Task<BaseResult<PromotionalCode?>> GetByIdAsync(long id)
         {
-            return await _context.PromotionalCodes.FindAsync(id);
+            var code = await _repository.GetByIdAsync(id);
+            return BaseResult<PromotionalCode?>.Ok(code);
         }
-        public async Task<BaseResult<List<PromotionalCode>>> GetAllAsync()
+
+        public async Task<BaseResult<IEnumerable<PromotionalCode>>> GetAllAsync()
         {
-            return await _context.PromotionalCodes.ToListAsync();
+            var codes = await _repository.GetAllAsync();
+            return BaseResult<IEnumerable<PromotionalCode>>.Ok(codes);
         }
+
         public async Task<BaseResult<PromotionalCode>> UpdateAsync(UpdatePromotionalCodeDto dto, long currentUserId)
         {
-            var code = await _context.PromotionalCodes.FindAsync(dto.Id);
+            var code = await _repository.GetByIdAsync(dto.Id);
 
             if (code == null)
-                throw new Exception("Promotional Code not found");
+                return BaseResult<PromotionalCode>.Failure(new Error(ErrorCode.NotFound, "Promotional Code not found"));
 
-            /*code.Code = dto.Code;
-            code.ExpiryDate = dto.ExpiryDate;
-            code.IsActive = dto.IsActive;
-*/
             code.UpdatedBy = currentUserId;
             code.UpdatedDate = DateTime.UtcNow;
 
-            await _context.SaveChangesAsync();
+            await _repository.UpdateAsync(code);
 
-            return code;
+            return BaseResult<PromotionalCode>.Ok(code);
         }
+
         public async Task<BaseResult<bool>> DeleteAsync(long id, long currentUserId)
         {
-            var code = await _context.PromotionalCodes
-                .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+            var code = await _repository.GetByIdAsync(id);
 
             if (code == null)
                 return BaseResult<bool>.Failure(new Error(ErrorCode.NotFound, "Promotional code not found"));
 
-            code.IsDeleted = true;
-            code.UpdatedBy = currentUserId;
-            code.UpdatedDate = DateTime.UtcNow;
+            // O DeleteAsync do GenericRepository já trata o Soft Delete (IsDeleted = true)
+            code.UpdatedBy = currentUserId; // Opcional: registar quem apagou antes de apagar
 
-            await _context.SaveChangesAsync();
+            await _repository.DeleteAsync(code);
 
             return BaseResult<bool>.Ok(true);
         }

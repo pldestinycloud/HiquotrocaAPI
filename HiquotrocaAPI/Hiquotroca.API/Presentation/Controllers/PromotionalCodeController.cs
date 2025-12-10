@@ -1,5 +1,6 @@
 ﻿using Hiquotroca.API.Application.Services;
 using Hiquotroca.API.DTOs.PromotionalCode;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hiquotroca.API.Presentation.Controllers
@@ -14,6 +15,7 @@ namespace Hiquotroca.API.Presentation.Controllers
         {
             _service = service;
         }
+
         private long GetCurrentUserId()
         {
             var idClaim = User.Claims.FirstOrDefault(c => c.Type == "id" || c.Type == "sub");
