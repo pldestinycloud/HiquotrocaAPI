@@ -38,7 +38,7 @@ namespace Hiquotroca.API.Application.Services
 
         //Aqui novamente o serviço devia ser unware de como é que os dados chegam à aplicação, porque agora recebe por htttp, mas podia muito bem receber por outro protocolo
         // e o protocolo ser diferente. Por isso o que devia acontecer era o controlador mapear o registerRequest para um DTO genérico que o serviço entendesse. Mas enfim
-        public async Task<BaseResult> RegisterUser(RegisterRequest registerRequest)
+        public async Task<BaseResult> RegisterUser(RegisterUserDto registerRequest)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == registerRequest.Email);
 

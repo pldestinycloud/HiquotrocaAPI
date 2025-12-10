@@ -17,17 +17,9 @@ namespace Hiquotroca.API.Application.Services
 
         public async Task<BaseResult<long>> CreateAsync(CreatePromotionalCodeDto dto, long userId)
         {
-            var code = new PromotionalCode
-            {
-                Code = dto.Code,
-                ExpiryDate = dto.ExpiryDate,
-                IsActive = true,
-                UserId = dto.UserId,
-                CreatedBy = userId,
-                CreatedDate = DateTime.UtcNow
-            };
-
-            await _repository.AddAsync(code); // Usa o método do repositório genérico
+            var code = new PromotionalCode(dto.Code,dto.ExpiryDate);
+            _context.PromotionalCodes.Add(code);
+            await _context.SaveChangesAsync();
 
             return BaseResult<long>.Ok(code.Id);
         }
@@ -44,25 +36,16 @@ namespace Hiquotroca.API.Application.Services
             return BaseResult<IEnumerable<PromotionalCode>>.Ok(codes);
         }
 
-        // Lógica principal para controlar Ativo/Inativo e Data de Expiração
         public async Task<BaseResult<PromotionalCode>> UpdateAsync(UpdatePromotionalCodeDto dto, long currentUserId)
         {
-            // 1. Buscar a entidade pelo Repositório
             var code = await _repository.GetByIdAsync(dto.Id);
 
             if (code == null)
                 return BaseResult<PromotionalCode>.Failure(new Error(ErrorCode.NotFound, "Promotional Code not found"));
 
-            // 2. Atualizar os campos de controlo
-            code.Code = dto.Code;
-            code.ExpiryDate = dto.ExpiryDate; // Controla a expiração
-            code.IsActive = dto.IsActive;     // Controla se está ativo
-
-            // 3. Auditoria
             code.UpdatedBy = currentUserId;
             code.UpdatedDate = DateTime.UtcNow;
 
-            // 4. Persistir usando o Repositório
             await _repository.UpdateAsync(code);
 
             return BaseResult<PromotionalCode>.Ok(code);
@@ -81,6 +64,13 @@ namespace Hiquotroca.API.Application.Services
             await _repository.DeleteAsync(code);
 
             return BaseResult<bool>.Ok(true);
+        }
+
+        public async Task<List<PromotionalCode>> GetPromotionalCodesByIdsAsync(List<long> list)
+        {
+            return await _context.PromotionalCodes
+                .Where(x => list.Contains(x.Id) && !x.IsDeleted)
+                .ToListAsync();
         }
     }
 }

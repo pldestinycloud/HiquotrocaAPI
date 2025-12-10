@@ -27,7 +27,7 @@ namespace Hiquotroca.API.Presentation.Controllers
         public IActionResult Ping() => Ok("API está a funcionar!");
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterUserDto request)
         {
             var result = await _authService.RegisterUser(request);
             if (!result.isSuccess)

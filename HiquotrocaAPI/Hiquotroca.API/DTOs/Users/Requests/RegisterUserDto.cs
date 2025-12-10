@@ -1,6 +1,6 @@
 ﻿namespace Hiquotroca.API.DTOs.Users.Requests
 {
-    public class RegisterRequest
+    public class RegisterUserDto
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

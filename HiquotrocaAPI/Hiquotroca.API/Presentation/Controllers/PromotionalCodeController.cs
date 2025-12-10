@@ -29,7 +29,7 @@ namespace Hiquotroca.API.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreatePromotionalCodeDto dto)
         {
-            long currentUserId = GetCurrentUserId();
+            long currentUserId = 1; // GetCurrentUserId();
 
             var result = await _service.CreateAsync(dto, currentUserId);
 

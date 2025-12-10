@@ -1,5 +1,7 @@
 ﻿using Hiquotroca.API.Domain.Entities;
 using Hiquotroca.API.Domain.Entities.Posts;
+using Hiquotroca.API.Domain.Entities.Posts.ValueObjects;
+using Hiquotroca.API.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,9 +12,9 @@ namespace Hiquotroca.API.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Post> builder)
         {
             builder.HasKey(p => p.Id);
-            builder.HasMany<PostImage>(p => p.Images)
-                   .WithOne()
-                   .OnDelete(DeleteBehavior.Cascade);
+            builder.OwnsOne<PostTaxonomy>(p => p.PostTaxonomyData);
+            builder.OwnsOne<PostLocation>(p => p.Location);
+            builder.OwnsOne<PostAdditionalData>(p => p.AdditionalData);
         }
     }
 }
