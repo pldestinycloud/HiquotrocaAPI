@@ -1,4 +1,4 @@
-﻿namespace Hiquotroca.API.Domain.Entities.Post.ValueObjects;
+﻿namespace Hiquotroca.API.Domain.Entities.Posts.ValueObjects;
 
 public class PostTaxonomy
 {

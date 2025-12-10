@@ -1,6 +1,6 @@
 ﻿using Hiquotroca.API.Domain.Entities;
 using Hiquotroca.API.Domain.Entities.Chat;
-using Hiquotroca.API.Domain.Entities.Post;
+using Hiquotroca.API.Domain.Entities.Posts;
 using Hiquotroca.API.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +19,6 @@ namespace Hiquotroca.API.Infrastructure.Persistence
         public DbSet<ActionType> ActionTypes => Set<ActionType>();
         public DbSet<Post> Posts => Set<Post>();
         public DbSet<Chat> Chats => Set<Chat>();
-        public DbSet<Message> Messages => Set<Message>();
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<SubCategory> SubCategories => Set<SubCategory>();
         public DbSet<PromotionalCode> PromotionalCodes => Set<PromotionalCode>();
@@ -28,6 +27,7 @@ namespace Hiquotroca.API.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
     }
 }

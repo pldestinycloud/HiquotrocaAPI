@@ -1,4 +1,4 @@
-﻿using Hiquotroca.API.Domain.Entities.Post;
+﻿using Hiquotroca.API.Domain.Entities.Posts;
 using Hiquotroca.API.DTOs.Posts;
 
 namespace Hiquotroca.API.Mappings.Posts;
@@ -18,7 +18,6 @@ public static class MapPostToPostDto
         dto.Images = post.Images;
         dto.Location = new PostLocationDto
         {
-            Address = post.Location.Address,
             City = post.Location.City,
             PostalCode = post.Location.PostalCode,
             CountryId = post.Location.CountryId,

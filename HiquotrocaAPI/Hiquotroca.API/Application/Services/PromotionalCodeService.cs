@@ -19,17 +19,7 @@ namespace Hiquotroca.API.Application.Services
 
         public async Task<BaseResult<long>> CreateAsync(CreatePromotionalCodeDto dto, long userId)
         {
-            var code = new PromotionalCode
-            {
-                Code = dto.Code,
-                ExpiryDate = dto.ExpiryDate,
-                IsActive = true,
-                UserId = dto.UserId,
-
-                CreatedBy = userId,
-                CreatedDate = DateTime.UtcNow
-            };
-
+            var code = new PromotionalCode(dto.Code,dto.ExpiryDate);
             _context.PromotionalCodes.Add(code);
             await _context.SaveChangesAsync();
 
@@ -50,10 +40,10 @@ namespace Hiquotroca.API.Application.Services
             if (code == null)
                 throw new Exception("Promotional Code not found");
 
-            code.Code = dto.Code;
+            /*code.Code = dto.Code;
             code.ExpiryDate = dto.ExpiryDate;
             code.IsActive = dto.IsActive;
-
+*/
             code.UpdatedBy = currentUserId;
             code.UpdatedDate = DateTime.UtcNow;
 
@@ -76,6 +66,13 @@ namespace Hiquotroca.API.Application.Services
             await _context.SaveChangesAsync();
 
             return BaseResult<bool>.Ok(true);
+        }
+
+        public async Task<List<PromotionalCode>> GetPromotionalCodesByIdsAsync(List<long> list)
+        {
+            return await _context.PromotionalCodes
+                .Where(x => list.Contains(x.Id) && !x.IsDeleted)
+                .ToListAsync();
         }
     }
 }

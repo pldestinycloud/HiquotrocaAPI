@@ -1,4 +1,6 @@
 ﻿using Hiquotroca.API.Domain.Entities.Chat;
+using Hiquotroca.API.Domain.Entities.Posts;
+using Hiquotroca.API.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
