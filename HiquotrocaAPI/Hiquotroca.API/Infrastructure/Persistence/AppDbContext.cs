@@ -1,6 +1,6 @@
 ﻿using Hiquotroca.API.Domain.Entities;
 using Hiquotroca.API.Domain.Entities.Chat;
-using Hiquotroca.API.Domain.Entities.Post;
+using Hiquotroca.API.Domain.Entities.Posts;
 using Hiquotroca.API.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +28,7 @@ namespace Hiquotroca.API.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
     }
 }

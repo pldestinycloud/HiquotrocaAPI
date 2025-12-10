@@ -1,6 +1,6 @@
 ﻿using Hiquotroca.API.Domain.Common;
 
-namespace Hiquotroca.API.Domain.Entities.Post.ValueObjects
+namespace Hiquotroca.API.Domain.Entities.Posts.ValueObjects
 {
     public class PostLocation : BaseEntity
     {
