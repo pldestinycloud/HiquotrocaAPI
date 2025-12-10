@@ -56,12 +56,13 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
+app.UseMiddleware<Hiquotroca.API.Presentation.Middlewares.GlobalExceptionHandlerMiddleware>();
+
 //app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<ChatHub>("/chat").AllowAnonymous();
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.Run();
