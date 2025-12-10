@@ -1,6 +1,7 @@
 ﻿using Hiquotroca.API.Domain.Entities;
-using Hiquotroca.API.Domain.Entities.Post;
-using Hiquotroca.API.Domain.Entities.Post.ValueObjects;
+using Hiquotroca.API.Domain.Entities.Posts;
+using Hiquotroca.API.Domain.Entities.Posts.ValueObjects;
+using Hiquotroca.API.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,7 +15,6 @@ namespace Hiquotroca.API.Infrastructure.Persistence.Configurations
             builder.OwnsOne<PostTaxonomy>(p => p.PostTaxonomyData);
             builder.OwnsOne<PostLocation>(p => p.Location);
             builder.OwnsOne<PostAdditionalData>(p => p.AdditionalData);
-
         }
     }
 }

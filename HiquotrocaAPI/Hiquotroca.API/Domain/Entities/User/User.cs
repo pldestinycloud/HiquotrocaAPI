@@ -9,6 +9,7 @@ namespace Hiquotroca.API.Domain.Entities.Users
         public string? LastName { get; private set; }
         public string? PhoneNumber { get; private set; }
         public DateTime? BirthDate { get; private set; }
+        public double HiquoCredits { get; set; } = 0.0;
 
         //User Auth Info
         public string Email { get; private set; } = string.Empty;

@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var useInMemoryDatabase = true;
+var useInMemoryDatabase = false;
 builder.Services.AddInfrastructureServices(builder.Configuration, useInMemoryDatabase);
 builder.Services.AddApplicationServices();
 builder.Services.AddSignalR();

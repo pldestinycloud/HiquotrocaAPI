@@ -1,6 +1,6 @@
 using Hiquotroca.API.Application.Wrappers;
-using Hiquotroca.API.Domain.Entities.Post;
-using Hiquotroca.API.Domain.Entities.Post.ValueObjects;
+using Hiquotroca.API.Domain.Entities.Posts;
+using Hiquotroca.API.Domain.Entities.Posts.ValueObjects;
 using Hiquotroca.API.DTOs.Posts;
 using Hiquotroca.API.DTOs.Posts.Requests;
 using Hiquotroca.API.Infrastructure.Persistence.Repositories;
@@ -38,15 +38,25 @@ namespace Hiquotroca.API.Application.Services
             return MapPostToPostDto.Map(post, new PostDto());
         }
 
+        ///Nota critica: 3 metodos para fazer fetch a posts, apenas mudando ligeiramente os parametros. Refactorizar isto no futuro
+        public async Task<List<PostDto>> GetPostsByIdAsync(List<long> postsId)
+        {
+            var posts = await _postRepository.GetPostsByIdsAsync(postsId);
+
+            if (posts == null || !posts.Any())
+                return new List<PostDto>();
+
+            return posts.Select(post => MapPostToPostDto.Map(post, new PostDto())).ToList();
+        }
+
         //Tentei partir isto em varios bocados para nao ter um construtor gigantesco, mas agora este metodo ta cheio de "mappers" o que tb n ta bonito,
         //vou deixar assim por agora, mas no futuro se calhar é melhor meter um builder ou algo do genero
         public async Task CreatePostAsync(CreatePostDto createPostDto)
         {
             var postLocation = new PostLocation(
-                createPostDto.Location!.Address,
                 createPostDto.Location.City,
                 createPostDto.Location.PostalCode,
-                countryId: createPostDto.Location.CountryId,
+                createPostDto.Location.CountryId,
                 createPostDto.Location.Latitude,
                 createPostDto.Location.Longitude,
                 createPostDto.Location.DeliveryRadiusKm);

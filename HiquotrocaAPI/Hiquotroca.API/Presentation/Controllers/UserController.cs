@@ -12,20 +12,24 @@ namespace Hiquotroca.API.Presentation.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly UserService _service;
-        public UsersController(UserService service)
+        private readonly UserService _userService;
+        private readonly PostService _postService;
+        private readonly PromotionalCodeService _promotionalCodeService;
+        public UsersController(UserService userService, PostService postService, PromotionalCodeService promotionalCodeService)
         {
-            _service = service;
+            _userService = userService;
+            _postService = postService;
+            _promotionalCodeService = promotionalCodeService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUsers() =>
-            Ok(await _service.GetAllUsersAsync());
+            Ok(await _userService.GetAllUsersAsync());
 
         [HttpGet("{id:long}")]
         public async Task<IActionResult> GetUserById(long id)
         {
-            var user = await _service.GetUserByIdAsync(id);
+            var user = await _userService.GetUserByIdAsync(id);
 
             if (user == null)
                 return NotFound();
@@ -36,56 +40,92 @@ namespace Hiquotroca.API.Presentation.Controllers
         [HttpPut("{id:long}")]
         public async Task<IActionResult> UpdateUser(long id, [FromBody] UpdateUserDto updateUserDto)
         {
-            await _service.UpdateUserAsync(id, updateUserDto);
+            await _userService.UpdateUserAsync(id, updateUserDto);
             return NoContent();
         }
 
         [HttpDelete("{id:long}")]
         public async Task<IActionResult> DeleteUser(long id)
         {
-            await _service.DeleteUserAsync(id);
+            await _userService.DeleteUserAsync(id);
             return NoContent();
         }
 
-        [HttpPost("{userId:long}/favorites/{postId:long}")]
+        [HttpGet("{userId:long}/favorites-posts")]
+        public async Task<IActionResult> GetFavoritePosts(long userId)
+        {
+            var favoritePostIds = await _userService.GetUserFavoritePostsAsync(userId);
+
+            if (favoritePostIds == null || !favoritePostIds.Any())
+                return NotFound();
+
+            var favoritePosts = await _postService.GetPostsByIdAsync(favoritePostIds.ToList());
+            return Ok(favoritePosts);
+        }
+
+        [HttpPost("{userId:long}/favorites-posts/{postId:long}")]
         public async Task<IActionResult> AddFavoritePost(long userId, long postId)
         {
-            await _service.AddFavoritePostAsync(userId, postId);
+            await _userService.AddFavoritePostAsync(userId, postId);
             return NoContent();
         }
 
-        [HttpDelete("{userId:long}/favorites/{postId:long}")]
+        [HttpDelete("{userId:long}/favorites-posts/{postId:long}")]
         public async Task<IActionResult> RemoveFavoritePost(long userId, long postId)
         {
-            await _service.RemoveFavoritePostAsync(userId, postId);
+            await _userService.RemoveFavoritePostAsync(userId, postId);
             return NoContent();
         }
 
-        [HttpPost("{userId:long}/follow/{targetUserId:long}")]
+        [HttpGet("{userId:long}/followers")]
+        public async Task<IActionResult> GetFollowers(long userId)
+        {
+            var followers = await _userService.GetUserFollowersAsync(userId);
+
+            if(followers == null || !followers.Any())
+                return NotFound();
+
+            return Ok(followers);
+        }
+
+        [HttpPost("{userId:long}/followers/{targetUserId:long}")]
         public async Task<IActionResult> FollowUser(long userId, long targetUserId)
         {
-            await _service.FollowUserAsync(userId, targetUserId);
+            await _userService.FollowUserAsync(userId, targetUserId);
             return NoContent();
         }
 
-        [HttpDelete("{userId:long}/follow/{targetUserId:long}")]
+        [HttpDelete("{userId:long}/followers/{targetUserId:long}")]
         public async Task<IActionResult> UnfollowUser(long userId, long targetUserId)
         {
-            await _service.UnfollowUserAsync(userId, targetUserId);
+            await _userService.UnfollowUserAsync(userId, targetUserId);
             return NoContent();
+        }
+
+        [HttpGet("{userId:long}/promotional-codes")]
+        public async Task<IActionResult> GetPromotionalCodes(long userId)
+        {
+            var userPromotionalCodesIds = await _userService.GetUserPromotionalCodesAsync(userId);
+            if(userPromotionalCodesIds == null || !userPromotionalCodesIds.Any())
+                return NotFound();
+
+            var promotionalCodes = await _promotionalCodeService.GetPromotionalCodesByIdsAsync(userPromotionalCodesIds.ToList());
+
+
+            return Ok(promotionalCodes);
         }
 
         [HttpPost("{userId:long}/promotional-codes/{promotionalCodeId:long}")]
         public async Task<IActionResult> ApplyPromoCode(long userId, long promotionalCodeId)
         {
-            await _service.AttributePromotionalCode(userId, promotionalCodeId);
+            await _userService.AttributePromotionalCode(userId, promotionalCodeId);
             return NoContent();
         }
 
         [HttpDelete("{userId:long}/promotional-codes/{promotionalCodeId:long}")]
         public async Task<IActionResult> RemovePromoCode(long userId, long promotionalCodeId)
         {
-            await _service.RemovePromotionalCode(userId, promotionalCodeId);
+            await _userService.RemovePromotionalCode(userId, promotionalCodeId);
             return NoContent();
         }
     }

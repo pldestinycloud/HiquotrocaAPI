@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Hiquotroca.API.Domain.Common;
 using Hiquotroca.API.Domain.Entities.Chat;
-using Hiquotroca.API.Domain.Entities.Post.ValueObjects;
+using Hiquotroca.API.Domain.Entities.Posts.ValueObjects;
 using Hiquotroca.API.Domain.Entities.Users;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Hiquotroca.API.Domain.Entities.Post
+namespace Hiquotroca.API.Domain.Entities.Posts
 {
     public class Post : BaseEntity
     {
@@ -58,9 +58,9 @@ namespace Hiquotroca.API.Domain.Entities.Post
             return this;
         }
 
-        public Post UpdatePostLocation(string? address, string? city, string? postalCode, long countryId, double? latitude, double? longitude, int? deliveryRadiusKm)
+        public Post UpdatePostLocation( string? city, string? postalCode, long countryId, double? latitude, double? longitude, int? deliveryRadiusKm)
         {
-            var postLocation = new PostLocation(address, city, postalCode, countryId, latitude, longitude, deliveryRadiusKm);
+            var postLocation = new PostLocation(city, postalCode, countryId, latitude, longitude, deliveryRadiusKm);
             Location = postLocation;
             return this;
         }
