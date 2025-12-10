@@ -8,13 +8,13 @@ namespace Hiquotroca.API.Domain.Entities
     {
         public string Name { get; private set; }
         public string? IconPath { get; private set; }
-        public List<SubCategory> SubCategories { get; private set; }
+        public List<Subcategory> SubCategories { get; private set; }
 
         public Category(string name, string? iconPath)
         {
             Name = name;
             IconPath = iconPath;
-            SubCategories = new List<SubCategory>();
+            SubCategories = new List<Subcategory>();
         }
     }
 }

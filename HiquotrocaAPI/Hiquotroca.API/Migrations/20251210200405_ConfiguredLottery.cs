@@ -5,7 +5,7 @@
 namespace Hiquotroca.API.Migrations
 {
     /// <inheritdoc />
-    public partial class Migration2 : Migration
+    public partial class ConfiguredLottery : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

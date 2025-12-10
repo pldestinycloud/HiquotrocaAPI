@@ -1,4 +1,4 @@
-using Hiquotroca.API.Domain.Entities.Chat;
+using Hiquotroca.API.Domain.Entities.Chats;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hiquotroca.API.Infrastructure.Persistence.Repositories

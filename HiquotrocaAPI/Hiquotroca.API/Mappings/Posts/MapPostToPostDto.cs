@@ -13,7 +13,7 @@ public static class MapPostToPostDto
         dto.UserId = post.UserId;
         dto.ActionTypeId = post.PostTaxonomyData.ActionTypeId;
         dto.CategoryId = post.PostTaxonomyData.CategoryId; 
-        dto.SubCategoryId = post.PostTaxonomyData.SubCategoryId;
+        dto.SubcategoryId = post.PostTaxonomyData.SubcategoryId;
         dto.IsActive = post.IsActive;
         dto.Images = post.Images;
         dto.Location = new PostLocationDto

@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Hiquotroca.API.Domain.Common;
 using Hiquotroca.API.Domain.Entities.Posts;
 
-namespace Hiquotroca.API.Domain.Entities.Chat
+namespace Hiquotroca.API.Domain.Entities.Chats
 {
     public class Chat : BaseEntity
     {
         public long UserId1 { get; private set; }
         public long UserId2 { get; private set; }
-        public long? PostId { get; private set; } // conversa ligada a um post
+        public long? PostId { get; private set; }
         public List<Message> Messages { get; private set; } = new List<Message>();
 
         public Chat(long userId1, long userId2, long? postId)

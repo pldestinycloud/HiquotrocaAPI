@@ -33,13 +33,12 @@ namespace Hiquotroca.API.Domain.Entities
             IsActive = true;
         }
 
-        private readonly List<Ticket> _tickets = new();
-        public IReadOnlyCollection<Ticket> Tickets => _tickets.AsReadOnly();
+        public List<Ticket> Tickets  { get; set; }
 
         // Método de Domínio para registar uma venda (mantendo o encapsulamento)
         public void RegisterTicketSale(Ticket ticket)
         {
-            _tickets.Add(ticket);
+            Tickets.Add(ticket);
             TicketsSold++;
         }
     }

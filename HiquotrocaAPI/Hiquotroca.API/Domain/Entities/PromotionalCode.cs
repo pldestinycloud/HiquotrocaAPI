@@ -8,7 +8,7 @@ namespace Hiquotroca.API.Domain.Entities
         public string Code { get; private set; } = string.Empty;
         public DateTime ExpiryDate { get; private set; }
         public bool IsActive { get; private set; }
-        public List<long> OwnersId { get; private set; } = new List<long>();
+        public List<User> OwnersId { get; private set; }
 
         public PromotionalCode(string code, DateTime expiryDate)
         {

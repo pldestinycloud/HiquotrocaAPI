@@ -1,4 +1,4 @@
-﻿using Hiquotroca.API.Domain.Entities.Chat;
+﻿using Hiquotroca.API.Domain.Entities.Chats;
 using Hiquotroca.API.Infrastructure.Persistence.Repositories;
 using Hiquotroca.API.DTOs.Chat;
 using Hiquotroca.API.Application.Wrappers;

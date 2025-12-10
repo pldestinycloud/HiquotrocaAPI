@@ -1,5 +1,5 @@
 ﻿using Hiquotroca.API.Domain.Entities;
-using Hiquotroca.API.Domain.Entities.Chat;
+using Hiquotroca.API.Domain.Entities.Chats;
 using Hiquotroca.API.Domain.Entities.Posts;
 using Hiquotroca.API.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +20,7 @@ namespace Hiquotroca.API.Infrastructure.Persistence
         public DbSet<Post> Posts => Set<Post>();
         public DbSet<Chat> Chats => Set<Chat>();
         public DbSet<Category> Categories => Set<Category>();
-        public DbSet<SubCategory> SubCategories => Set<SubCategory>();
+        public DbSet<Subcategory> SubCategories => Set<Subcategory>();
         public DbSet<PromotionalCode> PromotionalCodes => Set<PromotionalCode>();
 
 

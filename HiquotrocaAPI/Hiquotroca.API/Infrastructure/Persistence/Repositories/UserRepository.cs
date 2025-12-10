@@ -1,4 +1,5 @@
-﻿using Hiquotroca.API.Domain.Entities.Users;
+﻿using Hiquotroca.API.Domain.Entities.Posts;
+using Hiquotroca.API.Domain.Entities.Users;
 using Hiquotroca.API.DTOs.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +13,7 @@ namespace Hiquotroca.API.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<List<long>> GetUserFavoritePostsAsync(long userId)
+        public async Task<List<Post>> GetUserFavoritePostsAsync(long userId)
         {
             return await _context.Users
                 .Where(u => u.Id == userId)
@@ -22,10 +23,12 @@ namespace Hiquotroca.API.Infrastructure.Persistence.Repositories
 
         public async Task<List<long>?> GetFollowingUsersForUserAsync(long userId)
         {
-            return await _context.Users
+            /*return await _context.Users
                 .Where(u => u.Id == userId)
                 .SelectMany(u => u.FollowingUsers)
-                .ToListAsync();
+                .ToListAsync();*/
+
+            return new List<long>();
         }
 
         public async Task<List<User>?> GetUsersByIdsAsync(List<long> usersIds)

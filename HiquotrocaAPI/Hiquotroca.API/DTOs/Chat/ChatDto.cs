@@ -1,4 +1,4 @@
-using Hiquotroca.API.Domain.Entities.Chat;
+using Hiquotroca.API.Domain.Entities.Chats;
 using System.Collections.Generic;
 
 namespace Hiquotroca.API.DTOs.Chat

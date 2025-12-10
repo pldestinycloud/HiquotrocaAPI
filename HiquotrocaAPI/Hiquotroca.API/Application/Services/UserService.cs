@@ -91,20 +91,22 @@ namespace Hiquotroca.API.Application.Services
         public async Task AddFavoritePostAsync(long userId, long postId)
         {
             var user = await _userRepository.GetByIdAsync(userId);
-            if (user == null)
+            var post = await _postRepository.GetByIdAsync(postId);
+            if (user == null || post == null)
                 return;
 
-            user.AddFavoritePost(postId);
+            user.AddFavoritePost(post);
             await _userRepository.UpdateAsync(user);
         }
 
         public async Task RemoveFavoritePostAsync(long userId, long postId)
         {
             var user = await _userRepository.GetByIdAsync(userId);
-            if (user == null)
+            var post = await _postRepository.GetByIdAsync(postId);
+            if (user == null || post == null)
                 return;
-            user.RemoveFavoritePost(postId);
 
+            user.RemoveFavoritePost(post);
             await _userRepository.UpdateAsync(user);
 
         }
@@ -115,7 +117,7 @@ namespace Hiquotroca.API.Application.Services
             if (user == null)
                 return;
 
-            user.StartFollowing(targetUserId);
+            //user.StartFollowing(targetUserId);
             await _userRepository.UpdateAsync(user);
         }
 
@@ -125,7 +127,7 @@ namespace Hiquotroca.API.Application.Services
             if (user == null)
                 return;
 
-            user.StopFollowing(targetUserId);
+            //user.StopFollowing(targetUserId);
             await _userRepository.UpdateAsync(user);
         }
 
@@ -135,7 +137,7 @@ namespace Hiquotroca.API.Application.Services
             if (user == null)
                 return;
 
-            user.AddPromotionalCode(promoCodeId);
+            //user.AddPromotionalCode(promoCodeId);
             await _userRepository.UpdateAsync(user);
         }
 
@@ -145,13 +147,15 @@ namespace Hiquotroca.API.Application.Services
             if (user == null)
                 return;
 
-            user.RemovePromotionalCode(promoCodeId);
+            //user.RemovePromotionalCode(promoCodeId);
             await _userRepository.UpdateAsync(user);
         }
 
-        public async Task<List<long>> GetUserFavoritePostsAsync(long userId)
+        public async Task<List<PostDto>> GetUserFavoritePostsAsync(long userId)
         {
-            return await _userRepository.GetUserFavoritePostsAsync(userId);
+            var favoritePosts = await _userRepository.GetUserFavoritePostsAsync(userId);
+            return favoritePosts.Select(post => MapPostToPostDto.Map(post, new PostDto()))
+                .ToList();
         }
 
         public async Task<List<UserDto>?> GetUserFollowersAsync(long userId)
@@ -179,7 +183,7 @@ namespace Hiquotroca.API.Application.Services
             if (user == null)
                 return null;
 
-            return user.PromotionalCodes;
+            return new List<long>(); //user.PromotionalCodes;
         }
     }
 }

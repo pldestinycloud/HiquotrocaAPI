@@ -56,12 +56,11 @@ namespace Hiquotroca.API.Presentation.Controllers
         [HttpGet("{userId:long}/favorite-posts")]
         public async Task<IActionResult> GetFavoritePosts(long userId)
         {
-            var favoritePostIds = await _userService.GetUserFavoritePostsAsync(userId);
+            var favoritePosts = await _userService.GetUserFavoritePostsAsync(userId);
 
-            if (favoritePostIds == null || !favoritePostIds.Any())
+            if (favoritePosts == null || !favoritePosts.Any())
                 return NotFound();
 
-            var favoritePosts = await _postService.GetPostsByIdAsync(favoritePostIds.ToList());
             return Ok(favoritePosts);
         }
 
