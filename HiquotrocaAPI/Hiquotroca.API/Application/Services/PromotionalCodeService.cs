@@ -18,8 +18,7 @@ namespace Hiquotroca.API.Application.Services
         public async Task<BaseResult<long>> CreateAsync(CreatePromotionalCodeDto dto, long userId)
         {
             var code = new PromotionalCode(dto.Code,dto.ExpiryDate);
-            _context.PromotionalCodes.Add(code);
-            await _context.SaveChangesAsync();
+            await _repository.AddAsync(code);
 
             return BaseResult<long>.Ok(code.Id);
         }
@@ -66,11 +65,9 @@ namespace Hiquotroca.API.Application.Services
             return BaseResult<bool>.Ok(true);
         }
 
-        public async Task<List<PromotionalCode>> GetPromotionalCodesByIdsAsync(List<long> list)
+        public async Task<List<PromotionalCode>> GetPromotionalCodesByIdsAsync(List<long> promoCodesIds)
         {
-            return await _context.PromotionalCodes
-                .Where(x => list.Contains(x.Id) && !x.IsDeleted)
-                .ToListAsync();
+            return (await _repository.GetByIdsAsync(promoCodesIds)).ToList();
         }
     }
 }
