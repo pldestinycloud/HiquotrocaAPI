@@ -62,7 +62,9 @@ app.UseAuthorization();
 
 //Aggregate roots endpoints
 app.MapControllers();
-app.MapHub<ChatHub>("/chat").AllowAnonymous();
+app.MapHub<ChatHub>("/chat")
+   .RequireCors("OpenPolicy")
+   .RequireAuthorization();
 
 //LoopUp entitities endpoints
 app.MapLookUpEntitiesEndpoints();

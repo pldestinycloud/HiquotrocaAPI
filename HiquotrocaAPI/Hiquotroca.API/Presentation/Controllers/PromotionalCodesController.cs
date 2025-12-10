@@ -7,11 +7,11 @@ namespace Hiquotroca.API.Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PromotionalCodeController : ControllerBase
+    public class PromotionalCodesController : ControllerBase
     {
         private readonly PromotionalCodeService _service;
 
-        public PromotionalCodeController(PromotionalCodeService service)
+        public PromotionalCodesController(PromotionalCodeService service)
         {
             _service = service;
         }

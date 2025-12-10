@@ -3,11 +3,13 @@ using Hiquotroca.API.Application.Wrappers;
 using Hiquotroca.API.DTOs.User;
 using Hiquotroca.API.DTOs.Users.Requests;
 using Hiquotroca.API.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hiquotroca.API.Presentation.Controllers
 {
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
@@ -51,7 +53,7 @@ namespace Hiquotroca.API.Presentation.Controllers
             return NoContent();
         }
 
-        [HttpGet("{userId:long}/favorites-posts")]
+        [HttpGet("{userId:long}/favorite-posts")]
         public async Task<IActionResult> GetFavoritePosts(long userId)
         {
             var favoritePostIds = await _userService.GetUserFavoritePostsAsync(userId);
@@ -63,14 +65,14 @@ namespace Hiquotroca.API.Presentation.Controllers
             return Ok(favoritePosts);
         }
 
-        [HttpPost("{userId:long}/favorites-posts/{postId:long}")]
+        [HttpPost("{userId:long}/favorite-posts/{postId:long}")]
         public async Task<IActionResult> AddFavoritePost(long userId, long postId)
         {
             await _userService.AddFavoritePostAsync(userId, postId);
             return NoContent();
         }
 
-        [HttpDelete("{userId:long}/favorites-posts/{postId:long}")]
+        [HttpDelete("{userId:long}/favorite-posts/{postId:long}")]
         public async Task<IActionResult> RemoveFavoritePost(long userId, long postId)
         {
             await _userService.RemoveFavoritePostAsync(userId, postId);

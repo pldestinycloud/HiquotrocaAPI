@@ -68,7 +68,7 @@ namespace Hiquotroca.API.Application.Services
             }
         }
 
-        public async Task<BaseResult<LoginResponse>> LoginUser(LoginRequest request)
+        public async Task<BaseResult<object>> LoginUser(LoginRequest request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
             if (user == null)
@@ -94,15 +94,13 @@ namespace Hiquotroca.API.Application.Services
 
             await _context.SaveChangesAsync();
 
-            var response = new LoginResponse
+            var response = new
             {
-                UserId = user.Id,
-                Email = user.Email,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken
             };
 
-            return BaseResult<LoginResponse>.Ok(response);
+            return BaseResult<object>.Ok(response);
         }
 
 
@@ -131,7 +129,7 @@ namespace Hiquotroca.API.Application.Services
 
         //SE calhar nao devia retornar um LoginResponse mas sim um objecto mais adequado
         //No entanto o LoginResponse ja tem os campos necessarios
-        public async Task<BaseResult<LoginResponse>> GetAccessTokenWithRefreshToken(long userId, string refreshToken)
+        public async Task<BaseResult<object>> GetAccessTokenWithRefreshToken(long userId, string refreshToken)
         {
             var user = await _context.Users.FindAsync(userId);
 
@@ -140,18 +138,12 @@ namespace Hiquotroca.API.Application.Services
                 || user.RefreshTokenExpiry < DateTime.UtcNow
                 || user.RefreshToken != refreshToken)
             {
-                return BaseResult<LoginResponse>.Failure(new Error(ErrorCode.AccessDenied, "A valid refresh token needs to be sent to"));
+                return BaseResult<object>.Failure(new Error(ErrorCode.AccessDenied, "A valid refresh token needs to be sent to"));
             }
 
             var newAccessToken = GenerateJwtToken(user);
 
-            return BaseResult<LoginResponse>.Ok(new LoginResponse
-            {
-                UserId = user.Id,
-                Email = user.Email,
-                AccessToken = newAccessToken,
-                RefreshToken = user.RefreshToken
-            });
+            return BaseResult<object>.Ok(newAccessToken);
         }
     }
 }

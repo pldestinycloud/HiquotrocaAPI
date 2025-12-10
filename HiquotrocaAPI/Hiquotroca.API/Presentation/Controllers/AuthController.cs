@@ -1,14 +1,7 @@
-﻿using Hiquotroca.API.Application.Interfaces;
-using Hiquotroca.API.Application.Services;
-using Hiquotroca.API.Domain.Entities.Users;
+﻿using Hiquotroca.API.Application.Services;
 using Hiquotroca.API.DTOs.Auth.Requests;
 using Hiquotroca.API.DTOs.Users.Requests;
-using Hiquotroca.API.Infrastructure.Persistence;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Hiquotroca.API.Presentation.Controllers
 {
