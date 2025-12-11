@@ -17,35 +17,19 @@ namespace Hiquotroca.API.Presentation.Controllers
         }
 
         [HttpGet("ping")]
-        public IActionResult Ping() => Ok("API está a funcionar!");
-
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterUserDto request)
-        {
-            var result = await _authService.RegisterUser(request);
-            if (!result.isSuccess)
-                return BadRequest(result.Errors);
-
-            return Ok(result);
-        }
+        public IActionResult Ping() => Ok("API its working!");
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var result = await _authService.LoginUser(request);
-            if (!result.isSuccess)
-                return BadRequest(result.Errors);
-            return Ok(result);
+            return Ok(await _authService.LoginUser(request));        
         }
 
         [HttpPost("get-access-token")]
         public async Task<IActionResult> GetAccessToken(long userId,string refreshToken)
         {
-            var result = await _authService.GetAccessTokenWithRefreshToken(userId, refreshToken);
-            if (!result.isSuccess)
-                return Forbid();
-
-            return Ok(result);
+            return Ok();
+            //return Ok(await _authService.GetAccessTokenWithRefreshToken(userId, refreshToken));
         }
 
         [HttpPost("forgot-password")]

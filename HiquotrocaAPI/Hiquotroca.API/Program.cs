@@ -8,6 +8,9 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
+
 var useInMemoryDatabase = false;
 builder.Services.AddInfrastructureServices(builder.Configuration, useInMemoryDatabase);
 builder.Services.AddApplicationServices();

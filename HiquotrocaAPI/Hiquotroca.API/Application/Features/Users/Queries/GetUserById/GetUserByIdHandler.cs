@@ -1,5 +1,6 @@
 using Hiquotroca.API.DTOs.User;
 using Hiquotroca.API.Infrastructure.Persistence;
+using Hiquotroca.API.Mappings.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
@@ -15,14 +16,6 @@ public class GetUserByIdHandler(AppDbContext db) : IRequestHandler<GetUserByIdQu
         if (user == null)
             return null;
 
-        return new UserDto
-        {
-            Id = user.Id,
-            Nome = user.FirstName,
-            Sobrenome = user.LastName,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber,
-            BirthDate = user.BirthDate,
-        };
+        return MapUserToUserDto.Map(user, new UserDto());
     }
 }

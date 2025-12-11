@@ -1,18 +1,13 @@
-﻿using Hiquotroca.API.Application.Features.Users.Commands.AddFavoritePost;
+﻿using Hiquotroca.API.Application.Features.Users.Commands.CreateUser;
 using Hiquotroca.API.Application.Features.Users.Commands.DeleteUser;
-using Hiquotroca.API.Application.Features.Users.Commands.RemoveFavoritePost;
 using Hiquotroca.API.Application.Features.Users.Commands.UpdateUser;
 using Hiquotroca.API.Application.Features.Users.Commands.FollowUser;
 using Hiquotroca.API.Application.Features.Users.Commands.UnfollowUser;
-using Hiquotroca.API.Application.Features.Users.Commands.AttributePromotionalCode;
-using Hiquotroca.API.Application.Features.Users.Commands.RemovePromotionalCode;
 using Hiquotroca.API.Application.Features.Users.Queries.GetAllUsers;
 using Hiquotroca.API.Application.Features.Users.Queries.GetUserById;
-using Hiquotroca.API.Application.Features.Users.Queries.GetUserFavoritePosts;
-using Hiquotroca.API.Application.Features.Users.Queries.GetUserFollowers;
-using Hiquotroca.API.Application.Features.Users.Queries.GetUserPromotionalCodes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Hiquotroca.API.Application.Features.Users.Queries.GetFollowingUsers;
 
 namespace Hiquotroca.API.Presentation.Controllers;
 
@@ -39,10 +34,17 @@ public class UsersController : ControllerBase
         return Ok(user);
     }
 
-    [HttpPut("{id:long}")]
-    public async Task<IActionResult> UpdateUser(long id, [FromBody] DTOs.Users.Requests.UpdateUserDto updateUserDto)
+    [HttpPost]
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
     {
-        await _mediator.Send(new UpdateUserCommand(id, updateUserDto));
+        await _mediator.Send(command);
+        return Ok();
+    }
+
+    [HttpPut("{id:long}")]
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand updateUserCommand)
+    {
+        await _mediator.Send(updateUserCommand);
         return NoContent();
     }
 
@@ -53,35 +55,14 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet("{userId:long}/favorite-posts")]
-    public async Task<IActionResult> GetFavoritePosts(long userId)
-    {
-        var favoritePosts = await _mediator.Send(new GetUserFavoritePostsQuery(userId));
-        if (favoritePosts == null || !favoritePosts.Any())
-            return NotFound();
-        return Ok(favoritePosts);
-    }
-
-    [HttpPost("{userId:long}/favorite-posts/{postId:long}")]
-    public async Task<IActionResult> AddFavoritePost(long userId, long postId)
-    {
-        await _mediator.Send(new AddFavoritePostCommand(userId, postId));
-        return NoContent();
-    }
-
-    [HttpDelete("{userId:long}/favorite-posts/{postId:long}")]
-    public async Task<IActionResult> RemoveFavoritePost(long userId, long postId)
-    {
-        await _mediator.Send(new RemoveFavoritePostCommand(userId, postId));
-        return NoContent();
-    }
-
     [HttpGet("{userId:long}/followers")]
     public async Task<IActionResult> GetFollowers(long userId)
     {
-        var followers = await _mediator.Send(new GetUserFollowersQuery(userId));
+        var followers = await _mediator.Send(new GetFollowingUsersQuery(userId));
+
         if (followers == null || !followers.Any())
             return NotFound();
+
         return Ok(followers);
     }
 
@@ -96,30 +77,6 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> UnfollowUser(long userId, long targetUserId)
     {
         await _mediator.Send(new UnfollowUserCommand(userId, targetUserId));
-        return NoContent();
-    }
-
-    [HttpGet("{userId:long}/promotional-codes")]
-    public async Task<IActionResult> GetPromotionalCodes(long userId)
-    {
-        var userPromotionalCodesIds = await _mediator.Send(new GetUserPromotionalCodesQuery(userId));
-        if(userPromotionalCodesIds == null || !userPromotionalCodesIds.Any())
-            return NotFound();
-        // Aqui podes chamar outro handler/serviço para buscar os detalhes dos códigos
-        return Ok(userPromotionalCodesIds);
-    }
-
-    [HttpPost("{userId:long}/promotional-codes/{promotionalCodeId:long}")]
-    public async Task<IActionResult> ApplyPromoCode(long userId, long promotionalCodeId)
-    {
-        await _mediator.Send(new AttributePromotionalCodeCommand(userId, promotionalCodeId));
-        return NoContent();
-    }
-
-    [HttpDelete("{userId:long}/promotional-codes/{promotionalCodeId:long}")]
-    public async Task<IActionResult> RemovePromoCode(long userId, long promotionalCodeId)
-    {
-        await _mediator.Send(new RemovePromotionalCodeCommand(userId, promotionalCodeId));
         return NoContent();
     }
 }

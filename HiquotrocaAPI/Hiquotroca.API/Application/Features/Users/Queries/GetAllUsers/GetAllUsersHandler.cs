@@ -1,5 +1,6 @@
 using Hiquotroca.API.DTOs.User;
 using Hiquotroca.API.Infrastructure.Persistence;
+using Hiquotroca.API.Mappings.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -16,14 +17,6 @@ public class GetAllUsersHandler(AppDbContext db) : IRequestHandler<GetAllUsersQu
         if (users == null || !users.Any())
             return new List<UserDto>();
 
-        return users.Select(user => new UserDto
-        {
-            Id = user.Id,
-            Nome = user.FirstName,
-            Sobrenome = user.LastName,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber,
-            BirthDate = user.BirthDate,
-        }).ToList();
+        return users.Select(user => MapUserToUserDto.Map(user, new UserDto())).ToList();
     }
 }

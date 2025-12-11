@@ -1,3 +1,5 @@
+using Hiquotroca.API.Application.Features.Posts.Commands.AddUserToFavoritePost;
+using Hiquotroca.API.Application.Features.Posts.Commands.RemoveUserFromFavoritePost;
 using Hiquotroca.API.DTOs.Posts.Requests;
 using Hiquotroca.API.Application.Features.Posts.Commands.CreatePost;
 using Hiquotroca.API.Application.Features.Posts.Commands.DeletePost;
@@ -43,5 +45,23 @@ public class PostsController : ControllerBase
     {
         await _mediator.Send(new DeletePostCommand(id));
         return NoContent();
+    }
+
+    [HttpPost("{postId:long}/add-favorite/{userId:long}")]
+    public async Task<IActionResult> AddUserToFavorite(long postId, long userId)
+    {
+        var success = await _mediator.Send(new AddUserToFavoritePostCommand(postId, userId));
+        if (!success)
+            return BadRequest();
+        return Ok();
+    }
+
+    [HttpDelete("{postId:long}/remove-favorite/{userId:long}")]
+    public async Task<IActionResult> RemoveUserFromFavorite(long postId, long userId)
+    {
+        var success = await _mediator.Send(new RemoveUserFromFavoritePostCommand(postId, userId));
+        if (!success)
+            return BadRequest();
+        return Ok();
     }
 }

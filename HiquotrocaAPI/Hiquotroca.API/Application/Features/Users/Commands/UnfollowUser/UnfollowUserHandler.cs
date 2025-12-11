@@ -10,11 +10,18 @@ public class UnfollowUserHandler(AppDbContext db) : IRequestHandler<UnfollowUser
 {
     public async Task Handle(UnfollowUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await db.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
-        if (user == null)
-            return;
+        var user = await db.Users
+            .Include(u => u.FollowingUsers)
+            .FirstOrDefaultAsync(u => u.Id == request.UserId);
 
-        //user.StopFollowing(request.TargetUserId);
+        if (user == null)
+            throw new KeyNotFoundException("User not found.");
+
+        var targetUser = await db.Users.FirstOrDefaultAsync(u => u.Id == request.TargetUserId);
+        if (targetUser == null)
+            throw new KeyNotFoundException("Target user not found.");
+
+        user.StopFollowing(targetUser);
         db.Users.Update(user);
         await db.SaveChangesAsync();
     }

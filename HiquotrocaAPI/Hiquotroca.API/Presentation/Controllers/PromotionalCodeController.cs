@@ -1,5 +1,7 @@
-﻿using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.CreatePromotionalCode;
+﻿using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.AssignUserToPromotionalCode;
+using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.CreatePromotionalCode;
 using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.DeletePromotionalCode;
+using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.RemoveUserFromPromotionalCode;
 using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.UpdatePromotionalCode;
 using Hiquotroca.API.Application.Features.PromotionalCodes.Queries.GetAllPromotionalCodes;
 using Hiquotroca.API.Application.Features.PromotionalCodes.Queries.GetPromotionalCodeById;
@@ -10,10 +12,10 @@ namespace Hiquotroca.API.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PromotionalCodesController : ControllerBase
+public class PromotionalCodeController : ControllerBase
 {
     private readonly IMediator _mediator;
-    public PromotionalCodesController(IMediator mediator)
+    public PromotionalCodeController(IMediator mediator)
     {
         _mediator = mediator;
     }
@@ -67,6 +69,24 @@ public class PromotionalCodesController : ControllerBase
         var success = await _mediator.Send(new DeletePromotionalCodeCommand(id, currentUserId));
         if (!success)
             return NotFound();
+        return Ok();
+    }
+
+    [HttpPost("{promoCodeId:long}/assign-user/{userId:long}")]
+    public async Task<IActionResult> AssignUserToPromotionalCode(long promoCodeId, long userId)
+    {
+        var success = await _mediator.Send(new AssignUserToPromotionalCodeCommand(promoCodeId, userId));
+        if (!success)
+            return BadRequest();
+        return Ok();
+    }
+
+    [HttpDelete("{promoCodeId:long}/remove-user/{userId:long}")]
+    public async Task<IActionResult> RemoveUserFromPromotionalCode(long promoCodeId, long userId)
+    {
+        var success = await _mediator.Send(new RemoveUserFromPromotionalCodeCommand(promoCodeId, userId));
+        if (!success)
+            return BadRequest();
         return Ok();
     }
 }

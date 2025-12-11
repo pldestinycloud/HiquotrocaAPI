@@ -8,26 +8,26 @@ namespace Hiquotroca.API.Application.Features.Users.Commands.UpdateUser;
 
 public class UpdateUserHandler(AppDbContext db) : IRequestHandler<UpdateUserCommand>
 {
-    public async Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateUserCommand command, CancellationToken cancellationToken)
     {
-        var user = await db.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
+        var user = await db.Users.FirstOrDefaultAsync(u => u.Id == command.userId);
         if (user == null)
             return;
 
         user = user.UpdateUser(
-            request.UpdateUserDto.FirstName,
-            request.UpdateUserDto.LastName,
-            request.UpdateUserDto.PhoneNumber,
-            request.UpdateUserDto.BirthDate
+            command.FirstName,
+            command.LastName,
+            command.PhoneNumber,
+            command.BirthDate
         );
 
-        if (request.UpdateUserDto.Address != null)
+        if (command.Address != null)
         {
             user = user.SetUserAddress(
-                request.UpdateUserDto.Address.Address,
-                request.UpdateUserDto.Address.City,
-                request.UpdateUserDto.Address.PostalCode,
-                request.UpdateUserDto.Address.CountryId
+                command.Address.Address,
+                command.Address.City,
+                command.Address.PostalCode,
+                command.Address.CountryId
             );
         }
 
