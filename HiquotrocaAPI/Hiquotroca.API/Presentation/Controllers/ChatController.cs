@@ -1,77 +1,72 @@
-﻿using Hiquotroca.API.Application.Services;
-using Hiquotroca.API.DTOs.Chat;
-using Hiquotroca.API.DTOs.Chat.Requests;
+﻿using Hiquotroca.API.Application.Features.Chats.Commands.AddUserToChat;
+using Hiquotroca.API.Application.Features.Chats.Commands.CreateChat;
+using Hiquotroca.API.Application.Features.Chats.Commands.DeleteChat;
+using Hiquotroca.API.Application.Features.Chats.Commands.RemoveUserFromChat;
+using Hiquotroca.API.Application.Features.Chats.Queries.GetMessagesByChatId;
+using Hiquotroca.API.Application.Features.Chats.Queries.GetUserChatsWithFirstMessage;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Presentation.Controllers
+namespace Hiquotroca.API.Presentation.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class ChatsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ChatsController : ControllerBase
+    private readonly IMediator _mediator;
+    public ChatsController(IMediator mediator)
     {
-        private readonly ChatService _service;
-        public ChatsController(ChatService service)
-        {
-            _service = service;
-        }
-
-        [HttpGet("user-chats/{userId:long}")]
-        public async Task<IActionResult> GetUserChats(long userId)
-        {
-            var result = await _service.GetUserChatsWithFirstMessageAsync(userId);
-            if (!result.isSuccess)
-                return BadRequest(result);
-            if (result.Data == null || !result.Data.Any())
-                return NotFound(result);
-            return Ok(result);
-        }
-
-        [HttpGet("{chatId:long}")]
-        public async Task<IActionResult> GetMessages(long chatId)
-        {
-            var result = await _service.GetMessagesByChatIdAsync(chatId);
-            if (!result.isSuccess)
-                return BadRequest(result);
-            if (result.Data == null || !result.Data.Any())
-                return NotFound();
-            return Ok(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateChat([FromBody] CreateChatDto dto)
-        {
-            var result = await _service.CreateChatAsync(dto);
-            if (!result.isSuccess)
-                return BadRequest(result);
-            return Ok(result);
-        }
-
-        [HttpPost("{chatId:long}/add-user/{userId:long}")]
-        public async Task<IActionResult> AddUserToChat(long chatId, long userId)
-        {
-            var result = await _service.AddUserToChatAsync(chatId, userId);
-            if (!result.isSuccess)
-                return BadRequest(result);
-            return Ok(result);
-        }
-
-        [HttpDelete("{chatId:long}/remove-user/{userId:long}")]
-        public async Task<IActionResult> RemoveUserFromChat(long chatId, long userId)
-        {
-            var result = await _service.RemoveUserFromChatAsync(chatId, userId);
-            if (!result.isSuccess)
-                return BadRequest(result);
-            return Ok(result);
-        }
-
-        [HttpDelete("{chatId:long}")]
-        public async Task<IActionResult> DeleteChat(long chatId)
-        {
-            var result = await _service.DeleteChatAsync(chatId);
-            if (!result.isSuccess)
-                return BadRequest(result);
-            return Ok(result);
-        }
+        _mediator = mediator;
     }
+
+    [HttpGet("user-chats/{userId:long}")]
+    public async Task<IActionResult> GetUserChats(long userId)
+    {
+        var chats = await _mediator.Send(new GetUserChatsWithFirstMessageQuery(userId));
+        if (chats == null || !chats.Any())
+            return NotFound();
+
+        return Ok(chats);
+    }
+
+    [HttpGet("/messages/{chatId:long}")]
+    public async Task<IActionResult> GetMessages(long chatId)
+    {
+        var messages = await _mediator.Send(new GetMessagesByChatIdQuery(chatId));
+        if (messages == null || !messages.Any())
+            return NotFound();
+
+        return Ok(messages);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateChat([FromBody] CreateChatCommand command)
+    {
+        await _mediator.Send(command);
+        return Ok();
+    }
+
+    [HttpDelete("{chatId:long}")]
+    public async Task<IActionResult> DeleteChat(long chatId)
+    {
+        await _mediator.Send(new DeleteChatCommand(chatId));
+        return Ok();
+    }
+
+    /* Add and Remove users from chat endpoints are more relevant for group chats.
+       If the application only supports one-on-one chats, these endpoints might not be necessary.
+    
+    [HttpPost("{chatId:long}/add-user/{userId:long}")]
+    public async Task<IActionResult> AddUserToChat(long chatId, long userId)
+    {
+        await _mediator.Send(new AddUserToChatCommand(chatId, userId));
+        return Ok();
+    }
+
+    [HttpDelete("{chatId:long}/remove-user/{userId:long}")]
+    public async Task<IActionResult> RemoveUserFromChat(long chatId, long userId)
+    {
+        await _mediator.Send(new RemoveUserFromChatCommand(chatId, userId));
+        return Ok();
+    } */
 }

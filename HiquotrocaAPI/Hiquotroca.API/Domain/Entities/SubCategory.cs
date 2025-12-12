@@ -5,12 +5,12 @@ using Hiquotroca.API.Domain.Entities.Posts;
 
 namespace Hiquotroca.API.Domain.Entities
 {
-    public class SubCategory : BaseEntity
+    public class Subcategory : BaseEntity
     {
         public string Name { get; private set; } = string.Empty;
         public long CategoryId { get; private set; }
 
-        public SubCategory(string name, long categoryId)
+        public Subcategory(string name, long categoryId)
         {
             Name = name;
             CategoryId = categoryId;

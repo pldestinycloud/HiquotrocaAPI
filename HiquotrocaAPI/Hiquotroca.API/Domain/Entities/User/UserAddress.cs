@@ -6,7 +6,6 @@ namespace Hiquotroca.API.Domain.Entities.Users
 {
     public class UserAddress
     {
-        public long Id { get; private set;  }
         public string Address { get; private set; } = string.Empty;
         public string City { get; private set; } = string.Empty;
         public string? PostalCode { get; private set; }

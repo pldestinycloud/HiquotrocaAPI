@@ -1,4 +1,5 @@
 ﻿using Hiquotroca.API.Domain.Common;
+using Hiquotroca.API.Domain.Entities.Posts;
 
 namespace Hiquotroca.API.Domain.Entities.Users
 {
@@ -21,10 +22,11 @@ namespace Hiquotroca.API.Domain.Entities.Users
         public UserAddress? Address { get; private set; }
 
         //User Relations
-        public List<long> FavoritePosts { get; private set; }
-        public List<long> FollowingUsers { get; private set; }
-        public List<long> PromotionalCodes { get; private set; }
+        public List<Post> FavoritePosts { get; private set; }
+        public List<User> FollowingUsers { get; private set; } = new List<User>();
+        public List<PromotionalCode> PromotionalCodes { get; private set; } = new List<PromotionalCode>();
 
+        private User() { }
         public User(string email, string firstName, string lastName, string? phoneNumber = null, DateTime? birthDate = null)
         {
             Email = email;
@@ -32,9 +34,6 @@ namespace Hiquotroca.API.Domain.Entities.Users
             LastName = lastName;
             PhoneNumber = phoneNumber;
             BirthDate = birthDate;
-            FavoritePosts = new List<long>();
-            FollowingUsers = new List<long>();
-            PromotionalCodes = new List<long>();
         }
 
         public User UpdateUser(string firstName, string? lastName, string? phoneNumber, DateTime? birthDate)
@@ -65,57 +64,58 @@ namespace Hiquotroca.API.Domain.Entities.Users
             // Such as validations or logging.
         }
 
-        public User StartFollowing(long targetFollowerId)
+        public User StartFollowing(User userToFollow)
         {
-            if (this.FollowingUsers.Contains(targetFollowerId))
+            if (this.FollowingUsers.Contains(userToFollow))
                 return this;
-            
-            this.FollowingUsers.Add(targetFollowerId);
+
+            this.FollowingUsers.Add(userToFollow);
             return this;
         }
 
-        public User StopFollowing(long targetFollowerId)
+        public User StopFollowing(User userToUnfollow)
         {
-            if(!this.FollowingUsers.Contains(targetFollowerId))
+            if (!this.FollowingUsers.Contains(userToUnfollow))
                 return this;
 
-            this.FollowingUsers.Remove(targetFollowerId);
+            this.FollowingUsers.Remove(userToUnfollow);
             return this;
         }
 
-        public User AddFavoritePost(long postId)
+        public User AddFavoritePost(Post post)
         {
-            if (this.FavoritePosts.Contains(postId))
+            if (this.FavoritePosts.Contains(post))
                 return this;
 
-            this.FavoritePosts.Add(postId);
+            this.FavoritePosts.Add(post);
             return this;
         }
 
-        public User RemoveFavoritePost(long postId)
+        public User RemoveFavoritePost(Post post)
         {
-            if (!this.FavoritePosts.Contains(postId))
+            if (!this.FavoritePosts.Contains(post))
                 return this;
 
-            this.FavoritePosts.Remove(postId);
+            this.FavoritePosts.Remove(post);
             return this;
         }
 
-        public User AddPromotionalCode(long promoCodeId)
+        public User AddPromotionalCode(PromotionalCode promoCode)
         {
-            if (this.PromotionalCodes.Contains(promoCodeId))
+            if (this.PromotionalCodes.Contains(promoCode))
                 return this;
 
-            this.PromotionalCodes.Add(promoCodeId);
+            this.PromotionalCodes.Add(promoCode);
+      
             return this;
         }
 
-        public User RemovePromotionalCode(long promoCodeId)
+        public User RemovePromotionalCode(PromotionalCode promoCode)
         {
-            if (!this.PromotionalCodes.Contains(promoCodeId))
+            if (!this.PromotionalCodes.Contains(promoCode))
                 return this;
 
-            this.PromotionalCodes.Remove(promoCodeId);
+            this.PromotionalCodes.Remove(promoCode);
             return this;
         }
 

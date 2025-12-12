@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Hiquotroca.API.Domain.Common;
-using Hiquotroca.API.Domain.Entities.Chat;
+﻿using Hiquotroca.API.Domain.Common;
+using Hiquotroca.API.Domain.Entities.Chats;
 using Hiquotroca.API.Domain.Entities.Posts.ValueObjects;
-using Hiquotroca.API.Domain.Entities.Users;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Hiquotroca.API.Domain.Entities.Posts
 {
@@ -23,7 +17,7 @@ namespace Hiquotroca.API.Domain.Entities.Posts
         public PostAdditionalData AdditionalData { get; private set; }
         public PostTaxonomy PostTaxonomyData { get; private set; }
         public PostLocation Location { get; private set; }
-        public List<long> Chats { get; private set; } = new List<long>();
+        public List<Chat> Chats { get; private set; } = new List<Chat>();
 
         private Post() { }
 

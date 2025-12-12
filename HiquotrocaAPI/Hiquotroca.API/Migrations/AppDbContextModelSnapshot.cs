@@ -92,7 +92,7 @@ namespace Hiquotroca.API.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Chat.Chat", b =>
+            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Chats.Chat", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -135,6 +135,56 @@ namespace Hiquotroca.API.Migrations
                     b.ToTable("Chats");
                 });
 
+            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Chats.Message", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ChatId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("ReceiverId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SenderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Country", b =>
                 {
                     b.Property<long>("Id")
@@ -170,7 +220,7 @@ namespace Hiquotroca.API.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Posts.Post", b =>
+            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Lottery", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,9 +228,62 @@ namespace Hiquotroca.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Chats")
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MinTicketsSold")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TicketPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("TicketsSold")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TotalTickets")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Lottery");
+                });
+
+            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Posts.Post", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
@@ -253,10 +356,6 @@ namespace Hiquotroca.API.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("OwnersId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<long?>("UpdatedBy")
                         .HasColumnType("bigint");
 
@@ -268,7 +367,7 @@ namespace Hiquotroca.API.Migrations
                     b.ToTable("PromotionalCodes");
                 });
 
-            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.SubCategory", b =>
+            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Subcategory", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -326,15 +425,7 @@ namespace Hiquotroca.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FavoritePosts")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FollowingUsers")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -351,10 +442,6 @@ namespace Hiquotroca.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PromotionalCodes")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RefreshToken")
@@ -374,53 +461,101 @@ namespace Hiquotroca.API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("UserPromotionalCodes", b =>
+            modelBuilder.Entity("UserFavoritePost", b =>
                 {
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("PromotionalCodeId")
+                    b.Property<long>("PostId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("UserId", "PromotionalCodeId");
+                    b.HasKey("UserId", "PostId");
 
-                    b.HasIndex("PromotionalCodeId");
+                    b.HasIndex("PostId");
+
+                    b.ToTable("UserFavoritePosts", (string)null);
+                });
+
+            modelBuilder.Entity("UserFollowing", b =>
+                {
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("FollowedId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("UserId", "FollowedId");
+
+                    b.HasIndex("FollowedId");
+
+                    b.ToTable("UserFollowing", (string)null);
+                });
+
+            modelBuilder.Entity("UserPromotionalCode", b =>
+                {
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PromoCodeId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("UserId", "PromoCodeId");
+
+                    b.HasIndex("PromoCodeId");
 
                     b.ToTable("UserPromotionalCodes", (string)null);
                 });
 
-            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Chat.Chat", b =>
+            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Chats.Chat", b =>
                 {
                     b.HasOne("Hiquotroca.API.Domain.Entities.Posts.Post", null)
-                        .WithMany()
-                        .HasForeignKey("PostId");
+                        .WithMany("Chats")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId2")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Chats.Message", b =>
+                {
+                    b.HasOne("Hiquotroca.API.Domain.Entities.Chats.Chat", null)
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("Hiquotroca.API.Domain.Entities.Chat.Message", "Messages", b1 =>
-                        {
-                            b1.Property<long>("ChatId")
-                                .HasColumnType("bigint");
+                    b.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
+                    b.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Lottery", b =>
+                {
+                    b.OwnsMany("Hiquotroca.API.Domain.Entities.Ticket", "Tickets", b1 =>
+                        {
                             b1.Property<long>("Id")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("bigint");
 
                             SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<long>("Id"));
-
-                            b1.Property<string>("Content")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<long?>("CreatedBy")
                                 .HasColumnType("bigint");
@@ -431,14 +566,17 @@ namespace Hiquotroca.API.Migrations
                             b1.Property<bool>("IsDeleted")
                                 .HasColumnType("bit");
 
-                            b1.Property<bool>("IsRead")
-                                .HasColumnType("bit");
-
-                            b1.Property<long>("ReceiverId")
+                            b1.Property<long>("LotteryId")
                                 .HasColumnType("bigint");
 
-                            b1.Property<long>("SenderId")
+                            b1.Property<long?>("LotteryId1")
                                 .HasColumnType("bigint");
+
+                            b1.Property<DateTime>("PurchaseDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<int>("SelectedNumber")
+                                .HasColumnType("int");
 
                             b1.Property<long?>("UpdatedBy")
                                 .HasColumnType("bigint");
@@ -446,15 +584,36 @@ namespace Hiquotroca.API.Migrations
                             b1.Property<DateTime?>("UpdatedDate")
                                 .HasColumnType("datetime2");
 
-                            b1.HasKey("ChatId", "Id");
+                            b1.Property<long>("UserId")
+                                .HasColumnType("bigint");
 
-                            b1.ToTable("Message");
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("LotteryId");
+
+                            b1.HasIndex("LotteryId1");
+
+                            b1.HasIndex("UserId");
+
+                            b1.ToTable("Ticket");
 
                             b1.WithOwner()
-                                .HasForeignKey("ChatId");
+                                .HasForeignKey("LotteryId");
+
+                            b1.HasOne("Hiquotroca.API.Domain.Entities.Lottery", "Lottery")
+                                .WithMany()
+                                .HasForeignKey("LotteryId1");
+
+                            b1.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
+                                .WithMany()
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b1.Navigation("Lottery");
                         });
 
-                    b.Navigation("Messages");
+                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Posts.Post", b =>
@@ -462,7 +621,7 @@ namespace Hiquotroca.API.Migrations
                     b.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.OwnsOne("Hiquotroca.API.Domain.Entities.Posts.ValueObjects.PostAdditionalData", "AdditionalData", b1 =>
@@ -518,7 +677,15 @@ namespace Hiquotroca.API.Migrations
 
                             b1.HasKey("PostId");
 
+                            b1.HasIndex("CountryId");
+
                             b1.ToTable("Posts");
+
+                            b1.HasOne("Hiquotroca.API.Domain.Entities.Country", null)
+                                .WithMany()
+                                .HasForeignKey("CountryId")
+                                .OnDelete(DeleteBehavior.Restrict)
+                                .IsRequired();
 
                             b1.WithOwner()
                                 .HasForeignKey("PostId");
@@ -535,15 +702,39 @@ namespace Hiquotroca.API.Migrations
                             b1.Property<long>("CategoryId")
                                 .HasColumnType("bigint");
 
-                            b1.Property<long>("SubCategoryId")
+                            b1.Property<long>("SubcategoryId")
                                 .HasColumnType("bigint");
 
                             b1.HasKey("PostId");
 
+                            b1.HasIndex("ActionTypeId");
+
+                            b1.HasIndex("CategoryId");
+
+                            b1.HasIndex("SubcategoryId");
+
                             b1.ToTable("Posts");
+
+                            b1.HasOne("Hiquotroca.API.Domain.Entities.ActionType", null)
+                                .WithMany()
+                                .HasForeignKey("ActionTypeId")
+                                .OnDelete(DeleteBehavior.Restrict)
+                                .IsRequired();
+
+                            b1.HasOne("Hiquotroca.API.Domain.Entities.Category", null)
+                                .WithMany()
+                                .HasForeignKey("CategoryId")
+                                .OnDelete(DeleteBehavior.Restrict)
+                                .IsRequired();
 
                             b1.WithOwner()
                                 .HasForeignKey("PostId");
+
+                            b1.HasOne("Hiquotroca.API.Domain.Entities.Subcategory", null)
+                                .WithMany()
+                                .HasForeignKey("SubcategoryId")
+                                .OnDelete(DeleteBehavior.Restrict)
+                                .IsRequired();
                         });
 
                     b.Navigation("AdditionalData")
@@ -556,7 +747,7 @@ namespace Hiquotroca.API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.SubCategory", b =>
+            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Subcategory", b =>
                 {
                     b.HasOne("Hiquotroca.API.Domain.Entities.Category", null)
                         .WithMany("SubCategories")
@@ -583,9 +774,6 @@ namespace Hiquotroca.API.Migrations
                             b1.Property<long>("CountryId")
                                 .HasColumnType("bigint");
 
-                            b1.Property<long>("Id")
-                                .HasColumnType("bigint");
-
                             b1.Property<string>("PostalCode")
                                 .HasColumnType("nvarchar(max)");
 
@@ -600,24 +788,64 @@ namespace Hiquotroca.API.Migrations
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("UserPromotionalCodes", b =>
+            modelBuilder.Entity("UserFavoritePost", b =>
                 {
-                    b.HasOne("Hiquotroca.API.Domain.Entities.PromotionalCode", null)
+                    b.HasOne("Hiquotroca.API.Domain.Entities.Posts.Post", null)
                         .WithMany()
-                        .HasForeignKey("PromotionalCodeId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UserFollowing", b =>
+                {
+                    b.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("FollowedId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UserPromotionalCode", b =>
+                {
+                    b.HasOne("Hiquotroca.API.Domain.Entities.PromotionalCode", null)
+                        .WithMany()
+                        .HasForeignKey("PromoCodeId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Category", b =>
                 {
                     b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Chats.Chat", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Posts.Post", b =>
+                {
+                    b.Navigation("Chats");
                 });
 #pragma warning restore 612, 618
         }

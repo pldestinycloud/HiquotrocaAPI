@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Hiquotroca.API.Domain.Common;
 using Hiquotroca.API.Domain.Entities.Users;
 
-namespace Hiquotroca.API.Domain.Entities.Chat
+namespace Hiquotroca.API.Domain.Entities.Chats
 {
     public class Message : BaseEntity
     {
@@ -21,6 +21,12 @@ namespace Hiquotroca.API.Domain.Entities.Chat
             ReceiverId = receiverId;
             Content = content;
             IsRead = false;
+        }
+
+        public Message MarkAsRead()
+        {
+            IsRead = true;
+            return this;
         }
     }
 }

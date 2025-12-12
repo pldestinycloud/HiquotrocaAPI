@@ -22,9 +22,8 @@ namespace Hiquotroca.API.Domain.Entities
 
         public long UserId { get; private set; }
 
-        public int LotteryId { get; private set; }
+        public long LotteryId { get; private set; }
 
-        [ForeignKey("LotteryId")]
         public Lottery? Lottery { get; private set; }
     }
 }
