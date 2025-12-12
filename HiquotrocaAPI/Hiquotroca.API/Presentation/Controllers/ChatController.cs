@@ -25,51 +25,48 @@ public class ChatsController : ControllerBase
         var chats = await _mediator.Send(new GetUserChatsWithFirstMessageQuery(userId));
         if (chats == null || !chats.Any())
             return NotFound();
+
         return Ok(chats);
     }
 
-    [HttpGet("{chatId:long}")]
+    [HttpGet("/messages/{chatId:long}")]
     public async Task<IActionResult> GetMessages(long chatId)
     {
         var messages = await _mediator.Send(new GetMessagesByChatIdQuery(chatId));
         if (messages == null || !messages.Any())
             return NotFound();
+
         return Ok(messages);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateChat([FromBody] DTOs.Chat.Requests.CreateChatDto dto)
+    public async Task<IActionResult> CreateChat([FromBody] CreateChatCommand command)
     {
-        var chatId = await _mediator.Send(new CreateChatCommand(dto));
-        if (chatId == null)
-            return BadRequest();
-        return Ok(chatId);
-    }
-
-    [HttpPost("{chatId:long}/add-user/{userId:long}")]
-    public async Task<IActionResult> AddUserToChat(long chatId, long userId)
-    {
-        var success = await _mediator.Send(new AddUserToChatCommand(chatId, userId));
-        if (!success)
-            return BadRequest();
-        return Ok();
-    }
-
-    [HttpDelete("{chatId:long}/remove-user/{userId:long}")]
-    public async Task<IActionResult> RemoveUserFromChat(long chatId, long userId)
-    {
-        var success = await _mediator.Send(new RemoveUserFromChatCommand(chatId, userId));
-        if (!success)
-            return BadRequest();
+        await _mediator.Send(command);
         return Ok();
     }
 
     [HttpDelete("{chatId:long}")]
     public async Task<IActionResult> DeleteChat(long chatId)
     {
-        var success = await _mediator.Send(new DeleteChatCommand(chatId));
-        if (!success)
-            return BadRequest();
+        await _mediator.Send(new DeleteChatCommand(chatId));
         return Ok();
     }
+
+    /* Add and Remove users from chat endpoints are more relevant for group chats.
+       If the application only supports one-on-one chats, these endpoints might not be necessary.
+    
+    [HttpPost("{chatId:long}/add-user/{userId:long}")]
+    public async Task<IActionResult> AddUserToChat(long chatId, long userId)
+    {
+        await _mediator.Send(new AddUserToChatCommand(chatId, userId));
+        return Ok();
+    }
+
+    [HttpDelete("{chatId:long}/remove-user/{userId:long}")]
+    public async Task<IActionResult> RemoveUserFromChat(long chatId, long userId)
+    {
+        await _mediator.Send(new RemoveUserFromChatCommand(chatId, userId));
+        return Ok();
+    } */
 }

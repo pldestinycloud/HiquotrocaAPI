@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace Hiquotroca.API.Application.Features.Chats.Commands.CreateChat;
 
-public class CreateChatHandler(AppDbContext db) : IRequestHandler<CreateChatCommand, long?>
+public class CreateChatHandler(AppDbContext db) : IRequestHandler<CreateChatCommand>
 {
-    public async Task<long?> Handle(CreateChatCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateChatCommand command, CancellationToken cancellationToken)
     {
-        var chat = new Chat(request.Dto.UserId1, request.Dto.UserId2, request.Dto.PostId);
+        var chat = new Chat(command.userId1, command.userId2, command.postId);
         await db.Chats.AddAsync(chat);
         await db.SaveChangesAsync();
-        return chat.Id;
     }
 }

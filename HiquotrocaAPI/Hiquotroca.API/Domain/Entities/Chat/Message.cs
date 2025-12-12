@@ -22,6 +22,12 @@ namespace Hiquotroca.API.Domain.Entities.Chats
             Content = content;
             IsRead = false;
         }
+
+        public Message MarkAsRead()
+        {
+            IsRead = true;
+            return this;
+        }
     }
 }
 

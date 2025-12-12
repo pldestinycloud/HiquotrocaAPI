@@ -3,4 +3,6 @@ using MediatR;
 
 namespace Hiquotroca.API.Application.Features.PromotionalCodes.Commands.CreatePromotionalCode;
 
-public record CreatePromotionalCodeCommand(CreatePromotionalCodeDto Dto, long UserId) : IRequest<long>;
+public record CreatePromotionalCodeCommand(
+    string Code,
+    DateTime ExpiryDate) : IRequest;

@@ -1,23 +1,28 @@
+using Hiquotroca.API.Domain.Entities;
+using Hiquotroca.API.Domain.Entities.Users;
 using Hiquotroca.API.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Hiquotroca.API.Application.Features.PromotionalCodes.Commands.AssignUserToPromotionalCode;
 
-public class AssignUserToPromotionalCodeHandler(AppDbContext db) : IRequestHandler<AssignUserToPromotionalCodeCommand, bool>
+public class AssignUserToPromotionalCodeHandler(AppDbContext db) : IRequestHandler<AssignUserToPromotionalCodeCommand>
 {
-    public async Task<bool> Handle(AssignUserToPromotionalCodeCommand request, CancellationToken cancellationToken)
+    public async Task Handle(AssignUserToPromotionalCodeCommand request, CancellationToken cancellationToken)
     {
-        var promoCode = await db.PromotionalCodes.FirstOrDefaultAsync(p => p.Id == request.PromoCodeId);
-        var user = await db.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
-        if (promoCode == null || user == null)
-            return false;
+        var promoCode = await db.PromotionalCodes
+            .Include(pc => pc.Owners)
+            .FirstOrDefaultAsync(p => p.Id == request.PromoCodeId);
+        if (promoCode == null)
+            throw new KeyNotFoundException("Promotional code not found.");
 
-        // Assign promo code to user (update join table or similar logic)
-        // Example: db.UserPromoCodes.Add(new UserPromoCode { UserId = request.UserId, PromoCodeId = request.PromoCodeId });
+        var user = await db.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
+        if (user == null)
+            throw new KeyNotFoundException("User not found.");
+
+        promoCode.AssignUser(user);
+
+        db.PromotionalCodes.Update(promoCode);
         await db.SaveChangesAsync();
-        return true;
     }
 }

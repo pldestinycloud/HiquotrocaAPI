@@ -10,33 +10,31 @@ namespace Hiquotroca.API.Application.Features.Posts.Commands.CreatePost;
 
 public class CreatePostHandler(AppDbContext dbContext) : IRequestHandler<CreatePostCommand>
 {
-    public async Task Handle(CreatePostCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreatePostCommand command, CancellationToken cancellationToken)
     {
-        var dto = request.CreatePostDto;
-
         var postLocation = new PostLocation(
-            dto.Location.City,
-            dto.Location.PostalCode,
-            dto.Location.CountryId,
-            dto.Location.Latitude,
-            dto.Location.Longitude,
-            dto.Location.DeliveryRadiusKm);
+            command.Location_City,
+            command.Location_PostalCode,
+            command.Location_CountryId,
+            command.Location_Latitude,
+            command.Location_Longitude,
+            command.Location_DeliveryRadiusKm);
 
         var postTaxonomy = new PostTaxonomy(
-            dto.ActionTypeId,
-            dto.CategoryId,
-            dto.SubCategoryId);
+            command.ActionTypeId,
+            command.CategoryId,
+            command.SubCategoryId);
 
         var postAdditionalData = new PostAdditionalData(
-            dto.AdditionalInfo!.Elements,
-            dto.AdditionalInfo.Caracteristics,
-            dto.AdditionalInfo.Duration);
+            command.AdditionalInfo_Elements,
+            command.AdditionalInfo_Caracteristics,
+            command.AdditionalInfo_Duration);
 
         var post = new Post(
-            dto.Title,
-            dto.Description,
-            dto.UserId,
-            dto.Images,
+            command.Title,
+            command.Description,
+            command.UserId,
+            command.Images,
             postTaxonomy,
             postLocation,
             postAdditionalData);

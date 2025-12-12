@@ -12,7 +12,8 @@ public class GetPostByIdHandler(AppDbContext db) : IRequestHandler<GetPostByIdQu
     public async Task<PostDto?> Handle(GetPostByIdQuery request, CancellationToken cancellationToken)
     {
         var post = await db.Posts.FirstOrDefaultAsync(p => p.Id == request.Id);
-        if (post == null) return null;
+        if (post == null)
+            return null;
 
         post.IncrementViewCounter();
         await db.SaveChangesAsync();

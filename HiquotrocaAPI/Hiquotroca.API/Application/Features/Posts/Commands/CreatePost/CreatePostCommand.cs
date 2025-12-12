@@ -3,4 +3,26 @@ using MediatR;
 
 namespace Hiquotroca.API.Application.Features.Posts.Commands.CreatePost;
 
-public record CreatePostCommand(CreatePostDto CreatePostDto) : IRequest;
+public record CreatePostCommand(
+    string Title,
+    string Description,
+    long UserId,
+    long ActionTypeId,
+    long CategoryId,
+    long SubCategoryId,
+    List<string> Images,
+
+    // Location fields
+    string? Location_Address,
+    string Location_City,
+    string? Location_PostalCode,
+    long Location_CountryId,
+    double? Location_Latitude,
+    double? Location_Longitude,
+    int? Location_DeliveryRadiusKm,
+
+    // AdditionalInfo fields
+    string? AdditionalInfo_Elements,
+    string? AdditionalInfo_Caracteristics,
+    int? AdditionalInfo_Duration
+) : IRequest;

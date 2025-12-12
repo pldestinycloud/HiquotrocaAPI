@@ -1,5 +1,7 @@
+using Hiquotroca.API.Domain.Entities.Chats;
 using Hiquotroca.API.DTOs.Chat;
 using Hiquotroca.API.Infrastructure.Persistence;
+using Hiquotroca.API.Mappings.Chats;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -14,19 +16,19 @@ public class GetMessagesByChatIdHandler(AppDbContext db) : IRequestHandler<GetMe
     {
         var chat = await db.Chats
             .Include(c => c.Messages)
-            .FirstOrDefaultAsync(c => c.Id == request.ChatId);
+            .Where(c => c.Id == request.ChatId)
+            .FirstOrDefaultAsync();
 
-        if (chat == null || chat.Messages == null || !chat.Messages.Any())
+        var messages = chat?.GetMessages();
+
+        if (messages is null || !messages.Any())
             return new List<MessageDto>();
 
-        return chat.GetMessages().Select(m => new MessageDto
-        {
-            Id = m.Id,
-            ChatId = m.ChatId,
-            SenderId = m.SenderId,
-            ReceiverId = m.ReceiverId,
-            Content = m.Content,
-            IsRead = m.IsRead
-        }).ToList();
+        messages.ForEach(m => m.MarkAsRead());
+
+        db.UpdateRange(messages);
+        await db.SaveChangesAsync();
+
+        return messages.Select(m => MapMessageToMessageDto.Map(m, new MessageDto())).ToList();
     }
 }

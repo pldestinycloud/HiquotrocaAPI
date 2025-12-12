@@ -6,21 +6,17 @@ using System.Threading.Tasks;
 
 namespace Hiquotroca.API.Application.Features.Chats.Commands.RemoveUserFromChat;
 
-public class RemoveUserFromChatHandler(AppDbContext db) : IRequestHandler<RemoveUserFromChatCommand, bool>
+public class RemoveUserFromChatHandler(AppDbContext db) : IRequestHandler<RemoveUserFromChatCommand>
 {
-    public async Task<bool> Handle(RemoveUserFromChatCommand request, CancellationToken cancellationToken)
+    public async Task Handle(RemoveUserFromChatCommand request, CancellationToken cancellationToken)
     {
         var chat = await db.Chats.FirstOrDefaultAsync(c => c.Id == request.ChatId);
-
         if (chat == null)
-            return false;
+            throw new KeyNotFoundException("Chat not found.");
 
-        if (!chat.RemoveUser(request.UserId))
-            return false;
+        chat.AddUser(request.UserId);
 
         db.Chats.Update(chat);
         await db.SaveChangesAsync();
-
-        return true;
     }
 }

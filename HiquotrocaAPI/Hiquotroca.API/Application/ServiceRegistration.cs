@@ -14,13 +14,8 @@ public static class ServiceRegistration
         services.AddScoped<AuthService>();
         services.AddScoped<TokenService>();
 
-        //Aggregate Root Services
-        services.AddScoped<PostService>();
-        services.AddScoped<ChatService>();
-
         //Other Entities Services
         services.AddScoped<ActionTypeService>();
-        services.AddScoped<PromotionalCodeService>();
 
         return services;
     }

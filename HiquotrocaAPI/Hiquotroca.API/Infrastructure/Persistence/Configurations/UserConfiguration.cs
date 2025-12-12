@@ -14,8 +14,24 @@ namespace Hiquotroca.API.Infrastructure.Persistence.Configurations
             builder.OwnsOne<UserAddress>(u => u.Address);
 
             builder.HasMany<Post>(u => u.FavoritePosts)
-                .WithOne()
-                .HasForeignKey(p => p.UserId);
+                   .WithMany()
+                   .UsingEntity<Dictionary<string, object>>(
+                       "UserFavoritePost",
+                       j => j
+                           .HasOne<Post>()
+                           .WithMany()
+                           .HasForeignKey("PostId")
+                           .OnDelete(DeleteBehavior.ClientCascade),
+                       j => j
+                           .HasOne<User>()
+                           .WithMany()
+                           .HasForeignKey("UserId")
+                           .OnDelete(DeleteBehavior.ClientCascade),
+                       j =>
+                       {
+                           j.HasKey("UserId", "PostId");
+                           j.ToTable("UserFavoritePosts");
+                       });
 
             builder.HasMany(u=> u.FollowingUsers)
                 .WithMany()
@@ -38,7 +54,7 @@ namespace Hiquotroca.API.Infrastructure.Persistence.Configurations
                     });
 
             builder.HasMany(u => u.PromotionalCodes)
-                .WithMany(pc => pc.OwnersId)
+                .WithMany(pc => pc.Owners)
                 .UsingEntity<Dictionary<string, object>>(
                     "UserPromotionalCode",
                     j => j

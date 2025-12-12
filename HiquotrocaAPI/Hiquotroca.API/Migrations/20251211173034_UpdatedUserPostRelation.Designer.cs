@@ -4,6 +4,7 @@ using Hiquotroca.API.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hiquotroca.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251211173034_UpdatedUserPostRelation")]
+    partial class UpdatedUserPostRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -411,21 +414,6 @@ namespace Hiquotroca.API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("UserFavoritePost", b =>
-                {
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("PostId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("UserId", "PostId");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("UserFavoritePosts", (string)null);
-                });
-
             modelBuilder.Entity("UserFollowing", b =>
                 {
                     b.Property<long>("UserId")
@@ -615,9 +603,9 @@ namespace Hiquotroca.API.Migrations
             modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Posts.Post", b =>
                 {
                     b.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
-                        .WithMany()
+                        .WithMany("FavoritePosts")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.OwnsOne("Hiquotroca.API.Domain.Entities.Posts.ValueObjects.PostAdditionalData", "AdditionalData", b1 =>
@@ -784,21 +772,6 @@ namespace Hiquotroca.API.Migrations
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("UserFavoritePost", b =>
-                {
-                    b.HasOne("Hiquotroca.API.Domain.Entities.Posts.Post", null)
-                        .WithMany()
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
-                    b.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("UserFollowing", b =>
                 {
                     b.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
@@ -837,6 +810,11 @@ namespace Hiquotroca.API.Migrations
             modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Posts.Post", b =>
                 {
                     b.Navigation("Chats");
+                });
+
+            modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Users.User", b =>
+                {
+                    b.Navigation("FavoritePosts");
                 });
 #pragma warning restore 612, 618
         }

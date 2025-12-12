@@ -2,4 +2,4 @@ using MediatR;
 
 namespace Hiquotroca.API.Application.Features.PromotionalCodes.Commands.DeletePromotionalCode;
 
-public record DeletePromotionalCodeCommand(long Id, long CurrentUserId) : IRequest<bool>;
+public record DeletePromotionalCodeCommand(long Id) : IRequest;

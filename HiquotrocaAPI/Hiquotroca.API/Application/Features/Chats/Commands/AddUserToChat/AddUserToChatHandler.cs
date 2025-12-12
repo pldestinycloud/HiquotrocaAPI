@@ -6,20 +6,17 @@ using System.Threading.Tasks;
 
 namespace Hiquotroca.API.Application.Features.Chats.Commands.AddUserToChat;
 
-public class AddUserToChatHandler(AppDbContext db) : IRequestHandler<AddUserToChatCommand, bool>
+public class AddUserToChatHandler(AppDbContext db) : IRequestHandler<AddUserToChatCommand>
 {
-    public async Task<bool> Handle(AddUserToChatCommand request, CancellationToken cancellationToken)
+    public async Task Handle(AddUserToChatCommand request, CancellationToken cancellationToken)
     {
         var chat = await db.Chats.FirstOrDefaultAsync(c => c.Id == request.ChatId);
-
         if (chat == null)
-            return false;
+            throw new KeyNotFoundException("Chat not found.");
 
-        if (!chat.AddUser(request.UserId))
-            return false;
+        chat.AddUser(request.UserId);
 
         db.Chats.Update(chat);
         await db.SaveChangesAsync();
-        return true;
     }
 }

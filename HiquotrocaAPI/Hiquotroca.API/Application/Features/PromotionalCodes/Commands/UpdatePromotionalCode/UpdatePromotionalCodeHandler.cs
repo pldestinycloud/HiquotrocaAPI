@@ -6,18 +6,17 @@ using System.Threading.Tasks;
 
 namespace Hiquotroca.API.Application.Features.PromotionalCodes.Commands.UpdatePromotionalCode;
 
-public class UpdatePromotionalCodeHandler(AppDbContext db) : IRequestHandler<UpdatePromotionalCodeCommand, Domain.Entities.PromotionalCode?>
+public class UpdatePromotionalCodeHandler(AppDbContext db) : IRequestHandler<UpdatePromotionalCodeCommand>
 {
-    public async Task<Domain.Entities.PromotionalCode?> Handle(UpdatePromotionalCodeCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdatePromotionalCodeCommand request, CancellationToken cancellationToken)
     {
-        var code = await db.PromotionalCodes.FirstOrDefaultAsync(p => p.Id == request.Dto.Id);
-
+        var code = await db.PromotionalCodes.FirstOrDefaultAsync(p => p.Id == request.promotionalCodeId);
         if (code == null)
-            return null;
+           throw new KeyNotFoundException("Promotional code not found.");
+
+        code.Update(request.code, request.expiryDate, request.isActive);
 
         db.PromotionalCodes.Update(code);
         await db.SaveChangesAsync();
-
-        return code;
     }
 }

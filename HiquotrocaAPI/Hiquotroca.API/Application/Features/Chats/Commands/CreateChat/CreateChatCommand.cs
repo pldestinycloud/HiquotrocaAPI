@@ -3,4 +3,7 @@ using MediatR;
 
 namespace Hiquotroca.API.Application.Features.Chats.Commands.CreateChat;
 
-public record CreateChatCommand(CreateChatDto Dto) : IRequest<long?>;
+public record CreateChatCommand(
+    long userId1,
+    long userId2,
+    long postId) : IRequest;

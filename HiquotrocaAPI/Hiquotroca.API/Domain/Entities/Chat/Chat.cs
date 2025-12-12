@@ -22,34 +22,36 @@ namespace Hiquotroca.API.Domain.Entities.Chats
             Messages = new List<Message>();
         }
 
-        public bool AddUser(long userId)
+        public Chat AddUser(long userId)
         {
             if (UserId1 == 0 && UserId2 != userId)
             {
                 UserId1 = userId;
-                return true;
+                return this;
             }
             if (UserId2 == 0 && UserId1 != userId)
             {
                 UserId2 = userId;
-                return true;
+                return this;
             }
-            return false;
+
+            throw new InvalidOperationException("Cannot add user to chat: both user slots are already occupied or user already exists in chat.");
         }
 
-        public bool RemoveUser(long userId)
+        public Chat RemoveUser(long userId)
         {
             if (UserId1 == userId)
             {
                 UserId1 = 0;
-                return true;
+                return this;
             }
             if (UserId2 == userId)
             {
                 UserId2 = 0;
-                return true;
+                return this;
             }
-            return false;
+
+            throw new InvalidOperationException("Cannot remove user from chat: user not found.");
         }
 
         public void Delete()

@@ -7,6 +7,7 @@ using Hiquotroca.API.Application.Features.Posts.Queries.GetAllPosts;
 using Hiquotroca.API.Application.Features.Posts.Queries.GetPostById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Hiquotroca.API.Application.Features.Posts.Queries.GetUserFavoritePosts;
 
 namespace Hiquotroca.API.Presentation.Controllers;
 
@@ -21,8 +22,14 @@ public class PostsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetPosts() =>
-        Ok(await _mediator.Send(new GetAllPostsQuery()));
+    public async Task<IActionResult> GetPosts()
+    {
+        var result = await _mediator.Send(new GetAllPostsQuery());
+        if (result == null || !result.Any())
+            return NotFound();
+
+        return Ok(result);
+    }
 
     [HttpGet("{id:long}")]
     public async Task<IActionResult> GetPostById(long id)
@@ -30,13 +37,14 @@ public class PostsController : ControllerBase
         var result = await _mediator.Send(new GetPostByIdQuery(id));
         if (result == null)
             return NotFound();
+
         return Ok(result);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreatePost([FromBody] CreatePostDto createPostDto)
+    public async Task<IActionResult> CreatePost([FromBody] CreatePostCommand command)
     {
-        await _mediator.Send(new CreatePostCommand(createPostDto));
+        await _mediator.Send(command);
         return NoContent();
     }
 
@@ -47,21 +55,27 @@ public class PostsController : ControllerBase
         return NoContent();
     }
 
+    [HttpGet("/favorites/{userId:long}")]
+    public async Task<IActionResult> GetFavoritePostsByUserId(long userId)
+    {
+        var result = await _mediator.Send(new GetUserFavoritePostsQuery(userId));
+        if (result == null || !result.Any())
+            return NotFound();
+
+        return Ok(result);
+    }
+
     [HttpPost("{postId:long}/add-favorite/{userId:long}")]
     public async Task<IActionResult> AddUserToFavorite(long postId, long userId)
     {
-        var success = await _mediator.Send(new AddUserToFavoritePostCommand(postId, userId));
-        if (!success)
-            return BadRequest();
-        return Ok();
+        await _mediator.Send(new AddUserToFavoritePostCommand(postId, userId));
+        return NoContent();
     }
 
     [HttpDelete("{postId:long}/remove-favorite/{userId:long}")]
     public async Task<IActionResult> RemoveUserFromFavorite(long postId, long userId)
     {
-        var success = await _mediator.Send(new RemoveUserFromFavoritePostCommand(postId, userId));
-        if (!success)
-            return BadRequest();
-        return Ok();
+       await _mediator.Send(new RemoveUserFromFavoritePostCommand(postId, userId));
+       return Ok();
     }
 }

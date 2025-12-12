@@ -4,13 +4,12 @@ using MediatR;
 
 namespace Hiquotroca.API.Application.Features.PromotionalCodes.Commands.CreatePromotionalCode;
 
-public class CreatePromotionalCodeHandler(AppDbContext db) : IRequestHandler<CreatePromotionalCodeCommand, long>
+public class CreatePromotionalCodeHandler(AppDbContext db) : IRequestHandler<CreatePromotionalCodeCommand>
 {
-    public async Task<long> Handle(CreatePromotionalCodeCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreatePromotionalCodeCommand command, CancellationToken cancellationToken)
     {
-        var code = new PromotionalCode(request.Dto.Code, request.Dto.ExpiryDate);
+        var code = new PromotionalCode(command.Code, command.ExpiryDate);
         await db.PromotionalCodes.AddAsync(code);
         await db.SaveChangesAsync();
-        return code.Id;
     }
 }
