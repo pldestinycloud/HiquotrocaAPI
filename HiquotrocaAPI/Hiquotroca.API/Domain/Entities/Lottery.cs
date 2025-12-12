@@ -19,6 +19,7 @@ namespace Hiquotroca.API.Domain.Entities
         public DateTime ExpiryDate { get; private set; }
         public string? ImageUrl { get; private set; }
         public bool IsActive { get; private set; }
+        public List<Ticket> Tickets { get; set; } = new List<Ticket>(); 
 
         public Lottery(string title, string description, decimal ticketPrice, int totalTickets, int minTicketsSold, DateTime expiryDate, string imageUrl)
         {
@@ -33,9 +34,19 @@ namespace Hiquotroca.API.Domain.Entities
             IsActive = true;
         }
 
-        public List<Ticket> Tickets  { get; set; }
 
-        // Método de Domínio para registar uma venda (mantendo o encapsulamento)
+        public Lottery Update(string title, string description, decimal ticketPrice, DateTime expiryDate, string? imageUrl, bool isActive)
+        {
+            Title = title;
+            Description = description;
+            TicketPrice = ticketPrice;
+            ExpiryDate = expiryDate;
+            ImageUrl = imageUrl;
+            IsActive = isActive;
+
+            return this;
+        }
+
         public void RegisterTicketSale(Ticket ticket)
         {
             Tickets.Add(ticket);

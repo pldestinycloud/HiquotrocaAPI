@@ -17,7 +17,7 @@ namespace Hiquotroca.API.Domain.Entities
 
         protected Ticket() { }
 
-        public int SelectedNumber { get; private set; } // O número escolhido (Ex: 111)
+        public int SelectedNumber { get; private set; }
         public DateTime PurchaseDate { get; private set; }
 
         public long UserId { get; private set; }
