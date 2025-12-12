@@ -38,14 +38,14 @@ public class PurchaseTicketHandler(AppDbContext db) : IRequestHandler<PurchaseTi
         if (user.HiquoCredits < price)
             throw new InvalidOperationException("Saldo insuficiente de HiquoCredits.");
 
-        user.HiquoCredits -= price; 
+        user.HiquoCredits -= price;
 
         var ticket = new Ticket((int)request.LotteryId, request.UserId, request.SelectedNumber);
 
         lottery.RegisterTicketSale(ticket);
 
         db.Users.Update(user);
-        db.Set<Lottery>().Update(lottery); 
+        db.Set<Lottery>().Update(lottery);
 
         await db.SaveChangesAsync(cancellationToken);
     }
