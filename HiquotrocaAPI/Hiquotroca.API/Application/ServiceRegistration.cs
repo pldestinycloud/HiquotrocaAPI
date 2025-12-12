@@ -12,15 +12,10 @@ public static class ServiceRegistration
         //Auth Services
         services.AddScoped<PasswordHasher<User>>();
         services.AddScoped<AuthService>();
-
-        //Aggregate Root Services
-        services.AddScoped<UserService>();
-        services.AddScoped<PostService>();
-        services.AddScoped<ChatService>();
+        services.AddScoped<TokenService>();
 
         //Other Entities Services
         services.AddScoped<ActionTypeService>();
-        services.AddScoped<PromotionalCodeService>();
 
         return services;
     }

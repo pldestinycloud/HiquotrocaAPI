@@ -6,12 +6,6 @@ namespace Hiquotroca.API.Presentation.Hubs
 {
     public class ChatHub : Hub
     {
-        private readonly ChatService _chatService;
-        public ChatHub(ChatService chatService)
-        {
-            _chatService = chatService;
-        }
-
         public override Task OnConnectedAsync()
         {
             Console.WriteLine($"User connected: {Context.UserIdentifier}");

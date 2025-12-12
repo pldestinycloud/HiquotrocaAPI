@@ -1,91 +1,85 @@
-﻿using Hiquotroca.API.Application.Services;
-using Hiquotroca.API.DTOs.PromotionalCode;
-using Microsoft.AspNetCore.Authorization;
+﻿using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.AssignUserToPromotionalCode;
+using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.CreatePromotionalCode;
+using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.DeletePromotionalCode;
+using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.RemoveUserFromPromotionalCode;
+using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.UpdatePromotionalCode;
+using Hiquotroca.API.Application.Features.PromotionalCodes.Queries.GetAllPromotionalCodes;
+using Hiquotroca.API.Application.Features.PromotionalCodes.Queries.GetPromotionalCodeById;
+using Hiquotroca.API.Application.Features.PromotionalCodes.Queries.GetPromotionalCodesOfUser;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Hiquotroca.API.Presentation.Controllers
+namespace Hiquotroca.API.Presentation.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class PromotionalCodeController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class PromotionalCodeController : ControllerBase
+    private readonly IMediator _mediator;
+    public PromotionalCodeController(IMediator mediator)
     {
-        private readonly PromotionalCodeService _service;
+        _mediator = mediator;
+    }
 
-        public PromotionalCodeController(PromotionalCodeService service)
-        {
-            _service = service;
-        }
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var codes = await _mediator.Send(new GetAllPromotionalCodesQuery());
+        return Ok(codes);
+    }
 
-        private long GetCurrentUserId()
-        {
-            var idClaim = User.Claims.FirstOrDefault(c => c.Type == "id" || c.Type == "sub");
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(long id)
+    {
+        var code = await _mediator.Send(new GetPromotionalCodeByIdQuery(id));
+        if (code == null)
+            return NotFound();
 
-            if (idClaim == null)
-                throw new Exception("User ID not found in token");
+        return Ok(code);
+    }
 
-            return long.Parse(idClaim.Value);
-        }
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CreatePromotionalCodeCommand command)
+    {
+        await _mediator.Send(command);
+        return Ok();
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(CreatePromotionalCodeDto dto)
-        {
-            long currentUserId = 1; // GetCurrentUserId();
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] UpdatePromotionalCodeCommand command)
+    {
+        await _mediator.Send(command);
+        return Ok();
+    }
 
-            var result = await _service.CreateAsync(dto, currentUserId);
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(long id)
+    {
+        await _mediator.Send(new DeletePromotionalCodeCommand(id));
+        return Ok();
+    }
 
-            if (!result.isSuccess)
-                return BadRequest(result.Errors?.FirstOrDefault()?.Description);
+    [HttpGet("of-user/{userId:long}")]
+    public async Task<IActionResult> GetPromoCodesOfUser(long userId)
+    {
+        var result = await _mediator.Send(new GetPromotionalCodesOfUserQuery(userId));
+        if (result == null || !result.Any())
+            return NotFound();
 
-            return Ok(result.Data);
-        }
+        return Ok(result);
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(long id)
-        {
-            var result = await _service.GetByIdAsync(id);
+    [HttpPost("{promoCodeId:long}/assign-user/{userId:long}")]
+    public async Task<IActionResult> AssignUserToPromotionalCode(long promoCodeId, long userId)
+    {
+        await _mediator.Send(new AssignUserToPromotionalCodeCommand(promoCodeId, userId));;
+        return Ok();
+    }
 
-            if (!result.isSuccess)
-                return BadRequest(result.Errors?.FirstOrDefault()?.Description);
-
-            if (result.Data == null)
-                return NotFound();
-
-            return Ok(result.Data);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok(await _service.GetAllAsync());
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> Update(UpdatePromotionalCodeDto dto)
-        {
-            long currentUserId = GetCurrentUserId();
-
-            var result = await _service.UpdateAsync(dto, currentUserId);
-
-            if (!result.isSuccess)
-                return BadRequest(result.Errors?.FirstOrDefault()?.Description);
-
-            return Ok(result.Data);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(long id)
-        {
-            long currentUserId = GetCurrentUserId();
-
-            var result = await _service.DeleteAsync(id, currentUserId);
-
-            if (!result.isSuccess)
-                return BadRequest(result.Errors?.FirstOrDefault()?.Description);
-
-            if (result.Data == false)
-                return NotFound();
-
-            return Ok();
-        }
+    [HttpDelete("{promoCodeId:long}/remove-user/{userId:long}")]
+    public async Task<IActionResult> RemoveUserFromPromotionalCode(long promoCodeId, long userId)
+    {
+        await _mediator.Send(new RemoveUserFromPromotionalCodeCommand(promoCodeId, userId));
+        return Ok();
     }
 }

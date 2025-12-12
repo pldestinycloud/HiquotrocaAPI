@@ -8,6 +8,9 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
+
 var useInMemoryDatabase = false;
 builder.Services.AddInfrastructureServices(builder.Configuration, useInMemoryDatabase);
 builder.Services.AddApplicationServices();
@@ -62,7 +65,9 @@ app.UseAuthorization();
 
 //Aggregate roots endpoints
 app.MapControllers();
-app.MapHub<ChatHub>("/chat").AllowAnonymous();
+app.MapHub<ChatHub>("/chat")
+   .RequireCors("OpenPolicy")
+   .RequireAuthorization();
 
 //LoopUp entitities endpoints
 app.MapLookUpEntitiesEndpoints();

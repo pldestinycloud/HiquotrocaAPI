@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Hiquotroca.API.Domain.Common;
 using Hiquotroca.API.Domain.Entities.Posts;
 
-namespace Hiquotroca.API.Domain.Entities.Chat
+namespace Hiquotroca.API.Domain.Entities.Chats
 {
     public class Chat : BaseEntity
     {
         public long UserId1 { get; private set; }
         public long UserId2 { get; private set; }
-        public long? PostId { get; private set; } // conversa ligada a um post
+        public long? PostId { get; private set; }
         public List<Message> Messages { get; private set; } = new List<Message>();
 
         public Chat(long userId1, long userId2, long? postId)
@@ -22,34 +22,36 @@ namespace Hiquotroca.API.Domain.Entities.Chat
             Messages = new List<Message>();
         }
 
-        public bool AddUser(long userId)
+        public Chat AddUser(long userId)
         {
             if (UserId1 == 0 && UserId2 != userId)
             {
                 UserId1 = userId;
-                return true;
+                return this;
             }
             if (UserId2 == 0 && UserId1 != userId)
             {
                 UserId2 = userId;
-                return true;
+                return this;
             }
-            return false;
+
+            throw new InvalidOperationException("Cannot add user to chat: both user slots are already occupied or user already exists in chat.");
         }
 
-        public bool RemoveUser(long userId)
+        public Chat RemoveUser(long userId)
         {
             if (UserId1 == userId)
             {
                 UserId1 = 0;
-                return true;
+                return this;
             }
             if (UserId2 == userId)
             {
                 UserId2 = 0;
-                return true;
+                return this;
             }
-            return false;
+
+            throw new InvalidOperationException("Cannot remove user from chat: user not found.");
         }
 
         public void Delete()

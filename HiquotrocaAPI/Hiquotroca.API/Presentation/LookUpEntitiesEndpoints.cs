@@ -8,8 +8,9 @@ namespace Hiquotroca.API.Presentation
     {
         public static void MapLookUpEntitiesEndpoints(this WebApplication app)
         {
+            var group = app.MapGroup("/api");
 
-            app.MapGet("/Actiontypes", async (AppDbContext db) =>
+            group.MapGet("/ActionTypes", async (AppDbContext db) =>
             {
                 var items = await db.ActionTypes
                     .Where(a => !a.IsDeleted)
@@ -23,7 +24,7 @@ namespace Hiquotroca.API.Presentation
             .RequireCors("OpenPolicy");
             //.RequireAuthorization();
 
-            app.MapGet("/Categories", async (AppDbContext db) =>
+            group.MapGet("/Categories", async (AppDbContext db) =>
             {
                 var items = await db.Categories
                     .Where(c => !c.IsDeleted)
@@ -47,7 +48,7 @@ namespace Hiquotroca.API.Presentation
             .RequireCors("OpenPolicy");
             //.RequireAuthorization();
 
-            app.MapGet("/Categories/{id}", async (long id, AppDbContext db) =>
+            group.MapGet("/Categories/{id}", async (long id, AppDbContext db) =>
             {
                 var item = await db.Categories
                     .Where(c => c.Id == id && !c.IsDeleted)
@@ -66,7 +67,7 @@ namespace Hiquotroca.API.Presentation
             .RequireCors("OpenPolicy");
             //.RequireAuthorization();
 
-            app.MapGet("/Countries", async (AppDbContext db) =>
+            group.MapGet("/Countries", async (AppDbContext db) =>
             {
                 var items = await db.Countries
                     .Where(c => !c.IsDeleted)

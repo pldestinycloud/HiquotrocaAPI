@@ -8,7 +8,7 @@ namespace Hiquotroca.API.DTOs.Posts
         public long UserId { get; set; }
         public long ActionTypeId { get; set; }
         public long CategoryId { get; set; }
-        public long SubCategoryId { get; set; }
+        public long SubcategoryId { get; set; }
         public bool IsActive { get; set; }
         public List<string> Images { get; set; } = new List<string>();
         public PostLocationDto? Location { get; set; } 
