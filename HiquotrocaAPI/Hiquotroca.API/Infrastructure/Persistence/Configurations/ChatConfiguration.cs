@@ -27,23 +27,33 @@ namespace Hiquotroca.API.Infrastructure.Persistence.Configurations
                    .HasForeignKey(c => c.PostId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.OwnsMany<Message>(c => c.Messages, m =>
-            {
-                m.HasKey(m => m.Id);
+            builder.HasMany(c => c.Messages)
+                   .WithOne()
+                   .HasForeignKey(m => m.ChatId)
+                   .OnDelete(DeleteBehavior.Cascade);
+        }
+    }
 
-                m.WithOwner()
-                 .HasForeignKey(m => m.ChatId);
+    public class MessageConfiguration : IEntityTypeConfiguration<Message>
+    {
+        public void Configure(EntityTypeBuilder<Message> builder)
+        {
+            builder.HasKey(m => m.Id);
 
-                m.HasOne<User>()
-                 .WithMany()
-                 .HasForeignKey(m => m.SenderId)
-                 .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne<Chat>()
+                   .WithMany(c => c.Messages)
+                   .HasForeignKey(m => m.ChatId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
-                m.HasOne<User>()
-                 .WithMany()
-                 .HasForeignKey(m => m.ReceiverId)
-                 .OnDelete(DeleteBehavior.Restrict);
-            });
+            builder.HasOne<User>()
+                   .WithMany()
+                   .HasForeignKey(m => m.SenderId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne<User>()
+                   .WithMany()
+                   .HasForeignKey(m => m.ReceiverId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

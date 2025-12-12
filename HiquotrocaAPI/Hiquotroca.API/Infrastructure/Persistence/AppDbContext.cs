@@ -24,6 +24,7 @@ namespace Hiquotroca.API.Infrastructure.Persistence
         public DbSet<ActionType> ActionTypes => Set<ActionType>();
         public DbSet<Post> Posts => Set<Post>();
         public DbSet<Chat> Chats => Set<Chat>();
+        public DbSet<Message> Messages => Set<Message>();
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<Subcategory> SubCategories => Set<Subcategory>();
         public DbSet<PromotionalCode> PromotionalCodes => Set<PromotionalCode>();
