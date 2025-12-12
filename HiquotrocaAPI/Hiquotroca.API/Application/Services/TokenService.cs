@@ -25,10 +25,7 @@ public class TokenService
 
     public string GetAccessTokenWithRefreshToken(User user, string providedRefreshToken)
     {
-         if(!isRefreshTokenValid(user, providedRefreshToken))
-            throw new UnauthorizedAccessException("Invalid refresh token. Proceed to login.");
-
-        return GenerateJwtToken(user);
+         return GenerateJwtToken(user);
     }
 
 
@@ -54,7 +51,7 @@ public class TokenService
         return new JsonWebTokenHandler().CreateToken(token);
     }
 
-    private bool isRefreshTokenValid(User user, string providedRefreshToken)
+    public bool IsRefreshTokenValid(User user, string providedRefreshToken)
     {
         return user != null
             && user.RefreshTokenExpiry != null
