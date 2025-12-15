@@ -28,6 +28,7 @@ namespace Hiquotroca.API.Infrastructure.Persistence
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<Subcategory> SubCategories => Set<Subcategory>();
         public DbSet<PromotionalCode> PromotionalCodes => Set<PromotionalCode>();
+        public DbSet<Lottery> Lotteries => Set<Lottery>();
 
         public override int SaveChanges()
         {
