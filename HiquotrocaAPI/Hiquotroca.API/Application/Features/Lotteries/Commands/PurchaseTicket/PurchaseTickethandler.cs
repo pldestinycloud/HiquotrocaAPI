@@ -14,38 +14,21 @@ public class PurchaseTicketHandler(AppDbContext db) : IRequestHandler<PurchaseTi
             .FirstOrDefaultAsync(l => l.Id == request.LotteryId, cancellationToken);
 
         if (lottery == null)
-            throw new KeyNotFoundException("Lotaria não encontrada.");
-
-        if (!lottery.IsActive || lottery.ExpiryDate < DateTime.UtcNow)
-            throw new InvalidOperationException("Esta lotaria já não está ativa ou expirou.");
-
-        if (lottery.TicketsSold >= lottery.TotalTickets)
-            throw new InvalidOperationException("Todos os bilhetes já foram vendidos.");
-
-        bool numberTaken = lottery.Tickets.Any(t => t.SelectedNumber == request.SelectedNumber);
-        if (numberTaken)
-            throw new InvalidOperationException($"O número {request.SelectedNumber} já foi comprado.");
-
-        if (request.SelectedNumber < 1 || request.SelectedNumber > lottery.TotalTickets)
-            throw new InvalidOperationException($"Número inválido. Deve ser entre 1 e {lottery.TotalTickets}.");
+            throw new KeyNotFoundException("Lottery not found.");
 
         var user = await db.Users.FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
         if (user == null)
-            throw new KeyNotFoundException("Utilizador não encontrado.");
+            throw new KeyNotFoundException("User not found.");
 
-        double price = (double)lottery.TicketPrice;
+        double ticketPrice = lottery.GetTicketPrice();
+        if (!user.HaveEnoughCredits(ticketPrice))
+            throw new InvalidOperationException("User does not have enough credits to purchase the ticket.");
 
-        if (user.HiquoCredits < price)
-            throw new InvalidOperationException("Saldo insuficiente de HiquoCredits.");
-
-        user.HiquoCredits -= price;
-
-        var ticket = new Ticket((int)request.LotteryId, request.UserId, request.SelectedNumber);
-
-        lottery.RegisterTicketSale(ticket);
+        lottery.PurchaseTicket(user, request.SelectedNumber);
+        user.DeducteCredits(ticketPrice);
 
         db.Users.Update(user);
-        db.Set<Lottery>().Update(lottery);
+        db.Lotteries.Update(lottery);
 
         await db.SaveChangesAsync(cancellationToken);
     }

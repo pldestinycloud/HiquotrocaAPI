@@ -18,7 +18,8 @@ public class UpdateUserHandler(AppDbContext db) : IRequestHandler<UpdateUserComm
             command.FirstName,
             command.LastName,
             command.PhoneNumber,
-            command.BirthDate
+            command.BirthDate,
+            command.HiquotrocaCredits
         );
 
         if (command.Address != null)

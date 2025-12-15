@@ -7,7 +7,7 @@ public class LotteryDto
     public long Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public decimal TicketPrice { get; set; }
+    public double TicketPrice { get; set; }
     public int TotalTickets { get; set; }
     public int TicketsSold { get; set; }
     public DateTime ExpiryDate { get; set; }

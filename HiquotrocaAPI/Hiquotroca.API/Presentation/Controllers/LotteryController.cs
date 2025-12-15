@@ -39,8 +39,8 @@ public class LotteryController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateLotteryCommand command)
     {
-        var id = await _mediator.Send(command);
-        return CreatedAtAction(nameof(GetById), new { id }, command);
+        await _mediator.Send(command);
+        return NoContent();
     }
 
     [HttpPut("{id:long}")]
@@ -53,21 +53,10 @@ public class LotteryController : ControllerBase
         return NoContent();
     }
 
-    [HttpPost("purchase-ticket")]
+    [HttpPost("{id:long}/purchase-ticket/{userId:long}")]
     public async Task<IActionResult> PurchaseTicket([FromBody] PurchaseTicketCommand command)
     {
-        try
-        {
-            await _mediator.Send(command);
-            return Ok(new { message = "Ticket comprado com sucesso!" });
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { error = ex.Message });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
+        await _mediator.Send(command);
+        return NoContent();
     }
 }

@@ -5,8 +5,13 @@ using Hiquotroca.API.Domain.Common;
 
 namespace Hiquotroca.API.Domain.Entities
 {
-    public class Ticket : BaseEntity
+    public class Ticket 
     {
+        public int SelectedNumber { get; private set; }
+        public DateTime PurchaseDate { get; private set; }
+        public long UserId { get; private set; }
+        public long LotteryId { get; private set; }
+
         public Ticket(int lotteryId, long userId, int selectedNumber)
         {
             LotteryId = lotteryId;
@@ -14,16 +19,6 @@ namespace Hiquotroca.API.Domain.Entities
             SelectedNumber = selectedNumber;
             PurchaseDate = DateTime.UtcNow;
         }
-
         protected Ticket() { }
-
-        public int SelectedNumber { get; private set; }
-        public DateTime PurchaseDate { get; private set; }
-
-        public long UserId { get; private set; }
-
-        public long LotteryId { get; private set; }
-
-        public Lottery? Lottery { get; private set; }
     }
 }

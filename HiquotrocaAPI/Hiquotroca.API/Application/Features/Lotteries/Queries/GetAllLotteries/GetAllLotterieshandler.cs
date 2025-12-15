@@ -10,7 +10,7 @@ public class GetAllLotteriesHandler(AppDbContext db) : IRequestHandler<GetAllLot
 {
     public async Task<List<LotteryDto>> Handle(GetAllLotteriesQuery request, CancellationToken cancellationToken)
     {
-        var lotteries = await db.Set<Hiquotroca.API.Domain.Entities.Lottery>()
+        var lotteries = await db.Lotteries
             .Include(l => l.Tickets) 
             .Where(l => !l.IsDeleted)
             .OrderByDescending(l => l.CreatedDate)

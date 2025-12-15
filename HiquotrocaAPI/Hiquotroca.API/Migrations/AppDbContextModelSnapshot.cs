@@ -253,8 +253,8 @@ namespace Hiquotroca.API.Migrations
                     b.Property<int>("MinTicketsSold")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("TicketPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("TicketPrice")
+                        .HasColumnType("real");
 
                     b.Property<int>("TicketsSold")
                         .HasColumnType("int");
@@ -274,7 +274,7 @@ namespace Hiquotroca.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Lottery");
+                    b.ToTable("Lotteries");
                 });
 
             modelBuilder.Entity("Hiquotroca.API.Domain.Entities.Posts.Post", b =>
@@ -551,26 +551,14 @@ namespace Hiquotroca.API.Migrations
                 {
                     b.OwnsMany("Hiquotroca.API.Domain.Entities.Ticket", "Tickets", b1 =>
                         {
-                            b1.Property<long>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("bigint");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<long>("Id"));
-
-                            b1.Property<long?>("CreatedBy")
-                                .HasColumnType("bigint");
-
-                            b1.Property<DateTime>("CreatedDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<bool>("IsDeleted")
-                                .HasColumnType("bit");
-
                             b1.Property<long>("LotteryId")
                                 .HasColumnType("bigint");
 
-                            b1.Property<long?>("LotteryId1")
-                                .HasColumnType("bigint");
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
 
                             b1.Property<DateTime>("PurchaseDate")
                                 .HasColumnType("datetime2");
@@ -578,20 +566,10 @@ namespace Hiquotroca.API.Migrations
                             b1.Property<int>("SelectedNumber")
                                 .HasColumnType("int");
 
-                            b1.Property<long?>("UpdatedBy")
-                                .HasColumnType("bigint");
-
-                            b1.Property<DateTime?>("UpdatedDate")
-                                .HasColumnType("datetime2");
-
                             b1.Property<long>("UserId")
                                 .HasColumnType("bigint");
 
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("LotteryId");
-
-                            b1.HasIndex("LotteryId1");
+                            b1.HasKey("LotteryId", "Id");
 
                             b1.HasIndex("UserId");
 
@@ -600,17 +578,11 @@ namespace Hiquotroca.API.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("LotteryId");
 
-                            b1.HasOne("Hiquotroca.API.Domain.Entities.Lottery", "Lottery")
-                                .WithMany()
-                                .HasForeignKey("LotteryId1");
-
                             b1.HasOne("Hiquotroca.API.Domain.Entities.Users.User", null)
                                 .WithMany()
                                 .HasForeignKey("UserId")
                                 .OnDelete(DeleteBehavior.Cascade)
                                 .IsRequired();
-
-                            b1.Navigation("Lottery");
                         });
 
                     b.Navigation("Tickets");

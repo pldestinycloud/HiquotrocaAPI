@@ -6,7 +6,7 @@ public record UpdateLotteryCommand(
     long Id,
     string Title,
     string Description,
-    decimal TicketPrice,
+    float TicketPrice,
     DateTime ExpiryDate,
     string? ImageUrl,
     bool IsActive

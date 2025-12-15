@@ -11,4 +11,5 @@ public record UpdateUserCommand(
     string LastName,
     string? PhoneNumber,
     DateTime? BirthDate,
+    double HiquotrocaCredits,
     UserAddress Address) : IRequest;

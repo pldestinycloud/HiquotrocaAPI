@@ -12,15 +12,9 @@ public class LotteryConfiguration : IEntityTypeConfiguration<Lottery>
         builder.HasKey(l => l.Id);
 
         builder.OwnsMany<Ticket>(l => l.Tickets, t =>
-        {
-            t.HasKey(t => t.Id);
-
-            t.WithOwner()
-            .HasForeignKey(t => t.LotteryId);
-
-            t.HasOne<User>()
-            .WithMany()
-            .HasForeignKey(t => t.UserId);
-        });
+            {
+                t.HasOne<User>().WithMany().HasForeignKey("UserId");
+                t.WithOwner().HasForeignKey("LotteryId");
+            });
     }
 }

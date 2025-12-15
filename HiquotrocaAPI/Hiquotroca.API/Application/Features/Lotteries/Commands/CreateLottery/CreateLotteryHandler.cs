@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Hiquotroca.API.Application.Features.Lotteries.Commands.CreateLottery;
 
-public class CreateLotteryHandler(AppDbContext db) : IRequestHandler<CreateLotteryCommand, long>
+public class CreateLotteryHandler(AppDbContext db) : IRequestHandler<CreateLotteryCommand>
 {
-    public async Task<long> Handle(CreateLotteryCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateLotteryCommand request, CancellationToken cancellationToken)
     {
         var lottery = new Lottery(
             request.Title,
@@ -18,9 +18,7 @@ public class CreateLotteryHandler(AppDbContext db) : IRequestHandler<CreateLotte
             request.ImageUrl
         );
 
-        db.Set<Lottery>().Add(lottery); // Assumindo que adicionaste DbSet<Lottery> no AppDbContext
+        db.Set<Lottery>().Add(lottery);
         await db.SaveChangesAsync(cancellationToken);
-
-        return lottery.Id;
     }
 }
