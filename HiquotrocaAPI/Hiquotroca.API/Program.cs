@@ -4,6 +4,7 @@ using Hiquotroca.API.Presentation;
 using Hiquotroca.API.Presentation.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Hiquotroca.API.Infrastructure.Jobs;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,7 @@ var useInMemoryDatabase = false;
 builder.Services.AddInfrastructureServices(builder.Configuration, useInMemoryDatabase);
 builder.Services.AddApplicationServices();
 builder.Services.AddSignalR();
+builder.Services.AddHostedService<CloseExpiredLotteriesJob>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

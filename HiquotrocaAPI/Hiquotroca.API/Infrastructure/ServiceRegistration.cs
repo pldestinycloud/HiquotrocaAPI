@@ -1,6 +1,7 @@
 ﻿using Hiquotroca.API.Application.Interfaces;
 using Hiquotroca.API.Application.Interfaces.Repositories;
 using Hiquotroca.API.Infrastructure.Email;
+using Hiquotroca.API.Infrastructure.Jobs;
 using Hiquotroca.API.Infrastructure.Persistence;
 using Hiquotroca.API.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,6 @@ namespace Hiquotroca.API.Infrastructure
                     options.UseSqlServer(
                         configuration.GetConnectionString("DefaultConnection")));
             }
-
             services.AddScoped<IEmailSender, SmtpEmailSender>();
 
             services.RegisterRepositories();

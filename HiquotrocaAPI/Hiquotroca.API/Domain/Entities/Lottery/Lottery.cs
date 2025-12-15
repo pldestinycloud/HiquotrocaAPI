@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Net.Sockets;
 
-namespace Hiquotroca.API.Domain.Entities
+namespace Hiquotroca.API.Domain.Entities.Lottery
 {
     public class Lottery : BaseEntity
     {
@@ -21,6 +21,7 @@ namespace Hiquotroca.API.Domain.Entities
         public DateTime ExpiryDate { get; private set; }
         public string? ImageUrl { get; private set; }
         public bool IsActive { get; private set; }
+        public int WinnerNumber { get; private set; } = 0;
         public List<Ticket> Tickets { get; set; } = new List<Ticket>(); 
 
         public Lottery(string title, string description, float ticketPrice, int totalTickets, int minTicketsSold, DateTime expiryDate, string imageUrl)
@@ -78,6 +79,43 @@ namespace Hiquotroca.API.Domain.Entities
         public double GetTicketPrice()
         {
             return TicketPrice;
+        }
+
+        public Lottery DeactivateLottery()
+        {
+            if (!IsActive)
+                throw new InvalidOperationException("Lottery is already closed.");
+            IsActive = false;
+
+            return this;
+        }
+
+        public Lottery SetWinnerNumber()
+        {
+            if(IsActive)
+                throw new InvalidOperationException("Lottery is still active. Cannot declare a winner.");
+
+            //Maybe activate in according to business rules in the future
+           /* if (TicketsSold < MinTicketsSold)
+                throw new InvalidOperationException("Minimum tickets sold not reached. Cannot declare a winner.");*/
+
+            if(!Tickets.Any())
+                throw new InvalidOperationException("No tickets have been sold.");
+
+            var random = new Random();
+            int winningIndex = random.Next(Tickets.Count);
+            var winningTicket = Tickets[winningIndex];
+
+            WinnerNumber = winningTicket.SelectedNumber;
+
+            return this;
+        }
+
+        public int GetWinnerNumber()
+        {
+            if (WinnerNumber == 0)
+                throw new InvalidOperationException("Winner has not been declared yet.");
+            return WinnerNumber;
         }
     }
 }

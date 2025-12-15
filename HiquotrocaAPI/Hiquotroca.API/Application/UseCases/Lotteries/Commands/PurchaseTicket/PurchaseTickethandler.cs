@@ -1,4 +1,4 @@
-﻿using Hiquotroca.API.Domain.Entities;
+﻿using Hiquotroca.API.Domain.Entities.Lottery;
 using Hiquotroca.API.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,5 @@
-﻿using Hiquotroca.API.DTOs.Lotteries;
+﻿using Hiquotroca.API.Domain.Entities.Lottery;
+using Hiquotroca.API.DTOs.Lotteries;
 using Hiquotroca.API.Infrastructure.Persistence;
 using Hiquotroca.API.Mappings.Lotteries;
 using MediatR;
@@ -10,7 +11,7 @@ public class GetLotteryByIdHandler(AppDbContext db) : IRequestHandler<GetLottery
 {
     public async Task<LotteryDto?> Handle(GetLotteryByIdQuery request, CancellationToken cancellationToken)
     {
-        var lottery = await db.Set<Hiquotroca.API.Domain.Entities.Lottery>()
+        var lottery = await db.Set<Lottery>()
             .Include(l => l.Tickets)
             .FirstOrDefaultAsync(l => l.Id == request.Id && !l.IsDeleted, cancellationToken);
 

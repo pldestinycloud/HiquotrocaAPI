@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Hiquotroca.API.Domain.Common;
 
-namespace Hiquotroca.API.Domain.Entities
+namespace Hiquotroca.API.Domain.Entities.Lottery
 {
     public class Ticket 
     {
