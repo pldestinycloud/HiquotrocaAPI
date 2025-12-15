@@ -36,12 +36,16 @@ namespace Hiquotroca.API.Domain.Entities.Users
             BirthDate = birthDate;
         }
 
-        public User UpdateUser(string firstName, string? lastName, string? phoneNumber, DateTime? birthDate)
+        public User UpdateUser(string firstName, string? lastName, string? phoneNumber, DateTime? birthDate, double hiquotrocaCredits = 0.0)
         {
             FirstName = firstName;
             LastName = lastName;
             PhoneNumber = phoneNumber;
             BirthDate = birthDate;
+
+            if (hiquotrocaCredits > 0.0)
+                HiquoCredits = hiquotrocaCredits;
+
             return this;
         }
 
@@ -116,6 +120,20 @@ namespace Hiquotroca.API.Domain.Entities.Users
                 return this;
 
             this.PromotionalCodes.Remove(promoCode);
+            return this;
+        }
+
+        public bool HaveEnoughCredits(double requiredCredits)
+        {
+            return this.HiquoCredits >= requiredCredits;
+        }
+
+        public User DeducteCredits(double creditsToDeduct)
+        {
+            if (!HaveEnoughCredits(creditsToDeduct))
+                throw new InvalidOperationException("User does not have enough Hiquo Credits.");
+
+            this.HiquoCredits -= creditsToDeduct;
             return this;
         }
 

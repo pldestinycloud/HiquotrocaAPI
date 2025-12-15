@@ -36,15 +36,11 @@ namespace Hiquotroca.API.Application.Services
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
             if (user == null)
-            {
-                return BaseResult<LoginResponse>.Failure(new Error(ErrorCode.ErrorInIdentity, "Invalid email or password."));
-            }
+                return "Invalid email or password.";
 
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash!, request.Password);
             if (result == PasswordVerificationResult.Failed)
-            {
-                return BaseResult<LoginResponse>.Failure(new Error(ErrorCode.ErrorInIdentity, "Invalid email or password."));
-            }
+                return "Invalid email or password.";
 
             var accessToken = _tokenService.GenerateJwtToken(user);
             var refreshTokenDto = GenerateRefreshTokenDto();
@@ -63,6 +59,18 @@ namespace Hiquotroca.API.Application.Services
         public string HashPasswordForUser(User user, string password)
         {
              return _passwordHasher.HashPassword(user, password);
+        }
+
+        public async Task<string?> GetAccessTokenWithRefreshToken(long userId, string refreshToken)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+                return null ;
+
+            if(!_tokenService.IsRefreshTokenValid(user, refreshToken))
+                return null;
+
+            return _tokenService.GetAccessTokenWithRefreshToken(user!, refreshToken);
         }
 
         public RefreshTokenDto GenerateRefreshTokenDto()

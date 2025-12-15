@@ -1,4 +1,4 @@
-﻿using Hiquotroca.API.Domain.Entities;
+﻿using Hiquotroca.API.Domain.Entities.Lottery;
 using Hiquotroca.API.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -12,15 +12,9 @@ public class LotteryConfiguration : IEntityTypeConfiguration<Lottery>
         builder.HasKey(l => l.Id);
 
         builder.OwnsMany<Ticket>(l => l.Tickets, t =>
-        {
-            t.HasKey(t => t.Id);
-
-            t.WithOwner()
-            .HasForeignKey(t => t.LotteryId);
-
-            t.HasOne<User>()
-            .WithMany()
-            .HasForeignKey(t => t.UserId);
-        });
+            {
+                t.HasOne<User>().WithMany().HasForeignKey("UserId");
+                t.WithOwner().HasForeignKey("LotteryId");
+            });
     }
 }

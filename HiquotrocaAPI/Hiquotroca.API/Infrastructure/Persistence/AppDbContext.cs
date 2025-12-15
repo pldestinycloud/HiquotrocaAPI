@@ -1,5 +1,6 @@
 ﻿using Hiquotroca.API.Domain.Entities;
 using Hiquotroca.API.Domain.Entities.Chats;
+using Hiquotroca.API.Domain.Entities.Lottery;
 using Hiquotroca.API.Domain.Entities.Posts;
 using Hiquotroca.API.Domain.Entities.Users;
 using Hiquotroca.API.Infrastructure.Persistence.Extensions;

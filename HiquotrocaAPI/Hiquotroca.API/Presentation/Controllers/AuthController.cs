@@ -2,6 +2,7 @@
 using Hiquotroca.API.DTOs.Auth.Requests;
 using Hiquotroca.API.DTOs.Users.Requests;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace Hiquotroca.API.Presentation.Controllers
 {
@@ -28,8 +29,12 @@ namespace Hiquotroca.API.Presentation.Controllers
         [HttpPost("get-access-token")]
         public async Task<IActionResult> GetAccessToken(long userId,string refreshToken)
         {
-            return Ok();
-            //return Ok(await _authService.GetAccessTokenWithRefreshToken(userId, refreshToken));
+            var result = await _authService.GetAccessTokenWithRefreshToken(userId, refreshToken);
+            if(result is null)
+                return Unauthorized(new { message = "Invalid or expired refresh token." });
+
+            return Ok(new { AccessToken = result });
+
         }
 
         [HttpPost("forgot-password")]
