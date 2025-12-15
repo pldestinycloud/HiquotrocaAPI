@@ -44,7 +44,8 @@ public class CloseExpiredLotteriesJob : BackgroundService
                         .Select(l => l.Id)
                         .ToListAsync(stoppingToken);
 
-                    await mediator.Send(new CloseLotteriesCommand(expiredLotteries), stoppingToken);
+                    if(expiredLotteries.Any())  
+                        await mediator.Send(new CloseLotteriesCommand(expiredLotteries), stoppingToken);
                 }
 
                 await Task.Delay(delay, stoppingToken);

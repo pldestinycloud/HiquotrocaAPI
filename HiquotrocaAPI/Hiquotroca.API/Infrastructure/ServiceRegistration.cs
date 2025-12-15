@@ -5,6 +5,7 @@ using Hiquotroca.API.Infrastructure.Jobs;
 using Hiquotroca.API.Infrastructure.Persistence;
 using Hiquotroca.API.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Resend;
 using System.Reflection;
 
 namespace Hiquotroca.API.Infrastructure
@@ -24,7 +25,19 @@ namespace Hiquotroca.API.Infrastructure
                     options.UseSqlServer(
                         configuration.GetConnectionString("DefaultConnection")));
             }
-            services.AddScoped<IEmailSender, SmtpEmailSender>();
+
+            services.AddHttpClient<ResendClient>();
+            services.Configure<ResendClientOptions>(options =>
+            {
+                options.ApiToken = configuration["Resend:ApiKey"] ?? string.Empty;
+            });
+
+            services.AddScoped<IEmailSender, EmailSender>();
+
+
+
+            // Register Daily Jobs
+            services.AddHostedService<CloseExpiredLotteriesJob>();
 
             services.RegisterRepositories();
 
