@@ -4,6 +4,7 @@ using Hiquotroca.API.Presentation;
 using Hiquotroca.API.Presentation.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Hiquotroca.API.Presentation.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,9 +59,9 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
-
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 //Aggregate roots endpoints
 app.MapControllers();

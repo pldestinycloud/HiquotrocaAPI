@@ -5,13 +5,21 @@ using Hiquotroca.API.DTOs.Users.Requests;
 using Hiquotroca.API.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
-namespace Hiquotroca.API.Application.Features.Users.Commands.CreateUser
+namespace Hiquotroca.API.Application.UseCases.Users.Commands.CreateUser
 {
     public class CreateUserCommandHandler(AppDbContext context, AuthService authService) : IRequestHandler<CreateUserCommand>
     { 
+        private readonly Regex EmailRegex = new(
+            @"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public async Task Handle(CreateUserCommand command, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(command.Email) || !EmailRegex.IsMatch(command.Email))
+                throw new InvalidOperationException("Invalid email address.");
+
             var userExists = await context.Users.AnyAsync(u => u.Email == command.Email);
 
             if(userExists)

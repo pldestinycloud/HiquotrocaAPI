@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Users.Commands.DeleteUser;
+namespace Hiquotroca.API.Application.UseCases.Users.Commands.DeleteUser;
 
 public class DeleteUserHandler(AppDbContext db) : IRequestHandler<DeleteUserCommand>
 {

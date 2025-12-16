@@ -7,7 +7,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Posts.Commands.CreatePost;
+namespace Hiquotroca.API.Application.UseCases.Posts.Commands.CreatePost;
 
 public class CreatePostHandler(AppDbContext dbContext) : IRequestHandler<CreatePostCommand>
 {

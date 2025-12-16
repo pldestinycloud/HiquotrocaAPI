@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.PromotionalCodes.Queries.GetAllPromotionalCodes;
+namespace Hiquotroca.API.Application.UseCases.PromotionalCodes.Queries.GetAllPromotionalCodes;
 
 public class GetAllPromotionalCodesHandler(AppDbContext db) : IRequestHandler<GetAllPromotionalCodesQuery, List<PromotionalCodeDto>>
 {

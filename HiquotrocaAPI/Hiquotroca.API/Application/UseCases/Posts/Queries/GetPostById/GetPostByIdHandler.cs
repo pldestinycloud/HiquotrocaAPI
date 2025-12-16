@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Posts.Queries.GetPostById;
+namespace Hiquotroca.API.Application.UseCases.Posts.Queries.GetPostById;
 
 public class GetPostByIdHandler(AppDbContext db) : IRequestHandler<GetPostByIdQuery, PostDto?>
 {

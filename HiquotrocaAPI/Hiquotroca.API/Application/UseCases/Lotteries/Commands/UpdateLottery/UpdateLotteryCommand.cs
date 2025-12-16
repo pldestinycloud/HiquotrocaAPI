@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Hiquotroca.API.Application.Features.Lotteries.Commands.UpdateLottery;
+namespace Hiquotroca.API.Application.UseCases.Lotteries.Commands.UpdateLottery;
 
 public record UpdateLotteryCommand(
     long Id,

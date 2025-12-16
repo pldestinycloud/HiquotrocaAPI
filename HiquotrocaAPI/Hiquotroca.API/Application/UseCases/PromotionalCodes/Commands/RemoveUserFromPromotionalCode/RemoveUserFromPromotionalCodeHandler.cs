@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.PromotionalCodes.Commands.RemoveUserFromPromotionalCode;
+namespace Hiquotroca.API.Application.UseCases.PromotionalCodes.Commands.RemoveUserFromPromotionalCode;
 
 public class RemoveUserFromPromotionalCodeHandler(AppDbContext db) : IRequestHandler<RemoveUserFromPromotionalCodeCommand>
 {

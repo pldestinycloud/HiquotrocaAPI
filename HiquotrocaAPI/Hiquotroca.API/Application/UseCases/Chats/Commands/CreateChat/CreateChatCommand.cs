@@ -1,7 +1,7 @@
 using Hiquotroca.API.DTOs.Chat.Requests;
 using MediatR;
 
-namespace Hiquotroca.API.Application.Features.Chats.Commands.CreateChat;
+namespace Hiquotroca.API.Application.UseCases.Chats.Commands.CreateChat;
 
 public record CreateChatCommand(
     long userId1,

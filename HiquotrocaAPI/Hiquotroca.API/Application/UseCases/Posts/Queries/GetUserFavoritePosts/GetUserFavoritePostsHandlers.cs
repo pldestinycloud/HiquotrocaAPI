@@ -4,7 +4,7 @@ using Hiquotroca.API.Mappings.Posts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hiquotroca.API.Application.Features.Posts.Queries.GetUserFavoritePosts;
+namespace Hiquotroca.API.Application.UseCases.Posts.Queries.GetUserFavoritePosts;
 
 public class GetUserFavoritePostsHandlers(AppDbContext context) : IRequestHandler<GetUserFavoritePostsQuery, List<PostDto>>
 {

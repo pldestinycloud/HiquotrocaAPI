@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Posts.Commands.DeletePost;
+namespace Hiquotroca.API.Application.UseCases.Posts.Commands.DeletePost;
 
 public class DeletePostHandler(AppDbContext dbContext) : IRequestHandler<DeletePostCommand>
 {

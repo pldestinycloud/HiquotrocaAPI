@@ -1,9 +1,9 @@
-﻿using Hiquotroca.API.Application.Features.Chats.Commands.AddUserToChat;
-using Hiquotroca.API.Application.Features.Chats.Commands.CreateChat;
-using Hiquotroca.API.Application.Features.Chats.Commands.DeleteChat;
-using Hiquotroca.API.Application.Features.Chats.Commands.RemoveUserFromChat;
-using Hiquotroca.API.Application.Features.Chats.Queries.GetMessagesByChatId;
-using Hiquotroca.API.Application.Features.Chats.Queries.GetUserChatsWithFirstMessage;
+﻿using Hiquotroca.API.Application.UseCases.Chats.Commands.AddUserToChat;
+using Hiquotroca.API.Application.UseCases.Chats.Commands.CreateChat;
+using Hiquotroca.API.Application.UseCases.Chats.Commands.DeleteChat;
+using Hiquotroca.API.Application.UseCases.Chats.Commands.RemoveUserFromChat;
+using Hiquotroca.API.Application.UseCases.Chats.Queries.GetMessagesByChatId;
+using Hiquotroca.API.Application.UseCases.Chats.Queries.GetUserChatsWithFirstMessage;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

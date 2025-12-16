@@ -4,7 +4,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Chats.Commands.CreateChat;
+namespace Hiquotroca.API.Application.UseCases.Chats.Commands.CreateChat;
 
 public class CreateChatHandler(AppDbContext db) : IRequestHandler<CreateChatCommand>
 {

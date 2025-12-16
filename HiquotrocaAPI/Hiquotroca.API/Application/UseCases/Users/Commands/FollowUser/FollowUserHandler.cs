@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Users.Commands.FollowUser;
+namespace Hiquotroca.API.Application.UseCases.Users.Commands.FollowUser;
 
 public class FollowUserHandler(AppDbContext db) : IRequestHandler<FollowUserCommand>
 {

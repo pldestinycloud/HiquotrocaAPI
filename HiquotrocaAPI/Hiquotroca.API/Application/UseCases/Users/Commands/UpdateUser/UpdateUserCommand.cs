@@ -3,7 +3,7 @@ using Hiquotroca.API.DTOs.User;
 using MediatR;
 using Hiquotroca.API.Domain.Entities.Users;
 
-namespace Hiquotroca.API.Application.Features.Users.Commands.UpdateUser;
+namespace Hiquotroca.API.Application.UseCases.Users.Commands.UpdateUser;
 
 public record UpdateUserCommand(
     long userId,

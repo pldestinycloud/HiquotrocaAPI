@@ -1,11 +1,11 @@
-﻿using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.AssignUserToPromotionalCode;
-using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.CreatePromotionalCode;
-using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.DeletePromotionalCode;
-using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.RemoveUserFromPromotionalCode;
-using Hiquotroca.API.Application.Features.PromotionalCodes.Commands.UpdatePromotionalCode;
-using Hiquotroca.API.Application.Features.PromotionalCodes.Queries.GetAllPromotionalCodes;
-using Hiquotroca.API.Application.Features.PromotionalCodes.Queries.GetPromotionalCodeById;
-using Hiquotroca.API.Application.Features.PromotionalCodes.Queries.GetPromotionalCodesOfUser;
+﻿using Hiquotroca.API.Application.UseCases.PromotionalCodes.Commands.AssignUserToPromotionalCode;
+using Hiquotroca.API.Application.UseCases.PromotionalCodes.Commands.CreatePromotionalCode;
+using Hiquotroca.API.Application.UseCases.PromotionalCodes.Commands.DeletePromotionalCode;
+using Hiquotroca.API.Application.UseCases.PromotionalCodes.Commands.RemoveUserFromPromotionalCode;
+using Hiquotroca.API.Application.UseCases.PromotionalCodes.Commands.UpdatePromotionalCode;
+using Hiquotroca.API.Application.UseCases.PromotionalCodes.Queries.GetAllPromotionalCodes;
+using Hiquotroca.API.Application.UseCases.PromotionalCodes.Queries.GetPromotionalCodeById;
+using Hiquotroca.API.Application.UseCases.PromotionalCodes.Queries.GetPromotionalCodesOfUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,11 +28,11 @@ public class PromotionalCodeController : ControllerBase
         return Ok(codes);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Get(long id)
+    [HttpGet("{code}")]
+    public async Task<IActionResult> Get(string code)
     {
-        var code = await _mediator.Send(new GetPromotionalCodeByIdQuery(id));
-        if (code == null)
+        var promoCode = await _mediator.Send(new GetPromotionalCodeByCodeQuery(code));
+        if (promoCode == null)
             return NotFound();
 
         return Ok(code);
@@ -69,17 +69,20 @@ public class PromotionalCodeController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("{promoCodeId:long}/assign-user/{userId:long}")]
-    public async Task<IActionResult> AssignUserToPromotionalCode(long promoCodeId, long userId)
-    {
-        await _mediator.Send(new AssignUserToPromotionalCodeCommand(promoCodeId, userId));;
-        return Ok();
-    }
+    //Ativar se no futuro for necessário associar códigos promocionais a usuários específicos tipo cupões ou descontos personalizados
 
-    [HttpDelete("{promoCodeId:long}/remove-user/{userId:long}")]
-    public async Task<IActionResult> RemoveUserFromPromotionalCode(long promoCodeId, long userId)
-    {
-        await _mediator.Send(new RemoveUserFromPromotionalCodeCommand(promoCodeId, userId));
-        return Ok();
-    }
+    /*   
+        [HttpPost("{promoCodeId:long}/assign-user/{userId:long}")]
+        public async Task<IActionResult> AssignUserToPromotionalCode(long promoCodeId, long userId)
+        {
+            await _mediator.Send(new AssignUserToPromotionalCodeCommand(promoCodeId, userId));;
+            return Ok();
+        }
+
+        [HttpDelete("{promoCodeId:long}/remove-user/{userId:long}")]
+        public async Task<IActionResult> RemoveUserFromPromotionalCode(long promoCodeId, long userId)
+        {
+            await _mediator.Send(new RemoveUserFromPromotionalCodeCommand(promoCodeId, userId));
+            return Ok();
+        }*/
 }

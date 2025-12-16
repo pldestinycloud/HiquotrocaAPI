@@ -3,7 +3,7 @@ using Hiquotroca.API.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hiquotroca.API.Application.Features.Lotteries.Commands.PurchaseTicket;
+namespace Hiquotroca.API.Application.UseCases.Lotteries.Commands.PurchaseTicket;
 
 public class PurchaseTicketHandler(AppDbContext db) : IRequestHandler<PurchaseTicketCommand>
 {

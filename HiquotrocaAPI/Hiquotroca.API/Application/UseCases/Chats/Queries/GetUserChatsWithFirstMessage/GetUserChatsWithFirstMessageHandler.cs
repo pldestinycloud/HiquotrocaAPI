@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Chats.Queries.GetUserChatsWithFirstMessage;
+namespace Hiquotroca.API.Application.UseCases.Chats.Queries.GetUserChatsWithFirstMessage;
 
 public class GetUserChatsWithFirstMessageHandler(AppDbContext db) : IRequestHandler<GetUserChatsWithFirstMessageQuery, List<ChatDto>>
 {

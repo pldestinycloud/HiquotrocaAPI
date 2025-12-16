@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Hiquotroca.API.Application.Features.Lotteries.Commands.PurchaseTicket;
+namespace Hiquotroca.API.Application.UseCases.Lotteries.Commands.PurchaseTicket;
 
 public record PurchaseTicketCommand(
     long LotteryId,

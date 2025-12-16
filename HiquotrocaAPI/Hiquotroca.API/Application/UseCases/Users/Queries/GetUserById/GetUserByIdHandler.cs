@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Users.Queries.GetUserById;
+namespace Hiquotroca.API.Application.UseCases.Users.Queries.GetUserById;
 
 public class GetUserByIdHandler(AppDbContext db) : IRequestHandler<GetUserByIdQuery, UserDto?>
 {

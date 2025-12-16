@@ -1,10 +1,11 @@
 ﻿using Hiquotroca.API.Domain.Entities.Lottery;
+using Hiquotroca.API.Infrastructure.Email;
 using Hiquotroca.API.Infrastructure.Persistence;
 using MediatR;
 
 namespace Hiquotroca.API.Application.UseCases.Lotteries.Commands.CloseLottery;
 
-public class CloseLotteriesHandler(AppDbContext db) : IRequestHandler<CloseLotteriesCommand>
+public class CloseLotteriesHandler(AppDbContext db, EmailSender emailSender) : IRequestHandler<CloseLotteriesCommand>
 {
     public async Task Handle(CloseLotteriesCommand request, CancellationToken cancellationToken)
     {
@@ -15,9 +16,30 @@ public class CloseLotteriesHandler(AppDbContext db) : IRequestHandler<CloseLotte
         foreach (var lottery in lotteries)
         {
             lottery.DeactivateLottery();
-            int winningTicketNumber = lottery.SetWinnerNumber().GetWinnerNumber();
+            var winningTicket = lottery.SetWinner().GetWinnerTicket();
 
-            // Aditional logic for notifying users
+            if(winningTicket is null)
+                continue;
+
+            var winningUserData = db.Users
+                .Where(u => u.Id == winningTicket.UserId)
+                .Select(u => new
+                {
+                    u.Id,
+                    u.Email,
+                    u.FirstName,
+                });
+
+            var winningMessage = $@"
+                <h1>Congratulations!</h1>
+                <p>Your lottery '{lottery.Title}' has ended.</p>
+                <p>The winning ticket number is: <strong>{winningTicket.SelectedNumber}</strong></p>
+                <p>Thank you for participating!</p>";
+
+           _= Task.Run( () => emailSender.SendEmailAsync(
+                winningUserData.First().Email,
+                "You've Won the Lottery!",
+                winningMessage));
         }
 
         db.UpdateRange(lotteries);
