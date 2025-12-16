@@ -16,13 +16,19 @@ namespace Hiquotroca.API.Infrastructure.Email
 
         public async Task SendEmailAsync(string receipterAddress, string subject, string body)
         {
-            var message = new EmailMessage();
+            //Mock email sending for now
+            await Task.Delay(5000);
+            Console.WriteLine($"Email sent to {receipterAddress} with subject '{subject}' and body: {body}");
+
+
+            //Uncomment and configure the following code when Resend integration is ready
+            /*var message = new EmailMessage();
             message.From = _config["Email:FromAddress"] ?? "";
             message.To.Add(receipterAddress);
             message.Subject = subject;
             message.HtmlBody = body;
 
-            await _resendClient.EmailSendAsync(message);
+            await _resendClient.EmailSendAsync(message);*/
         }
     }
 }

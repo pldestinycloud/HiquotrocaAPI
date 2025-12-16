@@ -31,7 +31,7 @@ namespace Hiquotroca.API.Infrastructure
             {
                 options.ApiToken = configuration["Resend:ApiKey"] ?? string.Empty;
             });
-
+            services.AddScoped<IResend, ResendClient>();
             services.AddScoped<IEmailSender, EmailSender>();
 
 

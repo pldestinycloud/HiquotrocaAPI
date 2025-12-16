@@ -17,6 +17,8 @@ namespace Hiquotroca.API.Domain.Entities.Users
         public string? PasswordHash { get; private set; }
         public string? RefreshToken { get; private set; }
         public DateTime? RefreshTokenExpiry { get; private set; }
+        public string? PasswordResetToken { get; private set; }
+        public DateTime? PasswordResetTokenExpiry { get; private set; }
 
         //User Address Info
         public UserAddress? Address { get; private set; }
@@ -145,6 +147,32 @@ namespace Hiquotroca.API.Domain.Entities.Users
             this.RefreshToken = refreshToken;
             this.RefreshTokenExpiry = expiry;
             return this;
+        }
+
+        // Password reset helpers
+        public User SetPasswordResetToken(string token, DateTime expiry)
+        {
+            this.PasswordResetToken = token;
+            this.PasswordResetTokenExpiry = expiry;
+            return this;
+        }
+
+        public User ClearPasswordResetToken()
+        {
+            this.PasswordResetToken = null;
+            this.PasswordResetTokenExpiry = null;
+            return this;
+        }
+
+        public bool IsProvidedPasswordResetTokenValid(string token)
+        {
+            if (string.IsNullOrEmpty(this.PasswordResetToken) || this.PasswordResetTokenExpiry == null)
+                return false;
+
+            if (this.PasswordResetTokenExpiry < DateTime.UtcNow)
+                return false;
+
+            return this.PasswordResetToken == token;
         }
     }
 }

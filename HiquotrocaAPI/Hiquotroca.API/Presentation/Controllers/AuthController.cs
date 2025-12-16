@@ -1,8 +1,6 @@
 ﻿using Hiquotroca.API.Application.Services;
 using Hiquotroca.API.DTOs.Auth.Requests;
-using Hiquotroca.API.DTOs.Users.Requests;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
 
 namespace Hiquotroca.API.Presentation.Controllers
 {
@@ -18,7 +16,7 @@ namespace Hiquotroca.API.Presentation.Controllers
         }
 
         [HttpGet("ping")]
-        public IActionResult Ping() => Ok("API its working!");
+        public IActionResult Ping() => Ok("API is working!");
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
@@ -40,13 +38,19 @@ namespace Hiquotroca.API.Presentation.Controllers
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
+            await _authService.ForgotPasswordAsync(request.Email);
+            // Always return success to avoid user enumeration
             return Ok();
         }
 
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
         {
-            return Ok(new { message = "Palavra-passe alterada com sucesso." });
+            var result = await _authService.ResetPasswordAsync(request);
+            if (!result)
+                return BadRequest(new { message = "Invalid or expired token." });
+
+            return Ok(new { message = "Password changed successfully." });
         }
     }
 }
