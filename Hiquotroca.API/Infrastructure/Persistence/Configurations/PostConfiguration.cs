@@ -14,31 +14,9 @@ namespace Hiquotroca.API.Infrastructure.Persistence.Configurations
         {
             builder.HasKey(p => p.Id);
 
-            builder.OwnsOne(p => p.PostTaxonomyData, taxonomy =>
-            {
-                taxonomy.HasOne<Category>()
-                        .WithMany()
-                        .HasForeignKey(t => t.CategoryId)
-                        .OnDelete(DeleteBehavior.Restrict);
+            builder.OwnsOne(p => p.PostTaxonomyData);
 
-                taxonomy.HasOne<Subcategory>()
-                        .WithMany()
-                        .HasForeignKey(t => t.SubcategoryId)
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                taxonomy.HasOne<ActionType>()
-                        .WithMany()
-                        .HasForeignKey(t => t.ActionTypeId)
-                        .OnDelete(DeleteBehavior.Restrict);
-            });
-
-            builder.OwnsOne(p => p.Location, location =>
-            {
-                location.HasOne<Country>()
-                        .WithMany()
-                        .HasForeignKey(l => l.CountryId)
-                        .OnDelete(DeleteBehavior.Restrict);
-            });
+            builder.OwnsOne(p => p.Location);
 
             builder.OwnsOne<PostAdditionalData>(p => p.AdditionalData);
 

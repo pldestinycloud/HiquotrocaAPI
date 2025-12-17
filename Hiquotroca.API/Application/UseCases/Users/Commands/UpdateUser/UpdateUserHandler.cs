@@ -28,7 +28,7 @@ public class UpdateUserHandler(AppDbContext db) : IRequestHandler<UpdateUserComm
                 command.Address.Address,
                 command.Address.City,
                 command.Address.PostalCode,
-                command.Address.CountryId
+                command.Address.Country
             );
         }
 

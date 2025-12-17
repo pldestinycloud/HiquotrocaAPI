@@ -37,7 +37,7 @@ public class CreatePostHandler(AppDbContext dbContext) : IRequestHandler<CreateP
         var postLocation = new PostLocation(
             command.Location_City,
             command.Location_PostalCode,
-            command.Location_CountryId,
+            command.Location_Country,
             command.Location_Latitude,
             command.Location_Longitude,
             command.Location_DeliveryRadiusKm);

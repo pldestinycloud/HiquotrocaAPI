@@ -57,9 +57,9 @@ namespace Hiquotroca.API.Domain.Entities.Users
             return this;
         }
 
-        public User SetUserAddress(string address, string city, string? postalCode, long countryId)
+        public User SetUserAddress(string address, string city, string? postalCode, string country)
         {
-            this.Address = new UserAddress(address, city, postalCode, countryId);
+            this.Address = new UserAddress(address, city, postalCode, country);
 
             return this;
         }

@@ -52,9 +52,9 @@ namespace Hiquotroca.API.Domain.Entities.Posts
             return this;
         }
 
-        public Post UpdatePostLocation( string? city, string? postalCode, long countryId, double? latitude, double? longitude, int? deliveryRadiusKm)
+        public Post UpdatePostLocation( string? city, string? postalCode, string country, double? latitude, double? longitude, int? deliveryRadiusKm)
         {
-            var postLocation = new PostLocation(city, postalCode, countryId, latitude, longitude, deliveryRadiusKm);
+            var postLocation = new PostLocation(city, postalCode, country, latitude, longitude, deliveryRadiusKm);
             Location = postLocation;
             return this;
         }

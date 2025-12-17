@@ -18,7 +18,7 @@ public static class MapUserToUserDto
             Address = user.Address?.Address,
             City = user.Address?.City,
             PostalCode = user.Address?.PostalCode,
-            CountryId = user.Address?.CountryId ?? 0    
+            Country = user.Address?.Country
         };
 
         return userDto;

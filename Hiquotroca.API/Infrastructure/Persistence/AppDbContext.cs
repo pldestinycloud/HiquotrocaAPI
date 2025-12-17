@@ -21,13 +21,9 @@ namespace Hiquotroca.API.Infrastructure.Persistence
 
         // Tabelas principais
         public DbSet<User> Users => Set<User>();
-        public DbSet<Country> Countries => Set<Country>();
-        public DbSet<ActionType> ActionTypes => Set<ActionType>();
         public DbSet<Post> Posts => Set<Post>();
         public DbSet<Chat> Chats => Set<Chat>();
         public DbSet<Message> Messages => Set<Message>();
-        public DbSet<Category> Categories => Set<Category>();
-        public DbSet<Subcategory> SubCategories => Set<Subcategory>();
         public DbSet<PromotionalCode> PromotionalCodes => Set<PromotionalCode>();
         public DbSet<Lottery> Lotteries => Set<Lottery>();
 

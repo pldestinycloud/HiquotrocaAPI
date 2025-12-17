@@ -13,14 +13,13 @@ public static class MapPostToPostDto
         dto.UserId = post.UserId;
         dto.ActionTypeId = post.PostTaxonomyData.ActionTypeId;
         dto.CategoryId = post.PostTaxonomyData.CategoryId; 
-        dto.SubcategoryId = post.PostTaxonomyData.SubcategoryId;
         dto.IsActive = post.IsActive;
         dto.Images = post.Images;
         dto.Location = new PostLocationDto
         {
             City = post.Location.City,
             PostalCode = post.Location.PostalCode,
-            CountryId = post.Location.CountryId,
+            Country = post.Location.Country,
             Latitude = post.Location.Latitude,
             Longitude = post.Location.Longitude,
             DeliveryRadiusKm = post.Location.DeliveryRadiusKm

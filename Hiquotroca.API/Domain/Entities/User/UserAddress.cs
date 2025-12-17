@@ -9,14 +9,14 @@ namespace Hiquotroca.API.Domain.Entities.Users
         public string Address { get; private set; } = string.Empty;
         public string City { get; private set; } = string.Empty;
         public string? PostalCode { get; private set; }
-        public long CountryId { get; private set; }
+        public string Country { get; private set; }
 
-        public UserAddress(string address, string city, string? postalCode, long countryId)
+        public UserAddress(string address, string city, string? postalCode, string country)
         {
             Address = address;
             City = city;
             PostalCode = postalCode;
-            CountryId = countryId;
+            Country = country;
         }
     }
 }

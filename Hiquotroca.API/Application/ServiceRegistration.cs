@@ -9,16 +9,10 @@ public static class ServiceRegistration
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        //Validators
-        services.AddScoped<IValidator<CreateUserCommand>, CreateUserCommandValidator>();
-
         //Auth Services
         services.AddScoped<PasswordHasher<User>>();
         services.AddScoped<AuthService>();
         services.AddScoped<TokenService>();
-
-        //Other Entities Services
-        services.AddScoped<ActionTypeService>();
 
         return services;
     }

@@ -16,7 +16,7 @@ public record CreatePostCommand(
     string? Location_Address,
     string Location_City,
     string? Location_PostalCode,
-    long Location_CountryId,
+    string Location_Country,
     double? Location_Latitude,
     double? Location_Longitude,
     int? Location_DeliveryRadiusKm,
