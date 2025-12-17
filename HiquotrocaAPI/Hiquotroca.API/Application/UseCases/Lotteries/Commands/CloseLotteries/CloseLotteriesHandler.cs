@@ -15,34 +15,43 @@ public class CloseLotteriesHandler(AppDbContext db, EmailSender emailSender) : I
 
         foreach (var lottery in lotteries)
         {
-            lottery.DeactivateLottery();
-            var winningTicket = lottery.SetWinner().GetWinnerTicket();
 
-            if(winningTicket is null)
-                continue;
+            try
+            {
+                lottery.DeactivateLottery();
+                var winningTicket = lottery.SetWinner().GetWinnerTicket();
 
-            var winningUserData = db.Users
-                .Where(u => u.Id == winningTicket.UserId)
-                .Select(u => new
-                {
-                    u.Id,
-                    u.Email,
-                    u.FirstName,
-                });
+                if (winningTicket is null)
+                    continue;
 
-            var winningMessage = $@"
+                var winningUserData = db.Users
+                    .Where(u => u.Id == winningTicket.UserId)
+                    .Select(u => new
+                    {
+                        u.Id,
+                        u.Email,
+                        u.FirstName,
+                    });
+
+                var winningMessage = $@"
                 <h1>Congratulations!</h1>
                 <p>Your lottery '{lottery.Title}' has ended.</p>
                 <p>The winning ticket number is: <strong>{winningTicket.SelectedNumber}</strong></p>
                 <p>Thank you for participating!</p>";
 
-           _= Task.Run( () => emailSender.SendEmailAsync(
-                winningUserData.First().Email,
-                "You've Won the Lottery!",
-                winningMessage));
-        }
+                _ = Task.Run(() => emailSender.SendEmailAsync(
+                     winningUserData.First().Email,
+                     "You've Won the Lottery!",
+                     winningMessage));
+            }
+            catch
+            {
+                // Log the error (not implemented here for brevity)
+                continue;
+            }
 
-        db.UpdateRange(lotteries);
-        await db.SaveChangesAsync(cancellationToken);
+            db.UpdateRange(lotteries);
+            await db.SaveChangesAsync(cancellationToken);
+        }
     }
 }
