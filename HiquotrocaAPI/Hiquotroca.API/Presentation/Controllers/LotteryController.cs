@@ -1,8 +1,8 @@
-﻿using Hiquotroca.API.Application.Features.Lotteries.Commands.CreateLottery;
-using Hiquotroca.API.Application.Features.Lotteries.Commands.PurchaseTicket;
-using Hiquotroca.API.Application.Features.Lotteries.Commands.UpdateLottery;
-using Hiquotroca.API.Application.Features.Lotteries.Queries.GetAllLotteries;
-using Hiquotroca.API.Application.Features.Lotteries.Queries.GetLotteryById;
+﻿using Hiquotroca.API.Application.UseCases.Lotteries.Commands.CreateLottery;
+using Hiquotroca.API.Application.UseCases.Lotteries.Commands.PurchaseTicket;
+using Hiquotroca.API.Application.UseCases.Lotteries.Commands.UpdateLottery;
+using Hiquotroca.API.Application.UseCases.Lotteries.Queries.GetAllLotteries;
+using Hiquotroca.API.Application.UseCases.Lotteries.Queries.GetLotteryById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

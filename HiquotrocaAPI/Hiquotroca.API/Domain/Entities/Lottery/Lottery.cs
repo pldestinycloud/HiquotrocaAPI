@@ -90,16 +90,16 @@ namespace Hiquotroca.API.Domain.Entities.Lottery
             return this;
         }
 
-        public Lottery SetWinnerNumber()
+        public Lottery SetWinner()
         {
             if(IsActive)
                 throw new InvalidOperationException("Lottery is still active. Cannot declare a winner.");
 
-            //Maybe activate in according to business rules in the future
-           /* if (TicketsSold < MinTicketsSold)
-                throw new InvalidOperationException("Minimum tickets sold not reached. Cannot declare a winner.");*/
+            //Maybe deactivate in according to business rules in the future
+            if (TicketsSold <  Math.Floor((double)TotalTickets/2))
+                throw new InvalidOperationException("Minimum tickets sold not reached. Cannot declare a winner.");
 
-            if(!Tickets.Any())
+            if (!Tickets.Any())
                 throw new InvalidOperationException("No tickets have been sold.");
 
             var random = new Random();
@@ -111,11 +111,11 @@ namespace Hiquotroca.API.Domain.Entities.Lottery
             return this;
         }
 
-        public int GetWinnerNumber()
+        public Ticket? GetWinnerTicket()
         {
             if (WinnerNumber == 0)
                 throw new InvalidOperationException("Winner has not been declared yet.");
-            return WinnerNumber;
+            return Tickets.FirstOrDefault(t => t.SelectedNumber == WinnerNumber);
         }
     }
 }

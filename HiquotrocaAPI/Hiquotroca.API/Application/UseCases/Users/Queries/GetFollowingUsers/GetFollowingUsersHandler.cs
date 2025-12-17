@@ -5,7 +5,7 @@ using Hiquotroca.API.Mappings.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hiquotroca.API.Application.Features.Users.Queries.GetFollowingUsers;
+namespace Hiquotroca.API.Application.UseCases.Users.Queries.GetFollowingUsers;
 
 public class GetFollowingUsersHandler(AppDbContext db): IRequestHandler<GetFollowingUsersQuery, List<UserDto>>
 {

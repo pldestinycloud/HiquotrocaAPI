@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Chats.Queries.GetMessagesByChatId;
+namespace Hiquotroca.API.Application.UseCases.Chats.Queries.GetMessagesByChatId;
 
 public class GetMessagesByChatIdHandler(AppDbContext db) : IRequestHandler<GetMessagesByChatIdQuery, List<MessageDto>>
 {

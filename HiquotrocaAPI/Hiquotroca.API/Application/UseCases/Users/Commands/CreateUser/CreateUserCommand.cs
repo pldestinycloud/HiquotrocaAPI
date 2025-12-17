@@ -1,12 +1,12 @@
 using MediatR;
 
-namespace Hiquotroca.API.Application.Features.Users.Commands.CreateUser;
+namespace Hiquotroca.API.Application.UseCases.Users.Commands.CreateUser;
 
     public record CreateUserCommand(
         string Email,
         string FirstName,
         string LastName,
         string Password,
-        string PhoneNumber,
-        DateTime BirthDate
+        string? PhoneNumber,
+        DateTime? BirthDate
     ) : IRequest;

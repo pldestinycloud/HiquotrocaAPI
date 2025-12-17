@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.PromotionalCodes.Commands.DeletePromotionalCode;
+namespace Hiquotroca.API.Application.UseCases.PromotionalCodes.Commands.DeletePromotionalCode;
 
 public class DeletePromotionalCodeHandler(AppDbContext db) : IRequestHandler<DeletePromotionalCodeCommand>
 {

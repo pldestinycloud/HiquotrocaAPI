@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Users.Commands.UpdateUser;
+namespace Hiquotroca.API.Application.UseCases.Users.Commands.UpdateUser;
 
 public class UpdateUserHandler(AppDbContext db) : IRequestHandler<UpdateUserCommand>
 {

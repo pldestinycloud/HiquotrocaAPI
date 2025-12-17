@@ -1,13 +1,13 @@
-﻿using Hiquotroca.API.Application.Features.Users.Commands.CreateUser;
-using Hiquotroca.API.Application.Features.Users.Commands.DeleteUser;
-using Hiquotroca.API.Application.Features.Users.Commands.UpdateUser;
-using Hiquotroca.API.Application.Features.Users.Commands.FollowUser;
-using Hiquotroca.API.Application.Features.Users.Commands.UnfollowUser;
-using Hiquotroca.API.Application.Features.Users.Queries.GetAllUsers;
-using Hiquotroca.API.Application.Features.Users.Queries.GetUserById;
+﻿using Hiquotroca.API.Application.UseCases.Users.Commands.CreateUser;
+using Hiquotroca.API.Application.UseCases.Users.Commands.DeleteUser;
+using Hiquotroca.API.Application.UseCases.Users.Commands.UpdateUser;
+using Hiquotroca.API.Application.UseCases.Users.Commands.FollowUser;
+using Hiquotroca.API.Application.UseCases.Users.Commands.UnfollowUser;
+using Hiquotroca.API.Application.UseCases.Users.Queries.GetAllUsers;
+using Hiquotroca.API.Application.UseCases.Users.Queries.GetUserById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Hiquotroca.API.Application.Features.Users.Queries.GetFollowingUsers;
+using Hiquotroca.API.Application.UseCases.Users.Queries.GetFollowingUsers;
 
 namespace Hiquotroca.API.Presentation.Controllers;
 

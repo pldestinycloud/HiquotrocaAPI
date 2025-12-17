@@ -3,7 +3,7 @@ using Hiquotroca.API.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hiquotroca.API.Application.Features.Lotteries.Commands.UpdateLottery;
+namespace Hiquotroca.API.Application.UseCases.Lotteries.Commands.UpdateLottery;
 
 public class UpdateLotteryHandler(AppDbContext db) : IRequestHandler<UpdateLotteryCommand>
 {

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Posts.Queries.GetAllPosts;
+namespace Hiquotroca.API.Application.UseCases.Posts.Queries.GetAllPosts;
 
 public class GetAllPostsHandler(AppDbContext dbContext) : IRequestHandler<GetAllPostsQuery, List<PostDto>>
 {

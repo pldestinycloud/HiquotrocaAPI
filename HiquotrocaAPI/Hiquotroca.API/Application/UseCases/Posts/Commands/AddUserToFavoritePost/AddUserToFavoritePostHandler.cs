@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Posts.Commands.AddUserToFavoritePost;
+namespace Hiquotroca.API.Application.UseCases.Posts.Commands.AddUserToFavoritePost;
 
 public class AddUserToFavoritePostHandler(AppDbContext db) : IRequestHandler<AddUserToFavoritePostCommand>
 {

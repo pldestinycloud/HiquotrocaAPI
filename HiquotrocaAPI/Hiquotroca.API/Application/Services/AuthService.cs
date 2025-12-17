@@ -1,20 +1,11 @@
-﻿using Hiquotroca.API.Application.Wrappers;
-using Hiquotroca.API.Application.Interfaces;
+﻿using Hiquotroca.API.Application.Interfaces;
 using Hiquotroca.API.Domain.Entities.Users;
 using Hiquotroca.API.DTOs.Auth;
 using Hiquotroca.API.DTOs.Auth.Requests;
-using Hiquotroca.API.DTOs.Auth.Responses;
-using Hiquotroca.API.DTOs.Users.Requests;
 using Hiquotroca.API.Infrastructure.Persistence;
-using Hiquotroca.API.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Security.Cryptography;
-using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames;
 
 namespace Hiquotroca.API.Application.Services
 {

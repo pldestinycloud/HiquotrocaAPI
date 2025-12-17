@@ -4,7 +4,7 @@ using Hiquotroca.API.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hiquotroca.API.Application.Features.PromotionalCodes.Commands.AssignUserToPromotionalCode;
+namespace Hiquotroca.API.Application.UseCases.PromotionalCodes.Commands.AssignUserToPromotionalCode;
 
 public class AssignUserToPromotionalCodeHandler(AppDbContext db) : IRequestHandler<AssignUserToPromotionalCodeCommand>
 {

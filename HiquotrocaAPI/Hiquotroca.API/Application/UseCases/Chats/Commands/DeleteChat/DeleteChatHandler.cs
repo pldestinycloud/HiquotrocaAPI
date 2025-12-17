@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Chats.Commands.DeleteChat;
+namespace Hiquotroca.API.Application.UseCases.Chats.Commands.DeleteChat;
 
 public class DeleteChatHandler(AppDbContext db) : IRequestHandler<DeleteChatCommand>
 {

@@ -10,7 +10,7 @@ namespace Hiquotroca.API.Domain.Entities.Users
         public string? LastName { get; private set; }
         public string? PhoneNumber { get; private set; }
         public DateTime? BirthDate { get; private set; }
-        public double HiquoCredits { get; set; } = 0.0;
+        public double HiquoCredits { get; private set; } = 0.0;
 
         //User Auth Info
         public string Email { get; private set; } = string.Empty;
@@ -24,7 +24,7 @@ namespace Hiquotroca.API.Domain.Entities.Users
         public UserAddress? Address { get; private set; }
 
         //User Relations
-        public List<Post> FavoritePosts { get; private set; }
+        public List<Post> FavoritePosts { get; private set; } = new List<Post>();
         public List<User> FollowingUsers { get; private set; } = new List<User>();
         public List<PromotionalCode> PromotionalCodes { get; private set; } = new List<PromotionalCode>();
 
@@ -128,6 +128,12 @@ namespace Hiquotroca.API.Domain.Entities.Users
         public bool HaveEnoughCredits(double requiredCredits)
         {
             return this.HiquoCredits >= requiredCredits;
+        }
+
+        public User AddCredits(double creditsToAdd)
+        {
+            this.HiquoCredits += creditsToAdd;
+            return this;
         }
 
         public User DeducteCredits(double creditsToDeduct)

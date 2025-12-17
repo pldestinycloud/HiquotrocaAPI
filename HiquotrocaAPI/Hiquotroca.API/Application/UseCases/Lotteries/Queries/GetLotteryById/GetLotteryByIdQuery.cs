@@ -1,6 +1,6 @@
 ﻿using Hiquotroca.API.DTOs.Lotteries;
 using MediatR;
 
-namespace Hiquotroca.API.Application.Features.Lotteries.Queries.GetLotteryById;
+namespace Hiquotroca.API.Application.UseCases.Lotteries.Queries.GetLotteryById;
 
 public record GetLotteryByIdQuery(long Id) : IRequest<LotteryDto?>;

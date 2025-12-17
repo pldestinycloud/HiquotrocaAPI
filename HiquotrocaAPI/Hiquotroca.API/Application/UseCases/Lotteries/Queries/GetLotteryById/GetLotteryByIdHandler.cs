@@ -5,7 +5,7 @@ using Hiquotroca.API.Mappings.Lotteries;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hiquotroca.API.Application.Features.Lotteries.Queries.GetLotteryById;
+namespace Hiquotroca.API.Application.UseCases.Lotteries.Queries.GetLotteryById;
 
 public class GetLotteryByIdHandler(AppDbContext db) : IRequestHandler<GetLotteryByIdQuery, LotteryDto?>
 {

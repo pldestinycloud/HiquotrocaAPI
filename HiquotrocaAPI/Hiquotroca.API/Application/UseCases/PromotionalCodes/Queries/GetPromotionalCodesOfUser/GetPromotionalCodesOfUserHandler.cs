@@ -4,7 +4,7 @@ using Hiquotroca.API.Mappings.PromotionalCodes;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hiquotroca.API.Application.Features.PromotionalCodes.Queries.GetPromotionalCodesOfUser;
+namespace Hiquotroca.API.Application.UseCases.PromotionalCodes.Queries.GetPromotionalCodesOfUser;
 
 public class GetPromotionalCodesOfUserHandler(AppDbContext dbContext) : IRequestHandler<GetPromotionalCodesOfUserQuery, List<PromotionalCodeDto>>
 {

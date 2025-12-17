@@ -2,7 +2,7 @@
 using Hiquotroca.API.Infrastructure.Persistence;
 using MediatR;
 
-namespace Hiquotroca.API.Application.Features.Lotteries.Commands.CreateLottery;
+namespace Hiquotroca.API.Application.UseCases.Lotteries.Commands.CreateLottery;
 
 public class CreateLotteryHandler(AppDbContext db) : IRequestHandler<CreateLotteryCommand>
 {

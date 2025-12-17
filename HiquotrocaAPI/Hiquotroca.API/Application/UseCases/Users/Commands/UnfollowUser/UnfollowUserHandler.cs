@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Users.Commands.UnfollowUser;
+namespace Hiquotroca.API.Application.UseCases.Users.Commands.UnfollowUser;
 
 public class UnfollowUserHandler(AppDbContext db) : IRequestHandler<UnfollowUserCommand>
 {

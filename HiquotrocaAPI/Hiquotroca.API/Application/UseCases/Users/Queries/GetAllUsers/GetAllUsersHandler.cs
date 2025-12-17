@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Users.Queries.GetAllUsers;
+namespace Hiquotroca.API.Application.UseCases.Users.Queries.GetAllUsers;
 
 public class GetAllUsersHandler(AppDbContext db) : IRequestHandler<GetAllUsersQuery, List<UserDto>>
 {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Chats.Commands.RemoveUserFromChat;
+namespace Hiquotroca.API.Application.UseCases.Chats.Commands.RemoveUserFromChat;
 
 public class RemoveUserFromChatHandler(AppDbContext db) : IRequestHandler<RemoveUserFromChatCommand>
 {

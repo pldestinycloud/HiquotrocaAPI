@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Chats.Commands.AddUserToChat;
+namespace Hiquotroca.API.Application.UseCases.Chats.Commands.AddUserToChat;
 
 public class AddUserToChatHandler(AppDbContext db) : IRequestHandler<AddUserToChatCommand>
 {

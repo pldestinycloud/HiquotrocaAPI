@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Hiquotroca.API.Application.Features.Lotteries.Commands.CreateLottery;
+namespace Hiquotroca.API.Application.UseCases.Lotteries.Commands.CreateLottery;
 
 public record CreateLotteryCommand(
     string Title,

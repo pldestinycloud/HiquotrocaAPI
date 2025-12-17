@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hiquotroca.API.Application.Features.Posts.Commands.RemoveUserFromFavoritePost;
+namespace Hiquotroca.API.Application.UseCases.Posts.Commands.RemoveUserFromFavoritePost;
 
 public class RemoveUserFromFavoritePostHandler(AppDbContext db) : IRequestHandler<RemoveUserFromFavoritePostCommand>
 {

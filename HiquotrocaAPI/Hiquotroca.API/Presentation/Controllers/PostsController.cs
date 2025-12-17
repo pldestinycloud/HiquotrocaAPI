@@ -1,13 +1,13 @@
-using Hiquotroca.API.Application.Features.Posts.Commands.AddUserToFavoritePost;
-using Hiquotroca.API.Application.Features.Posts.Commands.RemoveUserFromFavoritePost;
+using Hiquotroca.API.Application.UseCases.Posts.Commands.AddUserToFavoritePost;
+using Hiquotroca.API.Application.UseCases.Posts.Commands.RemoveUserFromFavoritePost;
 using Hiquotroca.API.DTOs.Posts.Requests;
-using Hiquotroca.API.Application.Features.Posts.Commands.CreatePost;
-using Hiquotroca.API.Application.Features.Posts.Commands.DeletePost;
-using Hiquotroca.API.Application.Features.Posts.Queries.GetAllPosts;
-using Hiquotroca.API.Application.Features.Posts.Queries.GetPostById;
+using Hiquotroca.API.Application.UseCases.Posts.Commands.CreatePost;
+using Hiquotroca.API.Application.UseCases.Posts.Commands.DeletePost;
+using Hiquotroca.API.Application.UseCases.Posts.Queries.GetAllPosts;
+using Hiquotroca.API.Application.UseCases.Posts.Queries.GetPostById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Hiquotroca.API.Application.Features.Posts.Queries.GetUserFavoritePosts;
+using Hiquotroca.API.Application.UseCases.Posts.Queries.GetUserFavoritePosts;
 
 namespace Hiquotroca.API.Presentation.Controllers;
 

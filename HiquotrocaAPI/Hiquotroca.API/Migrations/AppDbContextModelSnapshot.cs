@@ -339,6 +339,9 @@ namespace Hiquotroca.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<double>("BonusPercentage")
+                        .HasColumnType("float");
+
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(50)
