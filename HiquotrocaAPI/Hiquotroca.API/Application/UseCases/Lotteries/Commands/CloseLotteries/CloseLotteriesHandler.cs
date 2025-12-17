@@ -1,11 +1,12 @@
-﻿using Hiquotroca.API.Domain.Entities.Lottery;
+﻿using Hiquotroca.API.Application.Interfaces;
+using Hiquotroca.API.Domain.Entities.Lottery;
 using Hiquotroca.API.Infrastructure.Email;
 using Hiquotroca.API.Infrastructure.Persistence;
 using MediatR;
 
 namespace Hiquotroca.API.Application.UseCases.Lotteries.Commands.CloseLottery;
 
-public class CloseLotteriesHandler(AppDbContext db, EmailSender emailSender) : IRequestHandler<CloseLotteriesCommand>
+public class CloseLotteriesHandler(AppDbContext db, IEmailSender emailSender) : IRequestHandler<CloseLotteriesCommand>
 {
     public async Task Handle(CloseLotteriesCommand request, CancellationToken cancellationToken)
     {
