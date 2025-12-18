@@ -46,6 +46,7 @@ namespace Hiquotroca.API.Application.Services
 
             return new
             {
+                UserId = user.Id,
                 AccessToken = accessToken,
                 RefreshToken = refreshTokenDto.RefreshToken,
             };

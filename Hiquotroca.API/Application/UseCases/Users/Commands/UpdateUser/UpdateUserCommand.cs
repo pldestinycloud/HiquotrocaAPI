@@ -1,5 +1,5 @@
 using Hiquotroca.API.DTOs.Users.Requests;
-using Hiquotroca.API.DTOs.User;
+using Hiquotroca.API.DTOs.Users;
 using MediatR;
 using Hiquotroca.API.Domain.Entities.Users;
 

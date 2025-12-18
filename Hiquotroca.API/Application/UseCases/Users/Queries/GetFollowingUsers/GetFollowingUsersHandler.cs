@@ -1,5 +1,5 @@
 ﻿using Hiquotroca.API.Domain.Entities.Users;
-using Hiquotroca.API.DTOs.User;
+using Hiquotroca.API.DTOs.Users;
 using Hiquotroca.API.Infrastructure.Persistence;
 using Hiquotroca.API.Mappings.Users;
 using MediatR;
@@ -17,6 +17,6 @@ public class GetFollowingUsersHandler(AppDbContext db): IRequestHandler<GetFollo
 
         var followedUsers = user.SelectMany(u => u.FollowingUsers).ToList();
 
-        return followedUsers.Select(user => MapUserToUserDto.Map(user, new UserDto())).ToList();
+        return followedUsers.Select(user => UserMappers.MapToUserDto(user, new UserDto())).ToList();
     }
 }

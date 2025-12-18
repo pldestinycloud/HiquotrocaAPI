@@ -1,4 +1,4 @@
-using Hiquotroca.API.DTOs.User;
+using Hiquotroca.API.DTOs.Users;
 using Hiquotroca.API.Infrastructure.Persistence;
 using Hiquotroca.API.Mappings.Users;
 using MediatR;
@@ -16,6 +16,6 @@ public class GetUserByIdHandler(AppDbContext db) : IRequestHandler<GetUserByIdQu
         if (user == null)
             return null;
 
-        return MapUserToUserDto.Map(user, new UserDto());
+        return UserMappers.MapToUserDto(user, new UserDto());
     }
 }

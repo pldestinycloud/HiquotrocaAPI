@@ -1,6 +1,6 @@
 ﻿using Hiquotroca.API.Domain.Entities.Posts;
 using Hiquotroca.API.Domain.Entities.Users;
-using Hiquotroca.API.DTOs.User;
+using Hiquotroca.API.DTOs.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hiquotroca.API.Infrastructure.Persistence.Repositories

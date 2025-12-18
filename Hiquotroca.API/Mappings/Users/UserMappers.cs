@@ -1,11 +1,12 @@
 ﻿using Hiquotroca.API.Domain.Entities.Users;
-using Hiquotroca.API.DTOs.User;
+using Hiquotroca.API.DTOs.Users;
+using Hiquotroca.API.DTOs.Users;
 
 namespace Hiquotroca.API.Mappings.Users;
 
-public static class MapUserToUserDto
+public static class UserMappers
 {
-    public static UserDto Map(User user, UserDto userDto)
+    public static UserDto MapToUserDto(User user, UserDto userDto)
     {
         userDto.Id = user.Id;
         userDto.FirstName = user.FirstName;
@@ -22,5 +23,14 @@ public static class MapUserToUserDto
         };
 
         return userDto;
+    }
+
+    public static UserBriefDataDto MapToUserBriefDataDto(User user, UserBriefDataDto userBriefDataDto)
+    {
+        userBriefDataDto.Id = user.Id;
+        userBriefDataDto.FirstName = user.FirstName;
+        userBriefDataDto.LastName = user.LastName;
+        userBriefDataDto.Email = user.Email;
+        return userBriefDataDto;
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Hiquotroca.API.DTOs.User
+﻿namespace Hiquotroca.API.DTOs.Users
 {
     public class UserDto
     {
