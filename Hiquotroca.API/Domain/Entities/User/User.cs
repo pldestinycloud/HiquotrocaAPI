@@ -1,0 +1,184 @@
+﻿using Hiquotroca.API.Domain.Common;
+using Hiquotroca.API.Domain.Entities.Posts;
+
+namespace Hiquotroca.API.Domain.Entities.Users
+{
+    public class User : BaseEntity
+    {
+        //User Personal Info 
+        public string FirstName { get; private set; } = string.Empty;
+        public string? LastName { get; private set; }
+        public string? PhoneNumber { get; private set; }
+        public DateTime? BirthDate { get; private set; }
+        public double HiquoCredits { get; private set; } = 0.0;
+
+        //User Auth Info
+        public string Email { get; private set; } = string.Empty;
+        public string? PasswordHash { get; private set; }
+        public string? RefreshToken { get; private set; }
+        public DateTime? RefreshTokenExpiry { get; private set; }
+        public string? PasswordResetToken { get; private set; }
+        public DateTime? PasswordResetTokenExpiry { get; private set; }
+
+        //User Address Info
+        public UserAddress? Address { get; private set; }
+
+        //User Relations
+        public List<Post> FavoritePosts { get; private set; } = new List<Post>();
+        public List<User> FollowingUsers { get; private set; } = new List<User>();
+        public List<PromotionalCode> PromotionalCodes { get; private set; } = new List<PromotionalCode>();
+
+        private User() { }
+        public User(string email, string firstName, string lastName, string? phoneNumber = null, DateTime? birthDate = null)
+        {
+            Email = email;
+            FirstName = firstName;
+            LastName = lastName;
+            PhoneNumber = phoneNumber;
+            BirthDate = birthDate;
+        }
+
+        public User UpdateUser(string firstName, string? lastName, string? phoneNumber, DateTime? birthDate, double hiquotrocaCredits = 0.0)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            PhoneNumber = phoneNumber;
+            BirthDate = birthDate;
+
+            if (hiquotrocaCredits > 0.0)
+                HiquoCredits = hiquotrocaCredits;
+
+            return this;
+        }
+
+        public User UpdateUserPassword(string passwordHash)
+        {
+            this.PasswordHash = passwordHash;
+            return this;
+        }
+
+        public User SetUserAddress(string address, string city, string? postalCode, string country)
+        {
+            this.Address = new UserAddress(address, city, postalCode, country);
+
+            return this;
+        }
+
+        public void DeleteUser()
+        {
+            // Implement any logic needed before deleting a user, if necessary.
+            // Such as validations or logging.
+        }
+
+        public User StartFollowing(User userToFollow)
+        {
+            if (this.FollowingUsers.Contains(userToFollow))
+                return this;
+
+            this.FollowingUsers.Add(userToFollow);
+            return this;
+        }
+
+        public User StopFollowing(User userToUnfollow)
+        {
+            if (!this.FollowingUsers.Contains(userToUnfollow))
+                return this;
+
+            this.FollowingUsers.Remove(userToUnfollow);
+            return this;
+        }
+
+        public User AddFavoritePost(Post post)
+        {
+            if (this.FavoritePosts.Contains(post))
+                return this;
+
+            this.FavoritePosts.Add(post);
+            return this;
+        }
+
+        public User RemoveFavoritePost(Post post)
+        {
+            if (!this.FavoritePosts.Contains(post))
+                return this;
+
+            this.FavoritePosts.Remove(post);
+            return this;
+        }
+
+        public User AddPromotionalCode(PromotionalCode promoCode)
+        {
+            if (this.PromotionalCodes.Contains(promoCode))
+                return this;
+
+            this.PromotionalCodes.Add(promoCode);
+      
+            return this;
+        }
+
+        public User RemovePromotionalCode(PromotionalCode promoCode)
+        {
+            if (!this.PromotionalCodes.Contains(promoCode))
+                return this;
+
+            this.PromotionalCodes.Remove(promoCode);
+            return this;
+        }
+
+        public bool HaveEnoughCredits(double requiredCredits)
+        {
+            return this.HiquoCredits >= requiredCredits;
+        }
+
+        public User AddCredits(double creditsToAdd)
+        {
+            this.HiquoCredits += creditsToAdd;
+            return this;
+        }
+
+        public User DeducteCredits(double creditsToDeduct)
+        {
+            if (!HaveEnoughCredits(creditsToDeduct))
+                throw new InvalidOperationException("User does not have enough Hiquo Credits.");
+
+            this.HiquoCredits -= creditsToDeduct;
+            return this;
+        }
+
+        //Isto Tá muito mal aqui mas pronto. Um dos motivos pelos quais o modelo de negócio nao deve ser misturado
+        //com questoes de segurança 
+        //No Futuro ao segregar as responsabilidades eliminar este metodo
+        public User UpdateRefreshToken(string refreshToken, DateTime expiry)
+        {
+            this.RefreshToken = refreshToken;
+            this.RefreshTokenExpiry = expiry;
+            return this;
+        }
+
+        // Password reset helpers
+        public User SetPasswordResetToken(string token, DateTime expiry)
+        {
+            this.PasswordResetToken = token;
+            this.PasswordResetTokenExpiry = expiry;
+            return this;
+        }
+
+        public User ClearPasswordResetToken()
+        {
+            this.PasswordResetToken = null;
+            this.PasswordResetTokenExpiry = null;
+            return this;
+        }
+
+        public bool IsProvidedPasswordResetTokenValid(string token)
+        {
+            if (string.IsNullOrEmpty(this.PasswordResetToken) || this.PasswordResetTokenExpiry == null)
+                return false;
+
+            if (this.PasswordResetTokenExpiry < DateTime.UtcNow)
+                return false;
+
+            return this.PasswordResetToken == token;
+        }
+    }
+}
