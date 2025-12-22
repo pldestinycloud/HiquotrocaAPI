@@ -6,6 +6,9 @@ using Hiquotroca.API.Application.UseCases.Chats.Queries.GetMessagesByChatId;
 using Hiquotroca.API.Application.UseCases.Chats.Queries.GetUserChatsWithFirstMessage;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Hiquotroca.API.Presentation.Hubs;
+using System.Security.Claims;
 
 namespace Hiquotroca.API.Presentation.Controllers;
 
@@ -14,9 +17,12 @@ namespace Hiquotroca.API.Presentation.Controllers;
 public class ChatsController : ControllerBase
 {
     private readonly IMediator _mediator;
-    public ChatsController(IMediator mediator)
+    private readonly IHubContext<ChatHub> _hubContext;
+
+    public ChatsController(IMediator mediator, IHubContext<ChatHub> hubContext)
     {
         _mediator = mediator;
+        _hubContext = hubContext;
     }
 
     [HttpGet("user-chats/{userId:long}")]
@@ -35,8 +41,31 @@ public class ChatsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateChat([FromBody] CreateChatCommand command)
     {
-        await _mediator.Send(command);
-        return Ok();
+        var chatId = await _mediator.Send(command);
+
+        try
+        {
+            var users = new[] { command.userId1, command.userId2 };
+            foreach (var userId in users)
+            {
+                var connections = ChatHub.GetConnections(userId);
+                if (connections != null)
+                {
+                    foreach (var connectionId in connections)
+                    {
+                        if (!string.IsNullOrEmpty(connectionId))
+                        {
+                            await _hubContext.Groups.AddToGroupAsync(connectionId, $"chat-{chatId}");
+                        }
+                    }
+                }
+            }
+        }
+        catch
+        {
+        }
+
+        return Ok(new { ChatId = chatId });
     }
 
     [HttpDelete("{chatId:long}")]

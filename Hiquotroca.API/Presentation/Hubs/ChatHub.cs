@@ -5,16 +5,27 @@ using Hiquotroca.API.Infrastructure.Persistence;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace Hiquotroca.API.Presentation.Hubs
 {
     public class ChatHub(AppDbContext dbContext) : Hub
     {
+        public static readonly ConcurrentDictionary<long, HashSet<string>> UserConnections = new();
+
         public override async Task OnConnectedAsync()
         {
+            if (!long.TryParse(Context.UserIdentifier, out var userId))
+            {
+                await base.OnConnectedAsync();
+                return;
+            }
+
+            var connections = UserConnections.GetOrAdd(userId, _ => new HashSet<string>());
+            connections.Add(Context.ConnectionId);
+
             var userChatsIds = await dbContext.Chats
-                .Where(c => c.UserId1 == Convert.ToInt64(Context.UserIdentifier) ||
-                            c.UserId2 == Convert.ToInt64(Context.UserIdentifier))
+                .Where(c => c.UserId1 == userId || c.UserId2 == userId)
                 .Select(c => c.Id)
                 .ToListAsync();
 
@@ -24,6 +35,29 @@ namespace Hiquotroca.API.Presentation.Hubs
             }
 
             await base.OnConnectedAsync();
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            if (long.TryParse(Context.UserIdentifier, out var userId))
+            {
+                if (UserConnections.TryGetValue(userId, out var connections))
+                {
+                    connections.Remove(Context.ConnectionId);
+                    if (connections.Count ==0)
+                    {
+                        UserConnections.TryRemove(userId, out _);
+                    }
+                }
+            }
+
+            await base.OnDisconnectedAsync(exception);
+        }
+
+        // Clients can call this to explicitly join a chat group (useful when a chat is created after connection)
+        public Task JoinChatGroup(long chatId)
+        {
+            return Groups.AddToGroupAsync(Context.ConnectionId, $"chat-{chatId}");
         }
 
         public async Task SendMessage(long chatId, long receiverId, long senderId, string message)
@@ -42,6 +76,15 @@ namespace Hiquotroca.API.Presentation.Hubs
             dbContext.Messages.Add(chatMessage);
 
             dbContext.SaveChanges();
+        }
+        public static IEnumerable<string> GetConnections(long userId)
+        {
+            if (UserConnections.TryGetValue(userId, out var connections))
+            {
+                return connections.ToList();
+            }
+
+            return Enumerable.Empty<string>();
         }
     }
 }

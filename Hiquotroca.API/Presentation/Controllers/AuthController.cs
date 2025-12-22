@@ -9,14 +9,20 @@ namespace Hiquotroca.API.Presentation.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AuthService _authService;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(AuthService authService)
+        public AuthController(AuthService authService, ILogger<AuthController> logger)
         {
             _authService = authService;
+            _logger = logger;
         }
 
         [HttpGet("ping")]
-        public IActionResult Ping() => Ok("API is working!");
+        public IActionResult Ping()
+        {
+            _logger.LogInformation("Ping request received.");
+            return Ok("API is working!");
+        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
