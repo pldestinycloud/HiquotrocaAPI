@@ -29,9 +29,6 @@ public class ChatsController : ControllerBase
     public async Task<IActionResult> GetMessages(long chatId)
     {
         var messages = await _mediator.Send(new GetMessagesByChatIdQuery(chatId));
-        if (messages == null || !messages.Any())
-            return NotFound();
-
         return Ok(messages);
     }
 

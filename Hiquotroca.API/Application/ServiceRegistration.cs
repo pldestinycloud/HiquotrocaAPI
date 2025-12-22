@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Hiquotroca.API.Application.UseCases.Users.Commands.CreateUser;
+﻿using Hiquotroca.API.Application.UseCases.Users.Commands.CreateUser;
 using Hiquotroca.API.Application.Services;
 using Hiquotroca.API.Domain.Entities.Users;
 using Microsoft.AspNetCore.Identity;
