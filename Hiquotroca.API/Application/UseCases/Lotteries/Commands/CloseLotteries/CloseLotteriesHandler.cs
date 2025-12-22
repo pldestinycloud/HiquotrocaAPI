@@ -16,7 +16,6 @@ public class CloseLotteriesHandler(AppDbContext db, IEmailSender emailSender) : 
 
         foreach (var lottery in lotteries)
         {
-
             try
             {
                 lottery.DeactivateLottery();
@@ -50,9 +49,9 @@ public class CloseLotteriesHandler(AppDbContext db, IEmailSender emailSender) : 
                 // Log the error (not implemented here for brevity)
                 continue;
             }
-
-            db.UpdateRange(lotteries);
-            await db.SaveChangesAsync(cancellationToken);
         }
+
+        db.UpdateRange(lotteries);
+        await db.SaveChangesAsync(cancellationToken);
     }
 }
