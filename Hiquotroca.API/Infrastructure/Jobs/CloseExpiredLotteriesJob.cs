@@ -15,10 +15,12 @@ namespace Hiquotroca.API.Infrastructure.Jobs;
 public class CloseExpiredLotteriesJob : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<CloseExpiredLotteriesJob> _logger;
 
-    public CloseExpiredLotteriesJob(IServiceProvider serviceProvider)
+    public CloseExpiredLotteriesJob(IServiceProvider serviceProvider, ILogger<CloseExpiredLotteriesJob> logger)
     {
         _serviceProvider = serviceProvider;
+        _logger = logger;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -27,6 +29,7 @@ public class CloseExpiredLotteriesJob : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            _logger.LogInformation("CloseExpiredLotteriesJob started at {StartTime}", DateTime.UtcNow);
             try
             {
                 var currentTime = DateTime.UtcNow;
@@ -48,6 +51,7 @@ public class CloseExpiredLotteriesJob : BackgroundService
                         await mediator.Send(new CloseLotteriesCommand(expiredLotteries), stoppingToken);
                 }
 
+                _logger.LogInformation("CloseExpiredLotteriesJob completed. Next run at: {NextRunAt}", nextRunAt);
                 await Task.Delay(delay, stoppingToken);
             }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
