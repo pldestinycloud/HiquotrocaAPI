@@ -96,11 +96,20 @@ namespace Hiquotroca.API.Domain.Entities.Lottery
                 throw new InvalidOperationException("Lottery is still active. Cannot declare a winner.");
 
             //Maybe deactivate in according to business rules in the future
-            if (TicketsSold <  Math.Floor((double)TotalTickets/2))
-                throw new InvalidOperationException("Minimum tickets sold not reached. Cannot declare a winner.");
+            if (TicketsSold < Math.Floor((double)TotalTickets / 2))
+            {
+                WinnerNumber = 0;
+                return this;
+            }
+                //throw new InvalidOperationException("Minimum tickets sold not reached. Cannot declare a winner.");
 
             if (!Tickets.Any())
-                throw new InvalidOperationException("No tickets have been sold.");
+            {
+                WinnerNumber = 0;
+                return this;
+            }
+            //throw new InvalidOperationException("No tickets have been sold.");
+
 
             var random = new Random();
             int winningIndex = random.Next(Tickets.Count);
@@ -114,7 +123,8 @@ namespace Hiquotroca.API.Domain.Entities.Lottery
         public Ticket? GetWinnerTicket()
         {
             if (WinnerNumber == 0)
-                throw new InvalidOperationException("Winner has not been declared yet.");
+                return null;
+               // throw new InvalidOperationException("Winner has not been declared yet.");
             return Tickets.FirstOrDefault(t => t.SelectedNumber == WinnerNumber);
         }
     }

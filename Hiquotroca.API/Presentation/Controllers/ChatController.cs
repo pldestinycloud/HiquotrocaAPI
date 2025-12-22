@@ -22,20 +22,13 @@ public class ChatsController : ControllerBase
     [HttpGet("user-chats/{userId:long}")]
     public async Task<IActionResult> GetUserChats(long userId)
     {
-        var chats = await _mediator.Send(new GetUserChatsWithFirstMessageQuery(userId));
-        if (chats == null || !chats.Any())
-            return NotFound();
-
-        return Ok(chats);
+        return Ok(await _mediator.Send(new GetUserChatsWithFirstMessageQuery(userId)));
     }
 
     [HttpGet("/messages/{chatId:long}")]
     public async Task<IActionResult> GetMessages(long chatId)
     {
         var messages = await _mediator.Send(new GetMessagesByChatIdQuery(chatId));
-        if (messages == null || !messages.Any())
-            return NotFound();
-
         return Ok(messages);
     }
 

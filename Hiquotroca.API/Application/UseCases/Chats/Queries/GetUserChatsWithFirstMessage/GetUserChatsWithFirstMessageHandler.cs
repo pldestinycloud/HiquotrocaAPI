@@ -31,7 +31,9 @@ public class GetUserChatsWithFirstMessageHandler(AppDbContext db) : IRequestHand
         foreach (var chat in chats)
         {
             var chatDto = MapChatToChatDto.Map(chat.Chat, new ChatDto());
-            chatDto.FirstMessage = MapMessageToMessageDto.Map(chat.FirstMessage, new MessageDto());
+            chatDto.FirstMessage = chat.FirstMessage != null 
+                ? MapMessageToMessageDto.Map(chat.FirstMessage, new MessageDto()) 
+                : null;
 
             chatDtos.Add(chatDto);
         }

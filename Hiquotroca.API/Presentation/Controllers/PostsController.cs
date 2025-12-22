@@ -25,9 +25,6 @@ public class PostsController : ControllerBase
     public async Task<IActionResult> GetPosts()
     {
         var result = await _mediator.Send(new GetAllPostsQuery());
-        if (result == null || !result.Any())
-            return NotFound();
-
         return Ok(result);
     }
 
