@@ -65,7 +65,8 @@ namespace Hiquotroca.API.Presentation.Hubs
             var chatMessage = new Message(chatId, senderId, receiverId, message);
             var saveTask = Task.Run(() => SaveMessageToDatabase(chatId, senderId, receiverId, message));
 
-            await Clients.Group($"chat-{chatId}").SendAsync("ReceiveMessage", chatMessage);
+            await Clients.Group($"chat-{chatId}")
+                .SendAsync("ReceiveMessage", chatId, senderId, receiverId, chatMessage);
 
             await saveTask;
         }

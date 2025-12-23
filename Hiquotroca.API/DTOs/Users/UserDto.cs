@@ -8,7 +8,7 @@
         public string Email { get; set; } = string.Empty;
         public string? PhoneNumber { get; set; }
         public DateTime? BirthDate { get; set; }
-        public int HiquoCredits { get; set; }
+        public double HiquoCredits { get; set; }
         public DateTime CreatedAt { get; set; }
         public UserAddressDto? Address { get; set; }
     }
