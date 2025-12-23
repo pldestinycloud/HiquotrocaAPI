@@ -13,6 +13,7 @@ public static class MapPostToPostDto
         dto.UserId = post.UserId;
         dto.ActionTypeId = post.PostTaxonomyData.ActionTypeId;
         dto.CategoryId = post.PostTaxonomyData.CategoryId; 
+        dto.CreatedAt = post.CreatedDate;
         dto.IsActive = post.IsActive;
         dto.Images = post.Images;
         dto.Location = new PostLocationDto
@@ -30,7 +31,7 @@ public static class MapPostToPostDto
             ViewCounter = post.AdditionalData.ViewCounter,
             IsFeatured = post.AdditionalData.IsFeatured,
             Elements = post.AdditionalData.Elements,
-            Caracteristics = post.AdditionalData.Caracteristics
+            Caracteristics = post.AdditionalData.Caracteristics,
         };
 
         return dto;

@@ -14,6 +14,7 @@ public static class UserMappers
         userDto.Email = user.Email;
         userDto.PhoneNumber = user.PhoneNumber;
         userDto.BirthDate = user.BirthDate;
+        userDto.HiquoCredits = user.HiquoCredits;
         userDto.Address = new UserAddressDto
         {
             Address = user.Address?.Address,
