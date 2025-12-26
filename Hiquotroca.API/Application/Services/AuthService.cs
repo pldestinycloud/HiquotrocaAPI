@@ -100,7 +100,7 @@ namespace Hiquotroca.API.Application.Services
             var subject = "Hiquotroca - Reset password";
             var body = $"Copy the following code to reset your password: {token}. </br>If you did not request this, please ignore this email.";
 
-            _ = Task.Run(() => _emailSender.SendEmailAsync(user.Email, subject, body));
+            await _emailSender.SendEmailAsync(user.Email, subject, body);
         }
 
         public async Task<bool> ResetPasswordAsync(ResetPasswordRequest request)
