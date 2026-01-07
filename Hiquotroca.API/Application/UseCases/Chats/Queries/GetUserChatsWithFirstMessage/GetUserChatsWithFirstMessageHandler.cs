@@ -19,7 +19,7 @@ public class GetUserChatsWithFirstMessageHandler(AppDbContext db) : IRequestHand
             .Select(c => new
             {
                 Chat = c,
-                FirstMessage = c.Messages.OrderBy(m => m.Id).FirstOrDefault()
+                FirstMessage = c.Messages.OrderByDescending(m => m.Id).FirstOrDefault()
             })
             .Where(c => c.Chat.UserId1 == request.UserId || c.Chat.UserId2 == request.UserId)
             .ToListAsync();

@@ -1,5 +1,7 @@
 ﻿using Hiquotroca.API.Application.Interfaces;
 using Resend;
+using System.Net;
+using System.Net.Mail;
 
 namespace Hiquotroca.API.Infrastructure.Email
 {
@@ -16,19 +18,21 @@ namespace Hiquotroca.API.Infrastructure.Email
 
         public async Task SendEmailAsync(string receipterAddress, string subject, string body)
         {
-            //Mock email sending for now
-            await Task.Delay(5000);
-            Console.WriteLine($"Email sent to {receipterAddress} with subject '{subject}' and body: {body}");
-
-
-            //Uncomment and configure the following code when Resend integration is ready
-            /*var message = new EmailMessage();
+            var message = new EmailMessage();
             message.From = _config["Email:FromAddress"] ?? "";
             message.To.Add(receipterAddress);
             message.Subject = subject;
             message.HtmlBody = body;
 
-            await _resendClient.EmailSendAsync(message);*/
+            try
+            {
+
+                var result = await _resendClient.EmailSendAsync(message);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }

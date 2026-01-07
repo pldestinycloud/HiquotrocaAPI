@@ -11,6 +11,7 @@ namespace Hiquotroca.API.Domain.Entities.Users
         public string? PhoneNumber { get; private set; }
         public DateTime? BirthDate { get; private set; }
         public double HiquoCredits { get; private set; } = 0.0;
+        public string ProfilePictureUrl { get; private set; } = string.Empty;
 
         //User Auth Info
         public string Email { get; private set; } = string.Empty;
@@ -38,15 +39,12 @@ namespace Hiquotroca.API.Domain.Entities.Users
             BirthDate = birthDate;
         }
 
-        public User UpdateUser(string firstName, string? lastName, string? phoneNumber, DateTime? birthDate, double hiquotrocaCredits = 0.0)
+        public User UpdateUser(string firstName, string? lastName, string? phoneNumber, DateTime? birthDate)
         {
             FirstName = firstName;
             LastName = lastName;
             PhoneNumber = phoneNumber;
             BirthDate = birthDate;
-
-            if (hiquotrocaCredits > 0.0)
-                HiquoCredits = hiquotrocaCredits;
 
             return this;
         }

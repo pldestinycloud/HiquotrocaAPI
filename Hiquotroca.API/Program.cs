@@ -5,18 +5,24 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Hiquotroca.API.Presentation.Middlewares;
 using Serilog;
+using Hiquotroca.API;
+
+var environmentName = EnvironmentNameLoader.GetEnvironmentName();
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration
+    .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: true);
+
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
     .WriteTo.Console()
     .CreateLogger();
 
+Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
+
 try
 {
-    Log.Information("Starting up the api at {Time}", DateTime.UtcNow);
-
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
     builder.Host.UseSerilog((context, configuration) =>
